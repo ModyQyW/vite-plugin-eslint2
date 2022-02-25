@@ -1,0 +1,88 @@
+{
+  "name": "@modyqyw/vite-plugin-eslint",
+  "version": "0.0.0",
+  "description": "ESLint plugin for vite.",
+  "keywords": [
+    "eslint",
+    "vite-plugin"
+  ],
+  "homepage": "https://github.com/ModyQyW/vite-plugin-eslint",
+  "repository": "git+https://github.com:ModyQyW/vite-plugin-eslint.git",
+  "license": "MIT",
+  "author": {
+    "name": "ModyQyW",
+    "email": "wurui7@mail3.sysu.edu.cn"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --external eslint,vite --format esm,cjs --dts --minify",
+    "commit": "git-cz",
+    "dev": "pnpm run build -- --watch src",
+    "example:react-build": "pnpm run build --filter example-react",
+    "example:react-dev": "pnpm run dev --filter example-react",
+    "example:vue-build": "pnpm run build --filter example-vue",
+    "example:vue-dev": "pnpm run dev --filter example-vue",
+    "lint": "eslint src --fix && tsc src/** --noEmit",
+    "prepare": "husky install",
+    "prepublishOnly": "pnpm run build",
+    "release": "release-it"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/prompt"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.1",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@commitlint/prompt": "^16.2.1",
+    "@rollup/pluginutils": "^4.1.2",
+    "@types/eslint": "^8.4.1",
+    "@types/node": "^17.0.18",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "prettier": "^2.5.1",
+    "release-it": "^14.12.4",
+    "rollup": "^2.67.2",
+    "rollup-plugin-dts": "^4.1.0",
+    "tsup": "^5.11.13",
+    "typescript": "^4.5.5",
+    "vite": "^2.8.2"
+  },
+  "peerDependencies": {
+    "vite": "^2.0.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): v${version}",
+      "tagName": "v${version}"
+    },
+    "hooks": {
+      "before:init": "pnpm install && pnpm run lint"
+    }
+  }
+}
