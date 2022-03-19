@@ -10,12 +10,30 @@ You may want [Vite Stylelint plugin](https://github.com/ModyQyW/vite-plugin-styl
 ## Install
 
 ```sh
-npm install @modyqyw/vite-plugin-eslint --save-dev
-# or
-yarn add @modyqyw/vite-plugin-eslint --dev
+npm install @modyqyw/vite-plugin-eslint -D
 ```
 
 `@modyqyw/vite-plugin-eslint` does not install and config ESLint for you. You should handle these yourself.
+
+<details>
+
+<summary>ESLint@7</summary>
+
+```sh
+npm install eslint@^7 @types/eslint@^7 -D
+```
+
+</details>
+
+<details>
+
+<summary>ESLint@8</summary>
+
+```sh
+npm install eslint@^8 @types/eslint@^8 -D
+```
+
+</details>
 
 ## Usage
 
@@ -24,11 +42,22 @@ import { defineConfig } from 'vite';
 import ESLintPlugin from '@modyqyw/vite-plugin-eslint';
 
 export default defineConfig({
-  plugins: [ESLintPlugin()],
+  plugins: [
+    ESLintPlugin({
+      // set options here
+    }),
+  ],
 });
 ```
 
 ## Options
+
+### `eslintPath`
+
+- Type: `string`
+- Default: `'eslint'`
+
+Path to ESLint instance that will be used for linting. You should read [vite server.fs options](https://vitejs.dev/config/#server-fs-strict) first.
 
 ### `cache`
 
@@ -85,6 +114,10 @@ The warnings found will be emitted, default to true.
 - Default: `true`
 
 The errors found will be emitted, default to true.
+
+## CHANGELOG
+
+See [CHANGELOG.md](./CHANGELOG.md).
 
 ## License
 
