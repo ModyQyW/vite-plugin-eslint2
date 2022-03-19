@@ -1,10 +1,11 @@
-import * as path from 'path';
+import path from 'path';
 import type { Plugin } from 'vite';
-import { ESLint } from 'eslint';
+import type ESLint from 'eslint';
 import { createFilter } from '@rollup/pluginutils';
 import { normalizePath, type Options } from './utils';
 
 export default function ESLintPlugin(options: Options = {}): Plugin {
+  const eslintPath = options?.eslintPath ?? 'eslint';
   const cache = options?.cache ?? true;
   const cacheLocation =
     options?.cacheLocation ??
@@ -19,11 +20,8 @@ export default function ESLintPlugin(options: Options = {}): Plugin {
 
   const filter = createFilter(include, exclude);
 
-  const eslint = new ESLint({
-    cache,
-    cacheLocation,
-    fix,
-  });
+  let eslint: ESLint.ESLint;
+  let outputFixes: typeof ESLint.ESLint.outputFixes;
 
   return {
     name: 'vite:eslint',
@@ -32,6 +30,24 @@ export default function ESLintPlugin(options: Options = {}): Plugin {
 
       if (!filter(file)) {
         return null;
+      }
+
+      if (!eslint || !outputFixes) {
+        await import(eslintPath)
+          .then((module: typeof ESLint) => {
+            eslint = new module.ESLint({
+              cache,
+              cacheLocation,
+              fix,
+            });
+            outputFixes = module.ESLint.outputFixes.bind(module.ESLint);
+          })
+          .catch(() => {
+            console.log('');
+            this.error(
+              `Failed to import ESLint. Have you installed ESLint and configured correctly?`,
+            );
+          });
       }
 
       switch (typeof formatter) {
@@ -48,12 +64,12 @@ export default function ESLintPlugin(options: Options = {}): Plugin {
       await eslint
         .lintFiles(file)
         .then(async (lintResults) => {
-          const formatResult = await (formatter as ESLint.Formatter).format(
-            lintResults,
-          );
+          const formatResult = await (
+            formatter as ESLint.ESLint.Formatter
+          ).format(lintResults);
 
           if (fix && lintResults.length > 0) {
-            ESLint.outputFixes(lintResults);
+            outputFixes(lintResults);
           }
           if (throwOnError && lintResults.some((item) => item.errorCount > 0)) {
             console.log('');

@@ -1,7 +1,9 @@
-import * as path from 'path';
+import path from 'path';
 import type { ESLint } from 'eslint';
 
 export interface Options {
+  /** Path to ESLint instance that will be used for linting */
+  eslintPath?: string;
   /** The cache is enabled by default to decrease execution time */
   cache?: boolean;
   /** Path to a file or directory for the cache location */
