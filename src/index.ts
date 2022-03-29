@@ -34,6 +34,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
 
   let filter: (id: string | unknown) => boolean;
   let eslint: ESLint.ESLint;
+  let outputFixes: typeof ESLint.ESLint.outputFixes;
 
   return {
     name: 'vite:eslint',
@@ -55,7 +56,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
       const file = normalizePath(id).split('?')[0];
 
       // initial
-      if (!loadedFormatter || !eslint) {
+      if (!eslint || !loadedFormatter || !outputFixes) {
         await import(eslintPath)
           .then(async (module) => {
             eslint = new module.ESLint({
@@ -64,6 +65,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
               cacheLocation,
             });
             loadedFormatter = await eslint.loadFormatter(formatter);
+            outputFixes = module.ESLint.outputFixes.bind(module.ESLint);
           })
           .catch(() => {
             this.error(`Failed to import ESLint. Have you installed and configured correctly?`);
@@ -78,6 +80,10 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
         })
         // lint results
         .then(async (lintResults: ESLint.ESLint.LintResult[]) => {
+          if (lintResults.length > 0 && options.fix) {
+            outputFixes(lintResults);
+          }
+
           if (lintResults.some((item) => item.errorCount > 0) && emitError) {
             const formatResult = await loadedFormatter.format(
               lintResults.filter((item) => item.errorCount > 0),
