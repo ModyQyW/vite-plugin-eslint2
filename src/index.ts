@@ -68,6 +68,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
             outputFixes = module.ESLint.outputFixes.bind(module.ESLint);
           })
           .catch(() => {
+            console.log('');
             this.error(`Failed to import ESLint. Have you installed and configured correctly?`);
           });
       }
@@ -76,6 +77,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
         .lintFiles(file)
         // catch config error
         .catch((error) => {
+          console.log('');
           this.error(`${error?.message ?? error}`);
         })
         // lint results
@@ -88,12 +90,15 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
             const formatResult = await loadedFormatter.format(
               lintResults.filter((item) => item.errorCount > 0),
             );
+            console.log('');
             this.error(formatResult);
           }
+
           if (lintResults.some((item) => item.warningCount > 0) && emitWarning) {
             const formatResult = await loadedFormatter.format(
               lintResults.filter((item) => item.warningCount > 0),
             );
+            console.log('');
             this.warn(formatResult);
           }
         });
