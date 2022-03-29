@@ -42,78 +42,91 @@ import { defineConfig } from 'vite';
 import ESLintPlugin from '@modyqyw/vite-plugin-eslint';
 
 export default defineConfig({
-  plugins: [
-    ESLintPlugin({
-      // set options here
-    }),
-  ],
+  plugins: [ESLintPlugin(options)],
 });
 ```
 
 ## Options
 
-### `eslintPath`
+You can pass ESLint [Node.js API constructor options](https://eslint.org/docs/developer-guide/nodejs-api#-new-eslintoptions) to the plugin.
 
-- Type: `string`
-- Default: `'eslint'`
+```ts
+import { defineConfig } from 'vite';
+import ESLintPlugin from 'vite-plugin-eslint';
 
-Path to ESLint instance that will be used for linting. You should read [vite server.fs options](https://vitejs.dev/config/#server-fs-strict) first.
+export default defineConfig({
+  plugins: [
+    ESLintPlugin({
+      fix: true,
+      ...,
+    }),
+  ],
+});
+```
+
+Additional options and explanations are listed below.
 
 ### `cache`
 
 - Type: `boolean`
 - Default: `true`
 
-Decrease execution time.
+Store the results of processed files. This is enabled by default to improve speed.
 
 ### `cacheLocation`
 
 - Type: `string`
-- Default: `path.resolve(process.cwd(), 'node_modules', '.vite', 'vite-plugin-eslint')`
+- Default: `path.join('node_modules', '.vite', 'vite-plugin-eslint')`
 
 Path to a file or directory for the cache location.
 
-### `fix`
-
-- Type: `boolean`
-- Default: `false`
-
-Auto fix source code.
-
 ### `include`
 
-- Type: `string | string[] | RegExp`
-- Default: `/.*\.(vue|js|jsx|ts|tsx)$/`
+- Type: `FilterPattern`
+- Default: `[/.*\.(vue|js|jsx|ts|tsx)$/]`
 
-A single file, array of files, or RegExp to include when linting.
+A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns.
+
+This is used to [create a filter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to determine [`eslint.lintFiles` params](https://eslint.org/docs/developer-guide/nodejs-api#-eslintlintfilespatterns).
 
 ### `exclude`
 
-- Type: `string | string[] | RegExp`
-- Default: `/node_modules/`
+- Type: `FilterPattern`
+- Default: `[/node_modules/, viteConfig.build.outDir]`
 
-A single file, array of files, or RegExp to exclude when linting.
+A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns.
+
+This is used to [create a filter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to determine [`eslint.lintFiles` params](https://eslint.org/docs/developer-guide/nodejs-api#-eslintlintfilespatterns).
+
+### `eslintPath`
+
+- Type: `string`
+- Default: `'eslint'`
+
+Path to ESLint instance that will be used for linting. Read [vite server.fs options](https://vitejs.dev/config/#server-fs-strict) first.
 
 ### `formatter`
 
-- Type: `ESLint.Formatter | string`
+- Type: `string`
 - Default: `'stylish'`
 
-Custom error formatter or the name of a built-in formatter.
+The name or the path of a formatter.
 
-### `throwOnWarning`
+This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) in order to convert lint results to a human- or machine-readable string.
 
-- Type: `boolean`
-- Default: `true`
-
-The warnings found will be emitted, default to true.
-
-### `throwOnError`
+### `emitError`
 
 - Type: `boolean`
 - Default: `true`
 
-The errors found will be emitted, default to true.
+The errors found will be emitted by default.
+
+### `emitWarning`
+
+- Type: `boolean`
+- Default: `true`
+
+The warnings found will be emitted by default.
 
 ## CHANGELOG
 
