@@ -1,90 +1,95 @@
-import path from 'path';
-import type { Plugin } from 'vite';
+import { createFilter, normalizePath } from '@rollup/pluginutils';
+import type Vite from 'vite';
 import type ESLint from 'eslint';
-import { createFilter } from '@rollup/pluginutils';
-import { normalizePath, type Options } from './utils';
+import type { FilterPattern } from '@rollup/pluginutils';
+import path from 'path';
 
-export default function ESLintPlugin(options: Options = {}): Plugin {
-  const eslintPath = options?.eslintPath ?? 'eslint';
+export interface Options extends ESLint.ESLint.Options {
+  cache?: boolean;
+  cacheLocation?: string;
+  include?: FilterPattern;
+  exclude?: FilterPattern;
+  eslintPath?: string;
+  formatter?: string;
+  /** @deprecated Recommend to use `emitError` */
+  throwOnError?: boolean;
+  /** @deprecated Recommend to use `emitWarning` */
+  throwOnWarning?: boolean;
+  emitError?: boolean;
+  emitWarning?: boolean;
+}
+
+export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const cache = options?.cache ?? true;
   const cacheLocation =
-    options?.cacheLocation ??
-    path.resolve(process.cwd(), 'node_modules', '.vite', 'vite-plugin-eslint');
-  const fix = options?.fix ?? false;
-  const include = options?.include ?? /.*\.(vue|js|jsx|ts|tsx)$/;
-  const exclude = options?.exclude ?? /node_modules/;
+    options?.cacheLocation ?? path.join('node_modules', '.vite', 'vite-plugin-eslint');
+  const include = options?.include ?? [/.*\.(vue|js|jsx|ts|tsx)$/];
+  let exclude = options?.exclude ?? [/node_modules/];
+  const eslintPath = options?.eslintPath ?? 'eslint';
   const defaultFormatter = 'stylish';
-  let formatter = options?.formatter ?? defaultFormatter;
-  const throwOnError = options?.throwOnError ?? true;
-  const throwOnWarning = options?.throwOnWarning ?? true;
+  const formatter = options?.formatter ?? defaultFormatter;
+  let loadedFormatter: ESLint.ESLint.Formatter;
+  const emitError = options?.emitError ?? options?.throwOnError ?? true;
+  const emitWarning = options?.emitWarning ?? options?.throwOnWarning ?? true;
 
-  const filter = createFilter(include, exclude);
-
+  let filter: (id: string | unknown) => boolean;
   let eslint: ESLint.ESLint;
-  let outputFixes: typeof ESLint.ESLint.outputFixes;
 
   return {
     name: 'vite:eslint',
+    configResolved(config) {
+      // convert exclude to array
+      // push config.build.outDir into exclude
+      if (Array.isArray(exclude)) {
+        exclude.push(config.build.outDir);
+      } else {
+        exclude = [exclude as string | RegExp, config.build.outDir].filter((item) => !!item);
+      }
+      filter = createFilter(include, exclude);
+    },
     async transform(_, id) {
-      const file = normalizePath(id);
-
-      if (!filter(file)) {
+      if (!filter(id)) {
         return null;
       }
 
-      if (!eslint || !outputFixes) {
+      const file = normalizePath(id).split('?')[0];
+
+      // initial
+      if (!loadedFormatter || !eslint) {
         await import(eslintPath)
-          .then((module: typeof ESLint) => {
+          .then(async (module) => {
             eslint = new module.ESLint({
+              ...options,
               cache,
               cacheLocation,
-              fix,
             });
-            outputFixes = module.ESLint.outputFixes.bind(module.ESLint);
+            loadedFormatter = await eslint.loadFormatter(formatter);
           })
           .catch(() => {
-            console.log('');
-            this.error(
-              `Failed to import ESLint. Have you installed ESLint and configured correctly?`,
-            );
+            this.error(`Failed to import ESLint. Have you installed and configured correctly?`);
           });
-      }
-
-      switch (typeof formatter) {
-        case 'string':
-          formatter = await eslint.loadFormatter(formatter);
-          break;
-        case 'function':
-          break;
-        default:
-          formatter = await eslint.loadFormatter(defaultFormatter);
-          break;
       }
 
       await eslint
         .lintFiles(file)
-        .then(async (lintResults) => {
-          const formatResult = await (
-            formatter as ESLint.ESLint.Formatter
-          ).format(lintResults);
-
-          if (fix && lintResults.length > 0) {
-            outputFixes(lintResults);
-          }
-          if (throwOnError && lintResults.some((item) => item.errorCount > 0)) {
-            console.log('');
+        // catch config error
+        .catch((error) => {
+          this.error(`${error?.message ?? error}`);
+        })
+        // lint results
+        .then(async (lintResults: ESLint.ESLint.LintResult[]) => {
+          if (lintResults.some((item) => item.errorCount > 0) && emitError) {
+            const formatResult = await loadedFormatter.format(
+              lintResults.filter((item) => item.errorCount > 0),
+            );
             this.error(formatResult);
           }
-          if (
-            throwOnWarning &&
-            lintResults.some((item) => item.warningCount > 0)
-          ) {
-            console.log('');
+          if (lintResults.some((item) => item.warningCount > 0) && emitWarning) {
+            const formatResult = await loadedFormatter.format(
+              lintResults.filter((item) => item.warningCount > 0),
+            );
             this.warn(formatResult);
           }
-        })
-        .catch((error) => {
-          console.error(error.stack);
         });
 
       return null;
