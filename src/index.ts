@@ -49,11 +49,11 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
       filter = createFilter(include, exclude);
     },
     async transform(_, id) {
-      if (!filter(id)) {
+      const file = normalizePath(id).split('?')[0];
+
+      if (!filter(file)) {
         return null;
       }
-
-      const file = normalizePath(id).split('?')[0];
 
       // initial
       if (!eslint || !loadedFormatter || !outputFixes) {
