@@ -16,7 +16,9 @@ export interface Options extends ESLint.ESLint.Options {
   /** @deprecated Recommend to use `emitWarning` */
   throwOnWarning?: boolean;
   emitError?: boolean;
+  emitErrorAsWarning?: boolean;
   emitWarning?: boolean;
+  emitWarningAsError?: boolean;
 }
 
 export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
@@ -30,7 +32,9 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const formatter = options?.formatter ?? defaultFormatter;
   let loadedFormatter: ESLint.ESLint.Formatter;
   const emitError = options?.emitError ?? options?.throwOnError ?? true;
+  const emitErrorAsWarning = options?.emitErrorAsWarning ?? false;
   const emitWarning = options?.emitWarning ?? options?.throwOnWarning ?? true;
+  const emitWarningAsError = options?.emitWarningAsError ?? false;
 
   let filter: (id: string | unknown) => boolean;
   let eslint: ESLint.ESLint;
@@ -91,7 +95,11 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
               lintResults.filter((item) => item.errorCount > 0),
             );
             console.log('');
-            this.error(formatResult);
+            if (emitErrorAsWarning) {
+              this.warn(formatResult);
+            } else {
+              this.error(formatResult);
+            }
           }
 
           if (lintResults.some((item) => item.warningCount > 0) && emitWarning) {
@@ -99,7 +107,11 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
               lintResults.filter((item) => item.warningCount > 0),
             );
             console.log('');
-            this.warn(formatResult);
+            if (emitWarningAsError) {
+              this.error(formatResult);
+            } else {
+              this.warn(formatResult);
+            }
           }
         });
 
