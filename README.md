@@ -71,7 +71,7 @@ Additional options and explanations are listed below.
 - Type: `boolean`
 - Default: `true`
 
-Store the results of processed files. This is enabled by default to improve speed.
+Store the results of processed files when enabled. This is enabled by default to improve speed.
 
 ### `cacheLocation`
 
@@ -119,14 +119,28 @@ This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodej
 - Type: `boolean`
 - Default: `true`
 
-The errors found will be emitted by default.
+The errors found will be emitted when enabled. This is enabled by default.
+
+## `emitErrorAsWarning`
+
+- Type: `boolean`
+- Default: `false`
+
+The errors found will be emitted as warnings when enabled. This is disabled by default but you may want it enabled when prototyping.
 
 ### `emitWarning`
 
 - Type: `boolean`
 - Default: `true`
 
-The warnings found will be emitted by default.
+The warnings found will be emitted when enabled. This is enabled by default.
+
+## `emitWarningAsError`
+
+- Type: `boolean`
+- Default: `false`
+
+The warnings found will be emitted as errors when enabled. This is disabled by default.
 
 ## CHANGELOG
 
