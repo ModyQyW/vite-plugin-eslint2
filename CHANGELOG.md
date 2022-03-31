@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.0
+
+- perf: better output format
+- feat: add `emitErrorAsWarning` and `emitWarningAsError` options
+
 ## 1.1.0
 
 - fix: fix `index.html` dealing
