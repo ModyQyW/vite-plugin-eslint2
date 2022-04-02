@@ -121,7 +121,7 @@ This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodej
 
 The errors found will be emitted when enabled. This is enabled by default.
 
-## `emitErrorAsWarning`
+### `emitErrorAsWarning`
 
 - Type: `boolean`
 - Default: `false`
@@ -135,7 +135,7 @@ The errors found will be emitted as warnings when enabled. This is disabled by d
 
 The warnings found will be emitted when enabled. This is enabled by default.
 
-## `emitWarningAsError`
+### `emitWarningAsError`
 
 - Type: `boolean`
 - Default: `false`
