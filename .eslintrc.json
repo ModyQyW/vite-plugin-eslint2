@@ -1,4 +1,9 @@
 {
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
   "root": true,
   "env": {
     "node": true
@@ -7,11 +12,5 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": "latest"
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:prettier/recommended"
-  ]
+  }
 }
