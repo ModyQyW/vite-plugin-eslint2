@@ -142,6 +142,13 @@ The warnings found will be emitted when enabled. This is enabled by default.
 
 The warnings found will be emitted as errors when enabled. This is disabled by default.
 
+## FAQ
+
+<details>
+  <summary>Facing caching problem?</summary>
+  Disable the <code>cache</code> option. Or delete the cache file (default <code>node_modules/.vite/vite-plugin-eslint</code>) and restart Vite.
+</details>
+
 ## Examples
 
 See [examples](https://github.com/ModyQyW/vite-plugin-eslint/tree/main/examples).
