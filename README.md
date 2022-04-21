@@ -83,7 +83,7 @@ Path to a file or directory for the cache location.
 ### `include`
 
 - Type: `FilterPattern`
-- Default: `[/.*\.(vue|js|jsx|ts|tsx)$/]`
+- Default: `[/.*\.(vue|js|jsx|ts|tsx|svelte)$/]`
 
 A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns.
 
