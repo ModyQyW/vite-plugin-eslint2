@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App(): JSX.Element {
+const App = memo(function App() {
   const [count, setCount] = useState(0);
 
   return (
@@ -40,6 +40,6 @@ function App(): JSX.Element {
       </header>
     </div>
   );
-}
+});
 
 export default App;
