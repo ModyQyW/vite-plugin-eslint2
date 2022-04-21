@@ -1,4 +1,10 @@
 {
+  "extends": [
+    "plugin:vue/vue3-recommended",
+    "plugin:vue-scoped-css/vue3-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
   "root": true,
   "env": {
     "node": true,
@@ -7,12 +13,7 @@
   "parser": "vue-eslint-parser",
   "parserOptions": {
     "parser": "@typescript-eslint/parser",
-    "sourceType": "module"
-  },
-  "extends": [
-    "plugin:vue/vue3-essential",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:prettier/recommended"
-  ]
+    "sourceType": "module",
+    "extraFileExtensions": [".vue"]
+  }
 }
