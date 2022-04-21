@@ -145,8 +145,13 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
 ## FAQ
 
 <details>
-  <summary>Facing caching problem?</summary>
-  Disable the <code>cache</code> option. Or delete the cache file (default <code>node_modules/.vite/vite-plugin-eslint</code>) and restart Vite.
+  <summary>Cache is broken</summary>
+  <ul>
+    <li>Disable <code>cache</code> option.</li>
+    <li>Or delete the cache file (default <code>node_modules/.vite/vite-plugin-eslint</code>), fix errors manully and restart Vite.
+    </li>
+  </ul>
+  This problem should only happens when starting Vite with ESLint errors. Have a better solution? PR welcome. :)
 </details>
 
 ## Examples
