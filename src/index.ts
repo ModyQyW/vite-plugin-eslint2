@@ -25,7 +25,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const cache = options?.cache ?? true;
   const cacheLocation =
     options?.cacheLocation ?? path.join('node_modules', '.vite', 'vite-plugin-eslint');
-  const include = options?.include ?? [/.*\.(vue|js|jsx|ts|tsx)$/];
+  const include = options?.include ?? [/.*\.(vue|js|jsx|ts|tsx|svelte)$/];
   let exclude = options?.exclude ?? [/node_modules/];
   const eslintPath = options?.eslintPath ?? 'eslint';
   const defaultFormatter = 'stylish';
