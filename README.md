@@ -142,6 +142,10 @@ The warnings found will be emitted when enabled. This is enabled by default.
 
 The warnings found will be emitted as errors when enabled. This is disabled by default.
 
+## Examples
+
+See [examples](https://github.com/ModyQyW/vite-plugin-eslint/tree/main/examples).
+
 ## CHANGELOG
 
 See [CHANGELOG.md](./CHANGELOG.md).
