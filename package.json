@@ -11,7 +11,8 @@
   "license": "MIT",
   "author": {
     "name": "ModyQyW",
-    "email": "wurui7@mail3.sysu.edu.cn"
+    "email": "wurui-dev@foxmail.com",
+    "url": "https://modyqyw.github.io"
   },
   "exports": {
     ".": {
