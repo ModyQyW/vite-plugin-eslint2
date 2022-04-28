@@ -42,7 +42,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
 
   return {
     name: 'vite:eslint',
-    configResolved(config) {
+    async configResolved(config) {
       // convert exclude to array
       // push config.build.outDir into exclude
       if (Array.isArray(exclude)) {
@@ -50,12 +50,26 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
       } else {
         exclude = [exclude as string | RegExp, config.build.outDir].filter((item) => !!item);
       }
+      // create filter
       filter = createFilter(include, exclude);
     },
     async transform(_, id) {
+      // id should be ignored: vite-plugin-eslint/examples/vue/index.html
+      // file should be ignored: vite-plugin-eslint/examples/vue/index.html
+
+      // id should be ignored: vite-plugin-eslint/examples/vue/index.html?html-proxy&index=0.css
+      // file should be ignored: vite-plugin-eslint/examples/vue/index.html
+
+      // id should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
+      // file should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
+
+      // id should be ignored: vite-plugin-eslint/examples/vue/src/app.vue?vue&type=style&index=0&lang.css
+      // file should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
+
       const file = normalizePath(id).split('?')[0];
 
-      if (!filter(file)) {
+      // !filter(file) will cause double lints and regressions
+      if (!filter(id)) {
         return null;
       }
 
@@ -75,6 +89,10 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
             console.log('');
             this.error(`Failed to import ESLint. Have you installed and configured correctly?`);
           });
+      }
+
+      if (await eslint.isPathIgnored(file)) {
+        return null;
       }
 
       await eslint
