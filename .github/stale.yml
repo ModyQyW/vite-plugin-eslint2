@@ -1,0 +1,12 @@
+daysUntilStale: 28
+daysUntilClose: 7
+onlyLabels: []
+exemptLabels: [pinned, security, bug]
+exemptProjects: true
+exemptMilestones: true
+exemptAssignees: false
+staleLabel: stale
+markComment: >
+  This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs. Thank you for your contributions.
+  因为这个议题最近没有活动，所以它被自动标记为 stale。如果没有进一步的活动，它将会被关闭。谢谢你们的贡献。
+limitPerRun: 30
