@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsup src/index.ts --external eslint,vite --format esm,cjs --dts --minify",
     "commit": "git-cz",
-    "dev": "pnpm run build -- --watch src",
+    "dev": "pnpm run build --watch src",
     "examples:react:build": "pnpm run build --filter react",
     "examples:react:dev": "pnpm run dev --filter react",
     "examples:vue:build": "pnpm run build --filter vue",
