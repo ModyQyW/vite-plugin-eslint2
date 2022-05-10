@@ -1,8 +1,8 @@
 import { createFilter, normalizePath } from '@rollup/pluginutils';
-import type Vite from 'vite';
-import type ESLint from 'eslint';
+import type * as Vite from 'vite';
+import type * as ESLint from 'eslint';
 import type { FilterPattern } from '@rollup/pluginutils';
-import path from 'path';
+import * as path from 'path';
 
 export interface Options extends ESLint.ESLint.Options {
   cache?: boolean;
