@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.2
+
+- fix: remove `allowSyntheticDefaultImports` and `esModuleInterop` in `tsconfig.json`
+
 ## 1.3.1
 
 - fix: fix regressions
