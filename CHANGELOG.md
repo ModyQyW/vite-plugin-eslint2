@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.0
+
+- feat!: requires `node >= 14`
+- feat!: requires `vite >= 3`
+- feat!: remove `throwOnError` and `throwOnWarning` options
+
 ## 1.3.2
 
 - fix: remove `allowSyntheticDefaultImports` and `esModuleInterop` in `tsconfig.json`
