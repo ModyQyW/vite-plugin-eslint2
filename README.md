@@ -92,7 +92,7 @@ This is used to [create a filter](https://github.com/rollup/plugins/blob/master/
 ### `exclude`
 
 - Type: `FilterPattern`
-- Default: `[/node_modules/, viteConfig.build.outDir]`
+- Default: `[/node_modules/]`
 
 A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns.
 
