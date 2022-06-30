@@ -1,4 +1,5 @@
 import { createFilter, normalizePath } from '@rollup/pluginutils';
+import fs from 'node:fs';
 import type * as Vite from 'vite';
 import type * as ESLint from 'eslint';
 import type { FilterPattern } from '@rollup/pluginutils';
@@ -58,7 +59,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
       const file = normalizePath(id).split('?')[0];
 
       // !filter(file) will cause double lints and regressions
-      if (!filter(id)) {
+      if (!filter(id) || !fs.existsSync(file)) {
         return null;
       }
 
