@@ -26,7 +26,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const cacheLocation =
     options?.cacheLocation ?? path.join('node_modules', '.vite', 'vite-plugin-eslint');
   const include = options?.include ?? [/.*\.(vue|js|jsx|ts|tsx|svelte)$/];
-  let exclude = options?.exclude ?? [/node_modules/];
+  const exclude = options?.exclude ?? [/node_modules/];
   const eslintPath = options?.eslintPath ?? 'eslint';
   const defaultFormatter = 'stylish';
   const formatter = options?.formatter ?? defaultFormatter;
@@ -36,23 +36,12 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const emitWarning = options?.emitWarning ?? options?.throwOnWarning ?? true;
   const emitWarningAsError = options?.emitWarningAsError ?? false;
 
-  let filter: (id: string | unknown) => boolean;
+  const filter = createFilter(include, exclude);
   let eslint: ESLint.ESLint;
   let outputFixes: typeof ESLint.ESLint.outputFixes;
 
   return {
     name: 'vite:eslint',
-    async configResolved(config) {
-      // convert exclude to array
-      // push config.build.outDir into exclude
-      if (Array.isArray(exclude)) {
-        exclude.push(config.build.outDir);
-      } else {
-        exclude = [exclude as string | RegExp, config.build.outDir].filter((item) => !!item);
-      }
-      // create filter
-      filter = createFilter(include, exclude);
-    },
     async transform(_, id) {
       // id should be ignored: vite-plugin-eslint/examples/vue/index.html
       // file should be ignored: vite-plugin-eslint/examples/vue/index.html
