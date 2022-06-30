@@ -28,7 +28,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup-node src/index.ts --format esm,cjs --dts --minify",
+    "build": "tsup-node src/index.ts --format esm,cjs --dts --minify --target node12",
     "commit": "git-cz",
     "dev": "pnpm run build --watch src",
     "examples:react:build": "pnpm --filter react run build",
@@ -57,29 +57,29 @@
     "@rollup/pluginutils": "^4.2.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.2",
-    "@commitlint/config-conventional": "^17.0.2",
-    "@commitlint/prompt": "^17.0.0",
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "@commitlint/prompt": "^17.0.3",
     "@release-it/conventional-changelog": "^5.0.0",
-    "@tsconfig/node14": "^1.0.3",
+    "@tsconfig/node16": "^1.0.3",
     "@types/eslint": "^8.4.3",
     "@types/node": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.29.0",
-    "@typescript-eslint/parser": "^5.29.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
-    "release-it": "^15.0.0",
+    "release-it": "^15.1.1",
     "tsup": "^6.1.2",
     "typescript": "^4.7.4",
-    "vite": "^2.9.12"
+    "vite": "^2.9.13"
   },
   "peerDependencies": {
     "@types/eslint": "^7.0.0 || ^8.0.0",
     "eslint": "^7.0.0 || ^8.0.0",
-    "vite": "^2.0.0"
+    "vite": "^2.0.0 || ^3.0.0-0"
   },
   "publishConfig": {
     "access": "public",
