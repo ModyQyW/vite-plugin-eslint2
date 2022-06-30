@@ -5,6 +5,7 @@
 - feat: support `vite@3`
 - feat: ignore virtual modules
 - perf: not to add `build.outDir` into `exclude`
+- fix: fix `then` handling
 
 ## 1.3.2
 
