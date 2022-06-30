@@ -93,7 +93,9 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
           this.error(`${error?.message ?? error}`);
         })
         // lint results
-        .then(async (lintResults: ESLint.ESLint.LintResult[]) => {
+        .then(async (lintResults: ESLint.ESLint.LintResult[] | void) => {
+          if (!lintResults) return;
+
           if (lintResults.length > 0 && options.fix) {
             outputFixes(lintResults);
           }
