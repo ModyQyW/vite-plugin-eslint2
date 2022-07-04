@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "plugin:svelte/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "root": true,
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module",
+    "extraFileExtensions": [".svelte"]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.svelte", "*.svelte"],
+      "parser": "svelte-eslint-parser",
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser"
+      }
+    }
+  ]
+}

@@ -35,6 +35,8 @@
     "examples:react:dev": "pnpm --filter react run dev",
     "examples:vue:build": "pnpm --filter vue run build",
     "examples:vue:dev": "pnpm --filter vue run dev",
+    "examples:svelte:build": "pnpm --filter svelte run build",
+    "examples:svelte:dev": "pnpm --filter svelte run dev",
     "lint": "eslint src --fix && tsc --noEmit",
     "prepare": "husky install",
     "prepublishOnly": "pnpm run build",
