@@ -75,9 +75,14 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
             loadedFormatter = await eslint.loadFormatter(formatter);
             outputFixes = module.ESLint.outputFixes.bind(module.ESLint);
           })
-          .catch(() => {
+          .catch((error) => {
             console.log('');
-            this.error(`Failed to import ESLint. Have you installed and configured correctly?`);
+            this.error(
+              `${
+                error?.message ??
+                'Failed to import ESLint. Have you installed and configured correctly?'
+              }`,
+            );
           });
       }
 
