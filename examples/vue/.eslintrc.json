@@ -10,19 +10,21 @@
     "node": true,
     "browser": true
   },
-  "parser": "vue-eslint-parser",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "parser": {
-      "js": "@babel/eslint-parser",
-      "javascript": "@babel/eslint-parser",
-      "ts": "@typescript-eslint/parser",
-      "typescript": "@typescript-eslint/parser"
-    },
     "ecmaFeatures": {
       "jsx": true
     },
-    "requireConfigFile": false,
     "sourceType": "module",
     "extraFileExtensions": [".vue"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.vue", "*.vue"],
+      "parser": "vue-eslint-parser",
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser"
+      }
+    }
+  ]
 }
