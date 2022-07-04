@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.1
+
+- fix: show error message when importing `eslint` if possible
+- fix: include `shims` into `dist`
+
 ## 1.4.0
 
 - feat: support `vite@3`
