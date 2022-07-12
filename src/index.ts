@@ -57,8 +57,9 @@ export default function ESLintPlugin(options: VitePluginESLintOptions = {}): Vit
       if (!eslint || !loadedFormatter || !outputFixes) {
         try {
           const module = await import(eslintPath);
-          const eslint: ESLint.ESLint = new module.ESLint({
+          eslint = new module.ESLint({
             ...options,
+            errorOnUnmatchedPattern: false,
             cache,
             cacheLocation,
           });
