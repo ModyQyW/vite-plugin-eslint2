@@ -94,12 +94,6 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
 
       await eslint
         .lintFiles(file)
-        // catch config error
-        .catch((error) => {
-          console.log('');
-          this.error(`${error?.message ?? error}`);
-        })
-        // lint results
         .then(async (lintResults: ESLint.ESLint.LintResult[] | void) => {
           if (!lintResults) return;
 
@@ -130,6 +124,10 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
               this.warn(formatResult);
             }
           }
+        })
+        .catch((error) => {
+          console.log('');
+          this.error(`${error?.message ?? error}`);
         });
 
       return null;
