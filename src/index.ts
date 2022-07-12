@@ -58,7 +58,23 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
         try {
           const module = await import(eslintPath);
           eslint = new module.ESLint({
-            ...options,
+            // omit keys
+            ...Object.fromEntries(
+              Object.entries(options).filter(
+                ([key]) =>
+                  ![
+                    'include',
+                    'exclude',
+                    'eslintPath',
+                    'formatter',
+                    'lintOnStart',
+                    'emitError',
+                    'emitErrorAsWarning',
+                    'emitWarning',
+                    'emitWarningAsError',
+                  ].includes(key),
+              ),
+            ),
             errorOnUnmatchedPattern: false,
             cache,
             cacheLocation,
