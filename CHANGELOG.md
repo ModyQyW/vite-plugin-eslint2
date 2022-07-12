@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.1
+
+- fix: fix type
+
 ## 2.0.0
 
 - feat!: remove `throwOnError` and `throwOnWarning` options (marked as `deprecated` before)
