@@ -53,26 +53,7 @@ export default function ESLintPlugin(options: VitePluginESLintOptions = {}): Vit
 
   return {
     name: 'vite:eslint',
-    async transform(_, id) {
-      // id should be ignored: vite-plugin-eslint/examples/vue/index.html
-      // file should be ignored: vite-plugin-eslint/examples/vue/index.html
-
-      // id should be ignored: vite-plugin-eslint/examples/vue/index.html?html-proxy&index=0.css
-      // file should be ignored: vite-plugin-eslint/examples/vue/index.html
-
-      // id should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
-      // file should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
-
-      // id should be ignored: vite-plugin-eslint/examples/vue/src/app.vue?vue&type=style&index=0&lang.css
-      // file should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
-
-      const file = normalizePath(id).split('?')[0];
-
-      // !filter(file) will cause double lints and regressions
-      if (!filter(id) || isVirtualModule(file)) {
-        return null;
-      }
-
+    async buildStart() {
       // initial
       if (!eslint || !loadedFormatter || !outputFixes) {
         await import(eslintPath)
@@ -94,6 +75,26 @@ export default function ESLintPlugin(options: VitePluginESLintOptions = {}): Vit
               }`,
             );
           });
+      }
+    },
+    async transform(_, id) {
+      // id should be ignored: vite-plugin-eslint/examples/vue/index.html
+      // file should be ignored: vite-plugin-eslint/examples/vue/index.html
+
+      // id should be ignored: vite-plugin-eslint/examples/vue/index.html?html-proxy&index=0.css
+      // file should be ignored: vite-plugin-eslint/examples/vue/index.html
+
+      // id should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
+      // file should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
+
+      // id should be ignored: vite-plugin-eslint/examples/vue/src/app.vue?vue&type=style&index=0&lang.css
+      // file should NOT be ignored: vite-plugin-eslint/examples/vue/src/app.vue
+
+      const file = normalizePath(id).split('?')[0];
+
+      // !filter(file) will cause double lints and regressions
+      if (!filter(id) || isVirtualModule(file)) {
+        return null;
       }
 
       if (await eslint.isPathIgnored(file)) {
