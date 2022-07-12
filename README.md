@@ -82,8 +82,8 @@ Path to a file or directory for the cache location.
 
 ### `include`
 
-- Type: `FilterPattern`
-- Default: `[/.*\.(vue|js|jsx|ts|tsx|svelte)$/]`
+- Type: `string | string[]`
+- Default: `['src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx', 'src/**/*.vue', 'src/**/*.svelte']`
 
 A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns.
 
@@ -91,8 +91,8 @@ This is used to [create a filter](https://github.com/rollup/plugins/blob/master/
 
 ### `exclude`
 
-- Type: `FilterPattern`
-- Default: `[/node_modules/]`
+- Type: `string | string[]`
+- Default: `['node_modules', 'virtual:']`
 
 A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) pattern, or array of patterns.
 
@@ -113,6 +113,13 @@ Path to ESLint instance that will be used for linting. Read [vite server.fs opti
 The name or the path of a formatter.
 
 This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) in order to convert lint results to a human- or machine-readable string.
+
+### `lintOnStart`
+
+- Type: `boolean`
+- Default: `false`
+
+Lint on start. Useful to check all codes, but slow down speed. This is disabled by default.
 
 ### `emitError`
 
