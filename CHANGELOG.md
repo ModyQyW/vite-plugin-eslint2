@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.2
+
+- fix: omit keys to avoid `new ESLint` error
+
 ## 2.0.1
 
 - fix: fix type
