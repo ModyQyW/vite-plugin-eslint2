@@ -32,7 +32,7 @@ export default function ESLintPlugin(options: VitePluginESLintOptions = {}): Vit
     'src/**/*.vue',
     'src/**/*.svelte',
   ];
-  const exclude = options?.exclude ?? ['node_modules'];
+  const exclude = options?.exclude ?? ['node_modules', 'virtual:'];
   const eslintPath = options?.eslintPath ?? 'eslint';
   const defaultFormatter = 'stylish';
   const formatter = options?.formatter ?? defaultFormatter;
