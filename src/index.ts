@@ -37,7 +37,7 @@ export default function ESLintPlugin(options: VitePluginESLintOptions = {}): Vit
   const defaultFormatter = 'stylish';
   const formatter = options?.formatter ?? defaultFormatter;
   let loadedFormatter: ESLint.ESLint.Formatter;
-  const lintOnStart = options?.lintOnStart ?? true;
+  const lintOnStart = options?.lintOnStart ?? false;
   const emitError = options?.emitError ?? true;
   const emitErrorAsWarning = options?.emitErrorAsWarning ?? false;
   const emitWarning = options?.emitWarning ?? true;
