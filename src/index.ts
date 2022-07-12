@@ -6,7 +6,7 @@ import * as path from 'path';
 
 export type FilterPattern = string | string[];
 
-export interface VitePluginESLintOptions extends ESLint.ESLint.Options {
+export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   cache?: boolean;
   cacheLocation?: string;
   include?: FilterPattern;
@@ -20,7 +20,7 @@ export interface VitePluginESLintOptions extends ESLint.ESLint.Options {
   emitWarningAsError?: boolean;
 }
 
-export default function ESLintPlugin(options: VitePluginESLintOptions = {}): Vite.Plugin {
+export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Plugin {
   const cache = options?.cache ?? true;
   const cacheLocation =
     options?.cacheLocation ?? path.join('node_modules', '.vite', 'vite-plugin-eslint');
