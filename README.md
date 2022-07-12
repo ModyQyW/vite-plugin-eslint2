@@ -161,6 +161,11 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
   This problem should only happens when starting Vite with ESLint errors. Have a better solution? PR welcome. :)
 </details>
 
+<details>
+  <summary><code>Vite</code> is slow when using this plugin</summary>
+  <p>You can try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>, or just run <code>ESLint</code> besides <code>Vite</code>.</p>
+</details>
+
 ## Examples
 
 See [examples](https://github.com/ModyQyW/vite-plugin-eslint/tree/main/examples).
