@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.0.0
+
+- feat!: remove `throwOnError` and `throwOnWarning` options (marked as `deprecated` before)
+- feat!: `include` and `exclude` options now accept `string | string[]` only to align with `eslint.lintFiles`
+- feat: add `lintOnStart` option
+- feat: exclude `virtual:` by default
+
 ## 1.4.1
 
 - fix: show error message when importing `eslint` if possible
