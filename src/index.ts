@@ -38,6 +38,8 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const emitWarningAsError = options?.emitWarningAsError ?? false;
 
   const filter = createFilter(include, exclude);
+  const isVirtualModule = (file: fs.PathLike) => !fs.existsSync(file);
+
   let eslint: ESLint.ESLint;
   let outputFixes: typeof ESLint.ESLint.outputFixes;
 
@@ -59,7 +61,7 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
       const file = normalizePath(id).split('?')[0];
 
       // !filter(file) will cause double lints and regressions
-      if (!filter(id) || !fs.existsSync(file)) {
+      if (!filter(id) || isVirtualModule(file)) {
         return null;
       }
 
