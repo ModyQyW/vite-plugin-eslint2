@@ -2,8 +2,9 @@ import { createFilter, normalizePath } from '@rollup/pluginutils';
 import fs from 'node:fs';
 import type * as Vite from 'vite';
 import type * as ESLint from 'eslint';
-import type { FilterPattern } from '@rollup/pluginutils';
 import * as path from 'path';
+
+export type FilterPattern = string | string[] | null;
 
 export interface Options extends ESLint.ESLint.Options {
   cache?: boolean;
@@ -26,8 +27,15 @@ export default function ESLintPlugin(options: Options = {}): Vite.Plugin {
   const cache = options?.cache ?? true;
   const cacheLocation =
     options?.cacheLocation ?? path.join('node_modules', '.vite', 'vite-plugin-eslint');
-  const include = options?.include ?? [/.*\.(vue|js|jsx|ts|tsx|svelte)$/];
-  const exclude = options?.exclude ?? [/node_modules/];
+  const include = options?.include ?? [
+    'src/**/*.js',
+    'src/**/*.jsx',
+    'src/**/*.ts',
+    'src/**/*.tsx',
+    'src/**/*.vue',
+    'src/**/*.svelte',
+  ];
+  const exclude = options?.exclude ?? ['node_modules'];
   const eslintPath = options?.eslintPath ?? 'eslint';
   const defaultFormatter = 'stylish';
   const formatter = options?.formatter ?? defaultFormatter;
