@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.3
+
+Just update `peerDependencies` in `package.json`.
+
 ## 2.0.2
 
 - fix: omit keys to avoid `new ESLint` error
@@ -9,6 +13,8 @@
 - fix: fix type
 
 ## 2.0.0
+
+This version supports vite@2 and vite@3. The breaking changes are caused by aligning behaviors with `ESLint` Node.js API.
 
 - feat!: remove `throwOnError` and `throwOnWarning` options (marked as `deprecated` before)
 - feat!: `include` and `exclude` options now accept `string | string[]` only to align with `eslint.lintFiles`
