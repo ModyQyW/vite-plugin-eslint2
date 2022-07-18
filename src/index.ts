@@ -1,8 +1,8 @@
 import { createFilter, normalizePath } from '@rollup/pluginutils';
 import fs from 'node:fs';
+import path from 'node:path';
 import type * as Vite from 'vite';
 import type * as ESLint from 'eslint';
-import * as path from 'path';
 
 export type FilterPattern = string | string[];
 
