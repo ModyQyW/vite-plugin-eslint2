@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## Unreleased
+## 2.0.4
 
 - perf: import path from `node:path` instead of `path`
+- fix: fix `type: "module"` support
 
 ## 2.0.3
 
