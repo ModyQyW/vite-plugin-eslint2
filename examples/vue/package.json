@@ -13,11 +13,11 @@
   "devDependencies": {
     "@modyqyw/vite-plugin-eslint": "workspace:*",
     "@types/eslint": "^8.4.5",
-    "@typescript-eslint/eslint-plugin": "^5.30.6",
-    "@typescript-eslint/parser": "^5.30.6",
-    "@vitejs/plugin-vue": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
+    "@vitejs/plugin-vue": "^3.0.1",
     "@vue/compiler-sfc": "^3.2.37",
-    "eslint": "^8.19.0",
+    "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.2.0",
@@ -31,9 +31,9 @@
     "sass": "^1.53.0",
     "tailwindcss": "^3.1.6",
     "typescript": "^4.7.4",
-    "vite": "^3.0.0",
-    "vite-plugin-inspect": "^0.5.1",
+    "vite": "^3.0.2",
+    "vite-plugin-inspect": "^0.6.0",
     "vue-eslint-parser": "^9.0.3",
-    "vue-tsc": "^0.38.5"
+    "vue-tsc": "^0.38.9"
   }
 }
