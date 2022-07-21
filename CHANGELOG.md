@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.6
+
+fix: fix typo
+
 ## 2.0.5
 
 - perf: warn when `lintOnStart` is true
