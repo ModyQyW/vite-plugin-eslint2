@@ -133,8 +133,9 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
       // lint on start
       if (lintOnStart) {
         console.log('');
-        this.warn(`ESLint is linting all files in the project because \`lintOnStart\` is true.`);
-        this.warn(`This will significantly slow down Vite.`);
+        this.warn(
+          `ESLint is linting all files in the project because \`lintOnStart\` is true. This will significantly slow down Vite.`,
+        );
         await lintFiles(include);
       }
     },
