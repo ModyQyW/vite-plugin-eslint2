@@ -1,8 +1,12 @@
 # CHANGELOG
 
+## 2.0.7
+
+- fix: warning styles
+
 ## 2.0.6
 
-fix: fix typo
+- fix: fix typo
 
 ## 2.0.5
 
