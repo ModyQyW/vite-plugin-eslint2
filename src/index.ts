@@ -1,6 +1,7 @@
 import { createFilter, normalizePath } from '@rollup/pluginutils';
 import fs from 'node:fs';
 import path from 'node:path';
+import type { PluginContext } from 'rollup';
 import type * as Vite from 'vite';
 import type * as ESLint from 'eslint';
 
@@ -48,7 +49,7 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
 
   let eslint: ESLint.ESLint;
   let outputFixes: typeof ESLint.ESLint.outputFixes;
-  let lintFiles: (files: FilterPattern) => Promise<void>;
+  let lintFiles: (ctx: PluginContext, files: FilterPattern) => Promise<void>;
 
   return {
     name: 'vite:eslint',
@@ -81,7 +82,7 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
           });
           loadedFormatter = await eslint.loadFormatter(formatter);
           outputFixes = module.ESLint.outputFixes.bind(module.ESLint);
-          lintFiles = async (files) =>
+          lintFiles = async (ctx, files) =>
             await eslint
               .lintFiles(files)
               .then(async (lintResults: ESLint.ESLint.LintResult[] | void) => {
@@ -97,9 +98,9 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
                   );
                   console.log('');
                   if (emitErrorAsWarning) {
-                    this.warn(formatResult);
+                    ctx.warn(formatResult);
                   } else {
-                    this.error(formatResult);
+                    ctx.error(formatResult);
                   }
                 }
 
@@ -109,15 +110,15 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
                   );
                   console.log('');
                   if (emitWarningAsError) {
-                    this.error(formatResult);
+                    ctx.error(formatResult);
                   } else {
-                    this.warn(formatResult);
+                    ctx.warn(formatResult);
                   }
                 }
               })
               .catch((error) => {
                 console.log('');
-                this.error(`${error?.message ?? error}`);
+                ctx.error(`${error?.message ?? error}`);
               });
         } catch (error) {
           console.log('');
@@ -136,7 +137,7 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
         this.warn(
           `ESLint is linting all files in the project because \`lintOnStart\` is true. This will significantly slow down Vite.`,
         );
-        await lintFiles(include);
+        await lintFiles(this, include);
       }
     },
     async transform(_, id) {
@@ -163,7 +164,7 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
         return null;
       }
 
-      await lintFiles(file);
+      await lintFiles(this, file);
 
       return null;
     },
