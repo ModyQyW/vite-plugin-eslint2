@@ -1,6 +1,6 @@
 {
   "name": "@modyqyw/vite-plugin-eslint",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "ESLint plugin for vite.",
   "keywords": [
     "eslint",
