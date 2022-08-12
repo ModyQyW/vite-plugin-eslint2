@@ -6,7 +6,7 @@
 
 ## 2.0.8
 
-- fix: pass ctx to lintFiles method
+- fix: pass `ctx` to lintFiles method
 
 ## 2.0.7
 
