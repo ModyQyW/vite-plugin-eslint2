@@ -23,8 +23,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
 
 export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Plugin {
   const cache = options?.cache ?? true;
-  const cacheLocation =
-    options?.cacheLocation ?? path.join('node_modules', '.vite', 'vite-plugin-eslint');
+  let cacheLocation = '';
   const include = options?.include ?? [
     'src/**/*.js',
     'src/**/*.jsx',
@@ -53,6 +52,9 @@ export default function ESLintPlugin(options: ESLintPluginOptions = {}): Vite.Pl
 
   return {
     name: 'vite:eslint',
+    configResolved(config) {
+      cacheLocation = options?.cacheLocation ?? path.resolve(config.cacheDir, 'vite-plugin-eslint');
+    },
     async buildStart() {
       // initial
       if (!eslint || !loadedFormatter || !outputFixes) {

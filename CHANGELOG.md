@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.9
+
+- perf: use `config.cacheDir` to get default `cacheLocation`
+
 ## 2.0.8
 
 - fix: pass ctx to lintFiles method

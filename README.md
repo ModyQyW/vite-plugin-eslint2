@@ -76,9 +76,9 @@ Store the results of processed files when enabled. This is enabled by default to
 ### `cacheLocation`
 
 - Type: `string`
-- Default: `path.join('node_modules', '.vite', 'vite-plugin-eslint')`
+- Default: `path.resolve(config.cacheDir, 'vite-plugin-eslint')`
 
-Path to a file or directory for the cache location.
+Path to a file or directory for the cache location. See [config.cacheDir](https://vitejs.dev/config/shared-options.html#cachedir) for more.
 
 ### `include`
 
