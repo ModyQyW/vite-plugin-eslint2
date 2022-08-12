@@ -44,19 +44,6 @@
     "prepublishOnly": "pnpm run build",
     "release": "release-it"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "lint-staged": {
-    "*.ts": "eslint --fix"
-  },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/prompt"
-    }
-  },
   "dependencies": {
     "@rollup/pluginutils": "^4.2.1"
   },
@@ -88,21 +75,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore(release): v${version}",
-      "tagName": "v${version}"
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "header": "# Changelog",
-        "preset": "conventionalcommits"
-      }
-    },
-    "hooks": {
-      "before:init": "pnpm install && pnpm run lint",
-      "after:bump": "pnpm run build"
-    }
   }
 }
