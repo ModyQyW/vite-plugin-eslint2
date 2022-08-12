@@ -166,6 +166,13 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
   <p>You can try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>, or just run <code>ESLint</code> besides <code>Vite</code>.</p>
 </details>
 
+<details>
+  <summary>What's the difference between <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and this project?</summary>
+  <p>This project initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
+  <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
+  <p>Now it seems gxmari007 is back again. But I will still keep updating this project. Feel free to choose one.</p>
+</details>
+
 ## Examples
 
 See [examples](https://github.com/ModyQyW/vite-plugin-eslint/tree/main/examples).
