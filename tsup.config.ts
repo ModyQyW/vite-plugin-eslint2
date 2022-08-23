@@ -8,9 +8,10 @@ export default defineConfig([
     dts: true,
     minify: true,
     shims: true,
+    splitting: false,
     target: 'node12',
     banner: {
-      js: `import {createRequire} from 'module';var require=createRequire(import\.meta.url);`,
+      js: `import {createRequire as __createRequire} from 'module';var require=createRequire(import\.meta.url);`,
     },
   },
   {
@@ -18,6 +19,11 @@ export default defineConfig([
     format: 'cjs',
     minify: true,
     shims: true,
+    splitting: false,
     target: 'node12',
+    footer: {
+      js: `if (module.exports.default) module.exports = module.exports.default;`,
+    },
   },
 ]);
+/* eslint-enable no-useless-escape */
