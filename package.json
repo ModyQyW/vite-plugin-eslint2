@@ -75,6 +75,9 @@
     "eslint": "^7.0.0 || ^8.0.0",
     "vite": "^2.0.0 || ^3.0.0"
   },
+  "engines": {
+    "node": ">=12.2"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
