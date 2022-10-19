@@ -185,6 +185,13 @@ See [CHANGELOG.md](./CHANGELOG.md).
 
 Initially forked from [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint).
 
+## Plan for v3
+
+- Support vite@4, support vite@2 and vite@3 if possible
+- Support eslint@9, support eslint@7 and eslint@8 if possible
+- Require node >= 14.16
+- Remove esm bundle banner (No need for node >= 14.16)
+
 ## License
 
 MIT
