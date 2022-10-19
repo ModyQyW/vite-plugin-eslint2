@@ -11,7 +11,7 @@ export default defineConfig([
     splitting: false,
     target: 'node12.2',
     banner: {
-      js: `import {createRequire as __createRequire} from 'module';var require=createRequire(import\.meta.url);`,
+      js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
     },
   },
   {
