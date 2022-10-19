@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.10
+
+- fix: fix build
+
 ## 2.0.9
 
 - perf: use `config.cacheDir` to get default `cacheLocation`
