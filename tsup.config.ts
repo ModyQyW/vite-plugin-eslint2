@@ -1,29 +1,28 @@
-/* eslint-disable no-useless-escape */
 import { defineConfig } from 'tsup';
 
 export default defineConfig([
   {
     entry: ['src/index.ts'],
-    format: 'esm',
+    format: ['esm', 'cjs'],
     dts: true,
     minify: true,
     shims: true,
     splitting: false,
     target: 'node12.2',
-    banner: {
-      js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
+    banner: ({ format }) => {
+      if (format === 'esm') {
+        return {
+          // eslint-disable-next-line no-useless-escape
+          js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
+        };
+      }
     },
-  },
-  {
-    entry: ['src/index.ts'],
-    format: 'cjs',
-    minify: true,
-    shims: true,
-    splitting: false,
-    target: 'node12.2',
-    footer: {
-      js: `if (module.exports.default) module.exports = module.exports.default;`,
+    footer: ({ format }) => {
+      if (format === 'cjs') {
+        return {
+          js: `if (module.exports.default) module.exports = module.exports.default;`,
+        };
+      }
     },
   },
 ]);
-/* eslint-enable no-useless-escape */
