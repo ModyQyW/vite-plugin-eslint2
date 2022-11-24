@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.11 (2022-11-24)
+
+- perf: reduce dependencies
+
 ## 2.0.10
 
 - fix: fix build
