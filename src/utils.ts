@@ -1,4 +1,3 @@
-import { existsSync, type PathLike } from 'node:fs';
 import { resolve } from 'node:path';
 import type {
   ESLintFormatter,
@@ -10,8 +9,8 @@ import type {
   ESLintPluginUserOptions,
   LintFiles,
 } from './types';
-import type { ResolvedConfig } from 'vite';
-import type { PluginContext } from 'rollup';
+import type * as Vite from 'vite';
+import type * as Rollup from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 
 // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/importMetaGlob.ts
@@ -33,7 +32,7 @@ export const getFinalOptions = (
     emitWarning,
     emitWarningAsError,
   }: ESLintPluginUserOptions,
-  { cacheDir }: ResolvedConfig,
+  { cacheDir }: Vite.ResolvedConfig,
 ): ESLintPluginOptions => ({
   cache: cache ?? true,
   cacheLocation: cacheLocation ?? resolve(cacheDir, 'vite-plugin-eslint'),
@@ -72,7 +71,7 @@ export const getESLintConstructorOptions = (opts: ESLintPluginOptions): ESLintOp
   cacheLocation: opts.cacheLocation,
 });
 
-export const initialESLint = async (opts: ESLintPluginOptions, ctx: PluginContext) => {
+export const initialESLint = async (opts: ESLintPluginOptions, ctx: Rollup.PluginContext) => {
   try {
     const module = await import(opts.eslintPath);
     const eslint = new module.ESLint(getESLintConstructorOptions(opts)) as ESLintInstance;

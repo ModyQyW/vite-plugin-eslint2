@@ -1,11 +1,11 @@
 import { createFilter } from '@rollup/pluginutils';
-import type { ESLint } from 'eslint';
-import type { PluginContext } from 'rollup';
+import type * as ESLint from 'eslint';
+import type * as Rollup from 'rollup';
 
 export type FilterPattern = string | string[];
 export type Filter = ReturnType<typeof createFilter>;
 
-export interface ESLintPluginOptions extends ESLint.Options {
+export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   cache: boolean;
   cacheLocation: string;
   include: FilterPattern;
@@ -20,11 +20,11 @@ export interface ESLintPluginOptions extends ESLint.Options {
 }
 export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
 
-export type ESLintInstance = ESLint;
-export type ESLintOptions = ESLint.Options;
-export type ESLintFormatter = ESLint.Formatter;
-export type ESLintOutputFixes = typeof ESLint.outputFixes;
-export type ESLintLintResult = ESLint.LintResult;
+export type ESLintInstance = ESLint.ESLint;
+export type ESLintOptions = ESLint.ESLint.Options;
+export type ESLintFormatter = ESLint.ESLint.Formatter;
+export type ESLintOutputFixes = typeof ESLint.ESLint.outputFixes;
+export type ESLintLintResult = ESLint.ESLint.LintResult;
 export type ESLintLintResults = ESLintLintResult[];
 
-export type LintFiles = (ctx: PluginContext, files: FilterPattern) => Promise<void>;
+export type LintFiles = (ctx: Rollup.PluginContext, files: FilterPattern) => Promise<void>;
