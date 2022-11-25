@@ -1,4 +1,4 @@
-import { normalizePath, createFilter } from 'vite';
+import { normalizePath, createFilter } from '@rollup/pluginutils';
 import fs from 'node:fs';
 import path from 'node:path';
 import type { PluginContext } from 'rollup';
