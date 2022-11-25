@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.12 (2022-11-25)
+
+- revert: revert `perf: reduce dependencies`, which breaks vite@2
+
 ## 2.0.11 (2022-11-24)
 
 - perf: reduce dependencies
