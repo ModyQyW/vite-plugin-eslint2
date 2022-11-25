@@ -159,7 +159,7 @@ importers:
       eslint: ^8.28.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.2.1
-      eslint-plugin-svelte: ^2.13.0
+      eslint-plugin-svelte: ^2.13.1
       less: ^4.1.3
       postcss: ^8.4.19
       postcss-html: ^1.5.0
@@ -169,7 +169,7 @@ importers:
       sass: ^1.56.1
       svelte: ^3.53.1
       svelte-check: ^2.9.2
-      svelte-eslint-parser: ^0.21.0
+      svelte-eslint-parser: ^0.22.0
       svelte-preprocess: ^4.10.7
       tailwindcss: ^3.2.4
       tslib: ^2.4.1
@@ -186,7 +186,7 @@ importers:
       eslint: 8.28.0
       eslint-config-prettier: 8.5.0_eslint@8.28.0
       eslint-plugin-prettier: 4.2.1_cwlo2dingkvfydnaculr42urve
-      eslint-plugin-svelte: 2.13.0_xgu65rlhscpnxffotiaicv6m5i
+      eslint-plugin-svelte: 2.13.1_xgu65rlhscpnxffotiaicv6m5i
       less: 4.1.3
       postcss: 8.4.19
       postcss-html: 1.5.0
@@ -196,7 +196,7 @@ importers:
       sass: 1.56.1
       svelte: 3.53.1
       svelte-check: 2.9.2_tcosvqhl4uvzwguhas5kblviii
-      svelte-eslint-parser: 0.21.0_svelte@3.53.1
+      svelte-eslint-parser: 0.22.0_svelte@3.53.1
       svelte-preprocess: 4.10.7_u7d4p32cz7erkvkok7mpzdta3i
       tailwindcss: 3.2.4_postcss@8.4.19
       tslib: 2.4.1
@@ -3445,8 +3445,8 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-svelte/2.13.0_xgu65rlhscpnxffotiaicv6m5i:
-    resolution: {integrity: sha512-/lNRny2zZmvCqm5DPE7Yt7WaP6ESCcPhiUdeBA57r1SOaCgBGUk6eUX1LtnmV/L3dXMs5ammVG5iX0UpjWF0Kg==}
+  /eslint-plugin-svelte/2.13.1_xgu65rlhscpnxffotiaicv6m5i:
+    resolution: {integrity: sha512-PZ0h8mm9vdVndLNoCUVujYFuWpp+AmCT5GnhjZ1q4dR3zLgQdL+V7Ce0KI1EQ8/4D6GExLMYcOd8vgGUdxxOxg==}
     engines: {node: ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0-0
@@ -3465,7 +3465,7 @@ packages:
       postcss-safe-parser: 6.0.0_postcss@8.4.19
       sourcemap-codec: 1.4.8
       svelte: 3.53.1
-      svelte-eslint-parser: 0.21.0_svelte@3.53.1
+      svelte-eslint-parser: 0.22.0_svelte@3.53.1
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -7139,8 +7139,8 @@ packages:
       - sugarss
     dev: true
 
-  /svelte-eslint-parser/0.21.0_svelte@3.53.1:
-    resolution: {integrity: sha512-RGUPcGPZxjA4xLBrdT5xkw/AdlFOOqRaizLGJLgpjowROfBkAZsPlnNQbAXzPuWnaELjCCQkYUlKaQ6SvzPS2w==}
+  /svelte-eslint-parser/0.22.0_svelte@3.53.1:
+    resolution: {integrity: sha512-KQut6bb5dPwQ1SYTN/m5rxCkEDWDXiZpOXl05afNKGnjCMC5ZpGVrJM7BtFGwV2kPFeIiwRW+ofY3GxfqFBNpw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       svelte: ^3.37.0
