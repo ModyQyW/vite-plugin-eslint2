@@ -21,7 +21,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
 export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
 
 export type ESLintInstance = ESLint.ESLint;
-export type ESLintOptions = ESLint.ESLint.Options;
+export type ESLintConstructorOptions = ESLint.ESLint.Options;
 export type ESLintFormatter = ESLint.ESLint.Formatter;
 export type ESLintOutputFixes = typeof ESLint.ESLint.outputFixes;
 export type ESLintLintResult = ESLint.ESLint.LintResult;

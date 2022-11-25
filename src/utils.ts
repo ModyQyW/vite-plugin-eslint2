@@ -3,7 +3,7 @@ import type {
   ESLintFormatter,
   ESLintInstance,
   ESLintLintResults,
-  ESLintOptions,
+  ESLintConstructorOptions,
   ESLintOutputFixes,
   ESLintPluginOptions,
   ESLintPluginUserOptions,
@@ -49,7 +49,9 @@ export const getFinalOptions = (
 
 export const getFilter = (opts: ESLintPluginOptions) => createFilter(opts.include, opts.exclude);
 
-export const getESLintConstructorOptions = (opts: ESLintPluginOptions): ESLintOptions => ({
+export const getESLintConstructorOptions = (
+  opts: ESLintPluginOptions,
+): ESLintConstructorOptions => ({
   ...Object.fromEntries(
     Object.entries(opts).filter(
       ([key]) =>
