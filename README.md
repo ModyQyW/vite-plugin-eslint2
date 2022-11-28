@@ -66,6 +66,22 @@ export default defineConfig({
 
 Additional options and explanations are listed below.
 
+### `dev`
+
+- Type: `boolean`
+- Default: `true`
+
+Run `eslint` under `serve` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
+
+### `build`
+
+- Type: `boolean`
+- Default: `true`
+
+Run `eslint` under `build` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
+
+**ATTENTION: the default value will be `false` in next major release.**
+
 ### `cache`
 
 - Type: `boolean`
