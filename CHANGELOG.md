@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.1.0 (2022-11-28)
+
+- feat: add `dev` and `build` option
+
 ## 2.0.14 (2022-11-25)
 
 - perf: improve types
