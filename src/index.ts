@@ -12,6 +12,7 @@ import type {
 } from './types';
 
 export default function ESLintPlugin(options: ESLintPluginUserOptions = {}): Vite.Plugin {
+  const { dev = true, build = true } = options;
   let opts: ESLintPluginOptions;
   let filter: Filter;
   let eslint: ESLintInstance;
@@ -21,6 +22,11 @@ export default function ESLintPlugin(options: ESLintPluginUserOptions = {}): Vit
 
   return {
     name: 'vite:eslint',
+    apply(_, { command }) {
+      if (command === 'serve' && dev) return true;
+      if (command === 'build' && build) return true;
+      return false;
+    },
     configResolved(config) {
       opts = getFinalOptions(options, config);
       filter = getFilter(opts);

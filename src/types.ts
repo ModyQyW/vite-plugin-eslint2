@@ -18,7 +18,10 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   emitWarning: boolean;
   emitWarningAsError: boolean;
 }
-export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
+export interface ESLintPluginUserOptions extends Partial<ESLintPluginOptions> {
+  dev?: boolean;
+  build?: boolean;
+}
 
 export type ESLintInstance = ESLint.ESLint;
 export type ESLintConstructorOptions = ESLint.ESLint.Options;
