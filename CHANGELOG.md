@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.1.1 (2022-12-04)
+
+- fix: fix ESLint options lost
+
 ## 2.1.0 (2022-11-28)
 
 - feat: add `dev` and `build` option
