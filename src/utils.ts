@@ -62,6 +62,8 @@ export const getESLintConstructorOptions = (
     Object.entries(opts).filter(
       ([key]) =>
         ![
+          'dev',
+          'build',
           'include',
           'exclude',
           'eslintPath',
