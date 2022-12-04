@@ -6,6 +6,8 @@ export type FilterPattern = string | string[];
 export type Filter = ReturnType<typeof createFilter>;
 
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
+  dev: boolean;
+  build: boolean;
   cache: boolean;
   cacheLocation: string;
   include: FilterPattern;
@@ -18,10 +20,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   emitWarning: boolean;
   emitWarningAsError: boolean;
 }
-export interface ESLintPluginUserOptions extends Partial<ESLintPluginOptions> {
-  dev?: boolean;
-  build?: boolean;
-}
+export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
 
 export type ESLintInstance = ESLint.ESLint;
 export type ESLintConstructorOptions = ESLint.ESLint.Options;

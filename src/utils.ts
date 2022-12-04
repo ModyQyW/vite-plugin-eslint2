@@ -20,6 +20,8 @@ export const isVirtualModule = (id: string) =>
 
 export const getFinalOptions = (
   {
+    dev,
+    build,
     cache,
     cacheLocation,
     include,
@@ -31,9 +33,12 @@ export const getFinalOptions = (
     emitErrorAsWarning,
     emitWarning,
     emitWarningAsError,
+    ...eslintOptions
   }: ESLintPluginUserOptions,
   { cacheDir }: Vite.ResolvedConfig,
 ): ESLintPluginOptions => ({
+  dev: dev ?? true,
+  build: build ?? true,
   cache: cache ?? true,
   cacheLocation: cacheLocation ?? resolve(cacheDir, 'vite-plugin-eslint'),
   include: include ?? ['src/**/*.{js,jsx,ts,tsx,vue,svelte}'],
@@ -45,6 +50,7 @@ export const getFinalOptions = (
   emitErrorAsWarning: emitErrorAsWarning ?? false,
   emitWarning: emitWarning ?? true,
   emitWarningAsError: emitWarningAsError ?? false,
+  ...eslintOptions,
 });
 
 export const getFilter = (opts: ESLintPluginOptions) => createFilter(opts.include, opts.exclude);
@@ -69,8 +75,6 @@ export const getESLintConstructorOptions = (
     ),
   ),
   errorOnUnmatchedPattern: false,
-  cache: opts.cache,
-  cacheLocation: opts.cacheLocation,
 });
 
 export const initialESLint = async (opts: ESLintPluginOptions, ctx: Rollup.PluginContext) => {
