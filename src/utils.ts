@@ -18,7 +18,7 @@ import { createFilter } from '@rollup/pluginutils';
 export const isVirtualModule = (id: string) =>
   id.startsWith('virtual:') || id.startsWith('\0') || !id.includes('/');
 
-export const getFinalOptions = (
+export const getOptions = (
   {
     dev,
     build,
@@ -53,13 +53,14 @@ export const getFinalOptions = (
   ...eslintOptions,
 });
 
-export const getFilter = (opts: ESLintPluginOptions) => createFilter(opts.include, opts.exclude);
+export const getFilter = (options: ESLintPluginOptions) =>
+  createFilter(options.include, options.exclude);
 
 export const getESLintConstructorOptions = (
-  opts: ESLintPluginOptions,
+  options: ESLintPluginOptions,
 ): ESLintConstructorOptions => ({
   ...Object.fromEntries(
-    Object.entries(opts).filter(
+    Object.entries(options).filter(
       ([key]) =>
         ![
           'dev',
@@ -79,11 +80,14 @@ export const getESLintConstructorOptions = (
   errorOnUnmatchedPattern: false,
 });
 
-export const initialESLint = async (opts: ESLintPluginOptions, ctx: Rollup.PluginContext) => {
+export const initialESLint = async (
+  options: ESLintPluginOptions,
+  context: Rollup.PluginContext,
+) => {
   try {
-    const module = await import(opts.eslintPath);
-    const eslint = new module.ESLint(getESLintConstructorOptions(opts)) as ESLintInstance;
-    const formatter = await eslint.loadFormatter(opts.formatter);
+    const module = await import(options.eslintPath);
+    const eslint = new module.ESLint(getESLintConstructorOptions(options)) as ESLintInstance;
+    const formatter = await eslint.loadFormatter(options.formatter);
     const outputFixes = module.ESLint.outputFixes.bind(module.ESLint) as ESLintOutputFixes;
     return {
       eslint,
@@ -92,7 +96,7 @@ export const initialESLint = async (opts: ESLintPluginOptions, ctx: Rollup.Plugi
     };
   } catch (error) {
     console.log('');
-    ctx.error(
+    context.error(
       `${
         (error as Error)?.message ??
         'Failed to import ESLint. Have you installed and configured correctly?'
@@ -108,7 +112,7 @@ export const getLintFiles =
     outputFixes: ESLintOutputFixes,
     { fix, emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
   ): LintFiles =>
-  async (ctx, files) =>
+  async (context, files) =>
     await eslint
       .lintFiles(files)
       .then(async (lintResults: ESLintLintResults | void) => {
@@ -120,19 +124,19 @@ export const getLintFiles =
         if (errorResults.length > 0 && emitError) {
           const formatResult = await formatter.format(errorResults);
           console.log('');
-          if (emitErrorAsWarning) ctx.warn(formatResult);
-          else ctx.error(formatResult);
+          if (emitErrorAsWarning) context.warn(formatResult);
+          else context.error(formatResult);
         }
 
         const warningResults = lintResults.filter((item) => item.warningCount > 0);
         if (warningResults.length > 0 && emitWarning) {
           const formatResult = await formatter.format(warningResults);
           console.log('');
-          if (emitWarningAsError) ctx.error(formatResult);
-          else ctx.warn(formatResult);
+          if (emitWarningAsError) context.error(formatResult);
+          else context.warn(formatResult);
         }
       })
       .catch((error) => {
         console.log('');
-        ctx.error(`${error?.message ?? error}`);
+        context.error(`${error?.message ?? error}`);
       });

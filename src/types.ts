@@ -29,4 +29,4 @@ export type ESLintOutputFixes = typeof ESLint.ESLint.outputFixes;
 export type ESLintLintResult = ESLint.ESLint.LintResult;
 export type ESLintLintResults = ESLintLintResult[];
 
-export type LintFiles = (ctx: Rollup.PluginContext, files: FilterPattern) => Promise<void>;
+export type LintFiles = (context: Rollup.PluginContext, files: FilterPattern) => Promise<void>;
