@@ -13,6 +13,8 @@ import type * as Vite from 'vite';
 import type * as Rollup from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 
+export const pluginName = 'vite:eslint';
+
 // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/importMetaGlob.ts
 // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
 export const isVirtualModule = (id: string) =>

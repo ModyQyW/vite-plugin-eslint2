@@ -1,6 +1,13 @@
 import { normalizePath } from '@rollup/pluginutils';
 import type * as Vite from 'vite';
-import { getFilter, getOptions, getLintFiles, initialESLint, isVirtualModule } from './utils';
+import {
+  getFilter,
+  getOptions,
+  getLintFiles,
+  initialESLint,
+  isVirtualModule,
+  pluginName,
+} from './utils';
 import type {
   Filter,
   ESLintPluginUserOptions,
@@ -21,7 +28,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
   let lintFiles: LintFiles;
 
   return {
-    name: 'vite:eslint',
+    name: pluginName,
     apply(_, { command }) {
       if (command === 'serve' && dev) return true;
       if (command === 'build' && build) return true;
