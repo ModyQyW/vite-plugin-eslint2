@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+
+- feat!: require `vite@^3.0.0` or `vite@^4.0.0-0`, will be `vite@^3.0.0` or `vite@^4.0.0` after `vite@4` released
+- feat!: require `node>=14.18`
+- feat!: `build` option defaults to `false`
+- feat!: `cacheLocation` option defaults to `.eslintcache`
+- feat: esm by default
+  - don't be afraid as commonjs is also supported
+
 ## 2.1.1 (2022-12-04)
 
 - fix: fix ESLint options lost
