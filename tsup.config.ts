@@ -8,15 +8,7 @@ export default defineConfig([
     minify: true,
     shims: true,
     splitting: false,
-    target: 'node12.2',
-    banner: ({ format }) => {
-      if (format === 'esm') {
-        return {
-          // eslint-disable-next-line no-useless-escape
-          js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
-        };
-      }
-    },
+    target: 'node14.18',
     footer: ({ format }) => {
       if (format === 'cjs') {
         return {
