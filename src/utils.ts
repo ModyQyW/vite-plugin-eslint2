@@ -35,7 +35,7 @@ export const getOptions = ({
   ...eslintOptions
 }: ESLintPluginUserOptions): ESLintPluginOptions => ({
   dev: dev ?? true,
-  build: build ?? true,
+  build: build ?? false,
   cache: cache ?? true,
   cacheLocation: cacheLocation ?? '.eslintcache',
   include: include ?? ['src/**/*.{js,jsx,ts,tsx,vue,svelte}'],
