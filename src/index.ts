@@ -1,4 +1,4 @@
-import { normalizePath } from '@rollup/pluginutils';
+import { normalizePath } from 'vite';
 import type * as Vite from 'vite';
 import {
   getFilter,
