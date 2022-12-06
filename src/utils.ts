@@ -1,4 +1,3 @@
-import { resolve } from 'node:path';
 import type {
   ESLintFormatter,
   ESLintInstance,
@@ -9,7 +8,6 @@ import type {
   ESLintPluginUserOptions,
   LintFiles,
 } from './types';
-import type * as Vite from 'vite';
 import type * as Rollup from 'rollup';
 import { createFilter } from 'vite';
 
@@ -20,29 +18,26 @@ export const pluginName = 'vite:eslint';
 export const isVirtualModule = (id: string) =>
   id.startsWith('virtual:') || id.startsWith('\0') || !id.includes('/');
 
-export const getOptions = (
-  {
-    dev,
-    build,
-    cache,
-    cacheLocation,
-    include,
-    exclude,
-    eslintPath,
-    formatter,
-    lintOnStart,
-    emitError,
-    emitErrorAsWarning,
-    emitWarning,
-    emitWarningAsError,
-    ...eslintOptions
-  }: ESLintPluginUserOptions,
-  { cacheDir }: Vite.ResolvedConfig,
-): ESLintPluginOptions => ({
+export const getOptions = ({
+  dev,
+  build,
+  cache,
+  cacheLocation,
+  include,
+  exclude,
+  eslintPath,
+  formatter,
+  lintOnStart,
+  emitError,
+  emitErrorAsWarning,
+  emitWarning,
+  emitWarningAsError,
+  ...eslintOptions
+}: ESLintPluginUserOptions): ESLintPluginOptions => ({
   dev: dev ?? true,
   build: build ?? true,
   cache: cache ?? true,
-  cacheLocation: cacheLocation ?? resolve(cacheDir, 'vite-plugin-eslint'),
+  cacheLocation: cacheLocation ?? '.eslintcache',
   include: include ?? ['src/**/*.{js,jsx,ts,tsx,vue,svelte}'],
   exclude: exclude ?? ['node_modules', 'virtual:'],
   eslintPath: eslintPath ?? 'eslint',

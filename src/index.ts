@@ -9,9 +9,7 @@ import {
   pluginName,
 } from './utils';
 import type {
-  Filter,
   ESLintPluginUserOptions,
-  ESLintPluginOptions,
   ESLintInstance,
   ESLintFormatter,
   ESLintOutputFixes,
@@ -19,9 +17,8 @@ import type {
 } from './types';
 
 export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}): Vite.Plugin {
-  const { dev = true, build = true } = userOptions;
-  let options: ESLintPluginOptions;
-  let filter: Filter;
+  const options = getOptions(userOptions);
+  const filter = getFilter(options);
   let eslint: ESLintInstance;
   let formatter: ESLintFormatter;
   let outputFixes: ESLintOutputFixes;
@@ -30,13 +27,9 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
   return {
     name: pluginName,
     apply(_, { command }) {
-      if (command === 'serve' && dev) return true;
-      if (command === 'build' && build) return true;
+      if (command === 'serve' && options.dev) return true;
+      if (command === 'build' && options.build) return true;
       return false;
-    },
-    configResolved(config) {
-      options = getOptions(userOptions, config);
-      filter = getFilter(options);
     },
     async buildStart() {
       // initial

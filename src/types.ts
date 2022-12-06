@@ -1,9 +1,7 @@
-import { createFilter } from 'vite';
 import type * as ESLint from 'eslint';
 import type * as Rollup from 'rollup';
 
 export type FilterPattern = string | string[];
-export type Filter = ReturnType<typeof createFilter>;
 
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   dev: boolean;
