@@ -76,11 +76,9 @@ Run `eslint` under `serve` command. See [Command Line Interface](https://vitejs.
 ### `build`
 
 - Type: `boolean`
-- Default: `true`
+- Default: `false`
 
 Run `eslint` under `build` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
-
-**ATTENTION: the default value will be `false` in next major release.**
 
 ### `cache`
 
@@ -92,9 +90,9 @@ Store the results of processed files when enabled. This is enabled by default to
 ### `cacheLocation`
 
 - Type: `string`
-- Default: `path.resolve(config.cacheDir, 'vite-plugin-eslint')`
+- Default: `.eslintcache`
 
-Path to a file or directory for the cache location. See [config.cacheDir](https://vitejs.dev/config/shared-options.html#cachedir) for more.
+Path to a file or directory for the cache location.
 
 ### `include`
 
