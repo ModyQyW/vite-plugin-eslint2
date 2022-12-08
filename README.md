@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@modyqyw/vite-plugin-eslint)](https://www.npmjs.com/package/@modyqyw/vite-plugin-eslint)
 [![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint)](https://github.com/ModyQyW/vite-plugin-eslint/blob/master/LICENSE)
 
-Vite ESLint plugin. Supports vite@2 and vite@3.
+Vite ESLint plugin. Supports vite@3 and vite@4.
 
 You may want [Vite Stylelint plugin](https://github.com/ModyQyW/vite-plugin-stylelint).
 
