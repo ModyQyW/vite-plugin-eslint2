@@ -6,7 +6,6 @@
     "eslint",
     "vite-plugin"
   ],
-  "type": "module",
   "homepage": "https://github.com/ModyQyW/vite-plugin-eslint",
   "repository": "git+https://github.com:ModyQyW/vite-plugin-eslint.git",
   "license": "MIT",
@@ -15,6 +14,7 @@
     "email": "wurui-dev@foxmail.com",
     "url": "https://modyqyw.github.io"
   },
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -47,6 +47,9 @@
     "prepublishOnly": "pnpm run build",
     "release": "release-it"
   },
+  "dependencies": {
+    "@rollup/pluginutils": "^5.0.2"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
@@ -54,9 +57,9 @@
     "@release-it/conventional-changelog": "^5.1.1",
     "@tsconfig/node18": "^1.0.1",
     "@types/eslint": "^8.4.10",
-    "@types/node": "^18.11.11",
-    "@typescript-eslint/eslint-plugin": "^5.45.1",
-    "@typescript-eslint/parser": "^5.45.1",
+    "@types/node": "^18.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -64,15 +67,15 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.1",
     "release-it": "^15.5.1",
-    "rollup": "^3.6.0",
+    "rollup": "^3.7.0",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",
-    "vite": "^4.0.0-0"
+    "vite": "^4.0.0"
   },
   "peerDependencies": {
     "@types/eslint": "^7.0.0 || ^8.0.0",
     "eslint": "^7.0.0 || ^8.0.0",
-    "vite": "^3.0.0 || ^4.0.0-0"
+    "vite": "^2.0.0 || ^3.0.0 || ^4.0.0"
   },
   "packageManager": "pnpm@7.17.1",
   "engines": {
