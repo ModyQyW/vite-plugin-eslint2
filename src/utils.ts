@@ -9,7 +9,7 @@ import type {
   LintFiles,
 } from './types';
 import type * as Rollup from 'rollup';
-import { createFilter } from 'vite';
+import { createFilter } from '@rollup/pluginutils';
 
 export const pluginName = 'vite:eslint';
 
