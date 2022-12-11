@@ -110,30 +110,24 @@ export const getLintFiles =
     { fix, emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
   ): LintFiles =>
   async (context, files) =>
-    await eslint
-      .lintFiles(files)
-      .then(async (lintResults: ESLintLintResults | void) => {
-        if (!lintResults) return;
+    await eslint.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
+      if (!lintResults) return;
 
-        if (lintResults.length > 0 && fix) outputFixes(lintResults);
+      if (lintResults.length > 0 && fix) outputFixes(lintResults);
 
-        const errorResults = lintResults.filter((item) => item.errorCount);
-        if (errorResults.length > 0 && emitError) {
-          const formatResult = await formatter.format(errorResults);
-          console.log('');
-          if (emitErrorAsWarning) context.warn(formatResult);
-          else context.error(formatResult);
-        }
-
-        const warningResults = lintResults.filter((item) => item.warningCount > 0);
-        if (warningResults.length > 0 && emitWarning) {
-          const formatResult = await formatter.format(warningResults);
-          console.log('');
-          if (emitWarningAsError) context.error(formatResult);
-          else context.warn(formatResult);
-        }
-      })
-      .catch((error) => {
+      const errorResults = lintResults.filter((item) => item.errorCount);
+      if (errorResults.length > 0 && emitError) {
+        const formatResult = await formatter.format(errorResults);
         console.log('');
-        context.error(`${error?.message ?? error}`);
-      });
+        if (emitErrorAsWarning) context.warn(formatResult);
+        else context.error(formatResult);
+      }
+
+      const warningResults = lintResults.filter((item) => item.warningCount > 0);
+      if (warningResults.length > 0 && emitWarning) {
+        const formatResult = await formatter.format(warningResults);
+        console.log('');
+        if (emitWarningAsError) context.error(formatResult);
+        else context.warn(formatResult);
+      }
+    });
