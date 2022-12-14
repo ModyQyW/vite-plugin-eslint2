@@ -2,6 +2,7 @@
   "name": "vue",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "vue-tsc --noEmit && vite build",
     "dev": "vite",
