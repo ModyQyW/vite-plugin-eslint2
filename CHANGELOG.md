@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.0.1 (2022-12-15)
+
+- fix: fix build
+
 ## 3.0.0 (2022-12-09)
 
 - feat: support `vite@4`
