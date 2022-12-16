@@ -1,3 +1,5 @@
+import { Worker } from 'node:worker_threads';
+import { extname, resolve } from 'node:path';
 import { normalizePath } from '@rollup/pluginutils';
 import type * as Vite from 'vite';
 import {
@@ -16,6 +18,8 @@ import type {
   LintFiles,
 } from './types';
 
+const ext = extname(__filename);
+
 export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}): Vite.Plugin {
   const options = getOptions(userOptions);
   const filter = getFilter(options);
@@ -23,6 +27,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
   let formatter: ESLintFormatter;
   let outputFixes: ESLintOutputFixes;
   let lintFiles: LintFiles;
+  let worker: Worker;
 
   return {
     name: pluginName,
@@ -32,8 +37,19 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       return false;
     },
     async buildStart() {
-      // initial
-      if (!eslint || !formatter || !outputFixes) {
+      // initial worker
+      if (!worker && options.lintInWorker) {
+        worker = new Worker(resolve(__dirname, `worker${ext}`), {
+          workerData: { options },
+        });
+        // lint on start in worker
+        if (options.lintOnStart) {
+          worker.postMessage(options.include);
+        }
+        return;
+      }
+      // initial ESLint
+      if (!eslint) {
         const result = await initialESLint(options);
         eslint = result.eslint;
         formatter = result.formatter;
@@ -42,9 +58,8 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       }
       // lint on start
       if (options.lintOnStart) {
-        console.log('');
         this.warn(
-          `ESLint is linting all files in the project because \`lintOnStart\` is true. This will significantly slow down Vite.`,
+          `\nESLint is linting all files in the project because \`lintOnStart\` is true. This will significantly slow down Vite.`,
         );
         await lintFiles(options.include, this);
       }
@@ -54,7 +69,8 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       if (!filter(id) || isVirtualModule(id)) return null;
       const file = normalizePath(id).split('?')[0];
       if (await eslint.isPathIgnored(file)) return null;
-      await lintFiles(file, this);
+      else if (worker) worker.postMessage(file);
+      else await lintFiles(file, this);
       return null;
     },
   };

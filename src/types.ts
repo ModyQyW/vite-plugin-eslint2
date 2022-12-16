@@ -12,6 +12,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   exclude: FilterPattern;
   eslintPath: string;
   formatter: string;
+  lintInWorker: boolean;
   lintOnStart: boolean;
   emitError: boolean;
   emitErrorAsWarning: boolean;
