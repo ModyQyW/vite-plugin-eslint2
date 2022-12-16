@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.1.0 (2022-12-16)
 
 - feat: add `lintInWorker` option
 - perf: initialESLint params
