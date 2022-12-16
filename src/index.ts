@@ -34,7 +34,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
     async buildStart() {
       // initial
       if (!eslint || !formatter || !outputFixes) {
-        const result = await initialESLint(options, this);
+        const result = await initialESLint(options);
         eslint = result.eslint;
         formatter = result.formatter;
         outputFixes = result.outputFixes;

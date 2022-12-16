@@ -77,27 +77,21 @@ export const getESLintConstructorOptions = (
   errorOnUnmatchedPattern: false,
 });
 
-export const initialESLint = async (
-  options: ESLintPluginOptions,
-  context: Rollup.PluginContext,
-) => {
+export const initialESLint = async (options: ESLintPluginOptions) => {
+  const { eslintPath, formatter } = options;
   try {
-    const module = await import(options.eslintPath);
+    const module = await import(eslintPath);
     const eslint = new module.ESLint(getESLintConstructorOptions(options)) as ESLintInstance;
-    const formatter = await eslint.loadFormatter(options.formatter);
+    const loadedFormatter = await eslint.loadFormatter(formatter);
     const outputFixes = module.ESLint.outputFixes.bind(module.ESLint) as ESLintOutputFixes;
     return {
       eslint,
-      formatter,
+      formatter: loadedFormatter,
       outputFixes,
     };
   } catch (error) {
-    console.log('');
-    context.error(
-      `${
-        (error as Error)?.message ??
-        'Failed to import ESLint. Have you installed and configured correctly?'
-      }`,
+    throw new Error(
+      `Failed to import ESLint. Have you installed and configured correctly? ${error}`,
     );
   }
 };
