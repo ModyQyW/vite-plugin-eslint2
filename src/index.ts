@@ -46,7 +46,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
         this.warn(
           `ESLint is linting all files in the project because \`lintOnStart\` is true. This will significantly slow down Vite.`,
         );
-        await lintFiles(this, options.include);
+        await lintFiles(options.include, this);
       }
     },
     async transform(_, id) {
@@ -54,7 +54,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       if (!filter(id) || isVirtualModule(id)) return null;
       const file = normalizePath(id).split('?')[0];
       if (await eslint.isPathIgnored(file)) return null;
-      await lintFiles(this, file);
+      await lintFiles(file, this);
       return null;
     },
   };
