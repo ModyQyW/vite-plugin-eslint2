@@ -28,3 +28,5 @@ export type ESLintLintResult = ESLint.ESLint.LintResult;
 export type ESLintLintResults = ESLintLintResult[];
 
 export type LintFiles = (files: FilterPattern, context?: Rollup.PluginContext) => Promise<void>;
+
+export type TextType = 'error' | 'warning' | 'plugin';

@@ -9,14 +9,14 @@ export default defineConfig([
     shims: true,
     splitting: false,
     target: 'node14.18',
-    // banner: ({ format }) => {
-    //   if (format === 'esm') {
-    //     return {
-    //       // eslint-disable-next-line no-useless-escape
-    //       js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
-    //     };
-    //   }
-    // },
+    banner: ({ format }) => {
+      if (format === 'esm') {
+        return {
+          // eslint-disable-next-line no-useless-escape
+          js: `import {createRequire as __createRequire} from 'module';var require=__createRequire(import\.meta.url);`,
+        };
+      }
+    },
     footer: ({ format }) => {
       if (format === 'cjs') {
         return {

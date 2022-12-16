@@ -1,22 +1,89 @@
+import pico from 'picocolors';
+import type { Colors } from 'picocolors/types';
 import type {
+  ESLintConstructorOptions,
   ESLintFormatter,
   ESLintInstance,
   ESLintLintResults,
-  ESLintConstructorOptions,
   ESLintOutputFixes,
   ESLintPluginOptions,
   ESLintPluginUserOptions,
   LintFiles,
+  TextType,
 } from './types';
 import type * as Rollup from 'rollup';
 import { createFilter } from '@rollup/pluginutils';
 
 export const pluginName = 'vite:eslint';
 
+export const colorMap: Record<TextType, keyof Omit<Colors, 'isColorSupported'>> = {
+  error: 'red',
+  warning: 'yellow',
+  plugin: 'magenta',
+};
+
 // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/importMetaGlob.ts
 // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
 export const isVirtualModule = (id: string) =>
   id.startsWith('virtual:') || id.startsWith('\0') || !id.includes('/');
+
+export const colorize = (text: string, textType: TextType) => pico[colorMap[textType]](text);
+
+export const contextPrint = (
+  text: string,
+  textType: TextType,
+  { emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
+  context: Rollup.PluginContext,
+) => {
+  if (textType === 'error' && emitError) {
+    if (emitErrorAsWarning) context.warn(text);
+    else context.error(text);
+  }
+  if (textType === 'warning' && emitWarning) {
+    if (emitWarningAsError) context.error(text);
+    else context.warn(text);
+  }
+};
+
+export const customPrint = (
+  text: string,
+  textType: TextType,
+  { emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
+  hasPluginName = false,
+  isColorized = false,
+) => {
+  let t = text;
+  if (!hasPluginName) t += `  Plugin: ${colorize(pluginName, 'plugin')}\n`;
+  if (textType === 'error' && emitError) {
+    if (!isColorized) t = colorize(t, emitErrorAsWarning ? 'warning' : textType);
+    console.log(t);
+  }
+  if (textType === 'warning' && emitWarning) {
+    if (!isColorized) t = colorize(t, emitWarningAsError ? 'error' : textType);
+    console.log(t);
+  }
+};
+
+export const print = (
+  text: string,
+  textType: TextType,
+  options: ESLintPluginOptions,
+  {
+    hasPluginName = false,
+    isColorized = false,
+    context,
+  }: {
+    context?: Rollup.PluginContext;
+    hasPluginName?: boolean;
+    isColorized?: boolean;
+  } = {},
+) => {
+  console.log('');
+  if (context && options) {
+    return contextPrint(text, textType, options, context);
+  }
+  return customPrint(text, textType, options, hasPluginName, isColorized);
+};
 
 export const getOptions = ({
   dev,
@@ -101,27 +168,27 @@ export const getLintFiles =
     eslint: ESLintInstance,
     formatter: ESLintFormatter,
     outputFixes: ESLintOutputFixes,
-    { fix, emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
+    options: ESLintPluginOptions,
   ): LintFiles =>
   async (files, context) =>
     await eslint.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
       if (!lintResults) return;
 
-      if (lintResults.length > 0 && fix) outputFixes(lintResults);
+      if (lintResults.length > 0 && options.fix) outputFixes(lintResults);
 
       const errorResults = lintResults.filter((item) => item.errorCount);
-      if (errorResults.length > 0 && emitError) {
-        const formatResult = await formatter.format(errorResults);
-        console.log('');
-        if (emitErrorAsWarning) context?.warn(formatResult);
-        else context?.error(formatResult);
+      if (errorResults.length) {
+        const text = await formatter.format(errorResults);
+        const textType = 'error';
+        if (context) print(text, textType, options, { context });
+        else print(text, textType, options);
       }
 
       const warningResults = lintResults.filter((item) => item.warningCount > 0);
-      if (warningResults.length > 0 && emitWarning) {
-        const formatResult = await formatter.format(warningResults);
-        console.log('');
-        if (emitWarningAsError) context?.error(formatResult);
-        else context?.warn(formatResult);
+      if (warningResults.length > 0) {
+        const text = await formatter.format(warningResults);
+        const textType = 'warning';
+        if (context) print(text, textType, options, { context });
+        else print(text, textType, options);
       }
     });
