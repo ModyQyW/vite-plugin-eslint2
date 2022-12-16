@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@modyqyw/vite-plugin-eslint)](https://www.npmjs.com/package/@modyqyw/vite-plugin-eslint)
 [![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint)](https://github.com/ModyQyW/vite-plugin-eslint/blob/master/LICENSE)
 
-Vite ESLint plugin. Supports vite v2, v3 and v4. Requires node >= 14.18.
+Vite ESLint plugin. Supports Vite v2, v3 and v4. Requires node >= 14.18.
 
 You may want [Vite Stylelint plugin](https://github.com/ModyQyW/vite-plugin-stylelint).
 
@@ -57,6 +57,7 @@ import ESLintPlugin from 'vite-plugin-eslint';
 export default defineConfig({
   plugins: [
     ESLintPlugin({
+      // recommend to enable auto fix
       fix: true,
       ...,
     }),
@@ -71,14 +72,14 @@ Additional options and explanations are listed below.
 - Type: `boolean`
 - Default: `true`
 
-Run `eslint` under `serve` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
+Run ESLint under `serve` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
 
 ### `build`
 
 - Type: `boolean`
 - Default: `false`
 
-Run `eslint` under `build` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
+Run ESLint under `build` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
 
 ### `cache`
 
@@ -92,7 +93,7 @@ Store the results of processed files when enabled. This is enabled by default to
 - Type: `string`
 - Default: `.eslintcache`
 
-Path to a file or directory for the cache location.
+Path to a file or directory for the cache location. `.eslintcache` is the default cache location of ESLint.
 
 ### `include`
 
@@ -117,7 +118,7 @@ This is used to [create a filter](https://github.com/rollup/plugins/blob/master/
 - Type: `string`
 - Default: `'eslint'`
 
-Path to ESLint instance that will be used for linting. Use [dynamic import](https://javascript.info/modules-dynamic-imports) under the hood. Read [vite server.fs options](https://vitejs.dev/config/server-options.html#server-fs-strict) first.
+Path to ESLint that will be used for linting. Use [dynamic import](https://javascript.info/modules-dynamic-imports) under the hood. Read [vite server.fs options](https://vitejs.dev/config/server-options.html#server-fs-strict) first.
 
 ### `formatter`
 
@@ -128,12 +129,25 @@ The name or the path of a formatter.
 
 This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) in order to convert lint results to a human- or machine-readable string.
 
+### `lintInWorker`
+
+- Type: `boolean`
+- Default: `false`
+
+Lint in [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-tran). This is disabled by default.
+
+When lint in worker, Vite build process will be faster. Vite build process will not be stopped, even with errors shown in terminal.
+
+It is similar with [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker), but [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) can show you errors and warnings in browsers.
+
 ### `lintOnStart`
 
 - Type: `boolean`
 - Default: `false`
 
-Lint on start (in `buildStart` hook). Useful to lint all files once to find potential errors, but significantly slow down Vite. This is disabled by default.
+Lint on start (in `buildStart` hook). Useful to lint all files once to find potential errors. This is disabled by default.
+
+This will significantly slow down Vite first starting if you has no caches and don't enable `lintInWorker`.
 
 ### `emitError`
 
@@ -177,14 +191,18 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
 
 <details>
   <summary><code>Vite</code> is slow when using this plugin</summary>
-  <p>You can try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>, or just run <code>ESLint</code> besides <code>Vite</code>.</p>
+  <ul>
+    <li>Try enable <code>lintInWorker</code> option</li>
+    <li>Or try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a></li>
+    <li>Or run ESLint directly besides Vite</li>
+  </ul>
 </details>
 
 <details>
   <summary>What's the difference between <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and this project?</summary>
-  <p>This project initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
-  <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
-  <p>Now it seems gxmari007 is back again. But I will still keep updating this project. Feel free to choose one.</p>
+  <p>This project is initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
+  <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintInWorker</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
+  <p>I will still keep updating this project. Feel free to choose one.</p>
 </details>
 
 ## Examples
