@@ -109,7 +109,7 @@ export const getLintFiles =
     outputFixes: ESLintOutputFixes,
     { fix, emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
   ): LintFiles =>
-  async (context, files) =>
+  async (files, context) =>
     await eslint.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
       if (!lintResults) return;
 
@@ -119,15 +119,15 @@ export const getLintFiles =
       if (errorResults.length > 0 && emitError) {
         const formatResult = await formatter.format(errorResults);
         console.log('');
-        if (emitErrorAsWarning) context.warn(formatResult);
-        else context.error(formatResult);
+        if (emitErrorAsWarning) context?.warn(formatResult);
+        else context?.error(formatResult);
       }
 
       const warningResults = lintResults.filter((item) => item.warningCount > 0);
       if (warningResults.length > 0 && emitWarning) {
         const formatResult = await formatter.format(warningResults);
         console.log('');
-        if (emitWarningAsError) context.error(formatResult);
-        else context.warn(formatResult);
+        if (emitWarningAsError) context?.error(formatResult);
+        else context?.warn(formatResult);
       }
     });
