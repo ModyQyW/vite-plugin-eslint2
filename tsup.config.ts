@@ -2,9 +2,11 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig([
   {
-    entry: ['src/index.ts'],
+    entry: ['src/index.ts', 'src/worker.ts'],
     format: ['esm', 'cjs'],
-    dts: true,
+    dts: {
+      entry: 'src/index.ts',
+    },
     minify: true,
     shims: true,
     splitting: false,
