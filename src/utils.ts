@@ -179,19 +179,9 @@ export const getLintFiles =
 
       if (lintResults.length > 0 && options.fix) outputFixes(lintResults);
 
-      const errorResults = lintResults.filter((item) => item.errorCount > 0);
-      if (errorResults.length > 0) {
-        const text = await formatter.format(errorResults);
-        const textType = 'error';
-        if (context) print(text, textType, options, { context });
-        else print(text, textType, options);
-      }
+      const text = await formatter.format(lintResults);
+      const textType = lintResults.some((item) => item.errorCount > 0) ? 'error' : 'warning';
 
-      const warningResults = lintResults.filter((item) => item.warningCount > 0);
-      if (warningResults.length > 0) {
-        const text = await formatter.format(warningResults);
-        const textType = 'warning';
-        if (context) print(text, textType, options, { context });
-        else print(text, textType, options);
-      }
+      if (context) return print(text, textType, options, { context });
+      return print(text, textType, options);
     });
