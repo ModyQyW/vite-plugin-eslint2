@@ -55,10 +55,10 @@
     "@release-it/conventional-changelog": "^5.1.1",
     "@tsconfig/node18": "^1.0.1",
     "@types/eslint": "^8.4.10",
-    "@types/node": "^18.11.15",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
-    "eslint": "^8.29.0",
+    "@types/node": "^18.11.17",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
+    "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.2",
@@ -66,10 +66,10 @@
     "picocolors": "^1.0.0",
     "prettier": "^2.8.1",
     "release-it": "^15.5.1",
-    "rollup": "^3.7.4",
+    "rollup": "^3.7.5",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",
-    "vite": "^4.0.1"
+    "vite": "^4.0.2"
   },
   "peerDependencies": {
     "@types/eslint": "^7.0.0 || ^8.0.0",
