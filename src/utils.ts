@@ -179,8 +179,8 @@ export const getLintFiles =
 
       if (lintResults.length > 0 && options.fix) outputFixes(lintResults);
 
-      const errorResults = lintResults.filter((item) => item.errorCount);
-      if (errorResults.length) {
+      const errorResults = lintResults.filter((item) => item.errorCount > 0);
+      if (errorResults.length > 0) {
         const text = await formatter.format(errorResults);
         const textType = 'error';
         if (context) print(text, textType, options, { context });
