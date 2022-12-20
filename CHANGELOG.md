@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.2 (2022-12-20)
+
+- perf: avoid empty log
+
 ## 3.1.1 (2022-12-20)
 
 - perf: avoid logging twice for one file
