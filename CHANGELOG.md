@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.1 (2022-12-20)
+
+- perf: avoid logging twice for one file
+
 ## 3.1.0 (2022-12-16)
 
 - feat: add `lintInWorker` option
