@@ -179,8 +179,12 @@ export const getLintFiles =
 
       if (lintResults.length > 0 && options.fix) outputFixes(lintResults);
 
-      const text = await formatter.format(lintResults);
-      const textType = lintResults.some((item) => item.errorCount > 0) ? 'error' : 'warning';
+      const results = lintResults.filter(
+        (result) => result.errorCount > 0 || result.warningCount > 0,
+      );
+      if (results.length === 0) return;
+      const text = await formatter.format(results);
+      const textType = results.some((result) => result.errorCount > 0) ? 'error' : 'warning';
 
       if (context) return print(text, textType, options, { context });
       return print(text, textType, options);
