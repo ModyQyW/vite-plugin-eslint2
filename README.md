@@ -104,6 +104,51 @@ A valid [picomatch](https://github.com/micromatch/picomatch#globbing-features) p
 
 This is used to [create a filter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to determine [`eslint.lintFiles` params](https://eslint.org/docs/developer-guide/nodejs-api#-eslintlintfilespatterns).
 
+You may want to change this option if you are using `nuxt`.
+
+<details>
+  <summary>nuxt example</summary>
+
+```typescript
+// nuxt.config.ts
+import viteEslint from 'vite-plugin-eslint';
+
+export default defineNuxtConfig({
+  vite: {
+    plugins: [
+      viteEslint({
+        ...,
+        include: [
+          'components/**/*.{js,jsx,ts,tsx,vue}',
+          'composables/**/*.{js,jsx,ts,tsx,vue}',
+          'constants/**/*.{js,jsx,ts,tsx,vue}',
+          'content/**/*.{js,jsx,ts,tsx,vue}',
+          'helpers/**/*.{js,jsx,ts,tsx,vue}',
+          'layouts/**/*.{js,jsx,ts,tsx,vue}',
+          'middleware/**/*.{js,jsx,ts,tsx,vue}',
+          'middlewares/**/*.{js,jsx,ts,tsx,vue}',
+          'pages/**/*.{js,jsx,ts,tsx,vue}',
+          'plugins/**/*.{js,jsx,ts,tsx,vue}',
+          'server/**/*.{js,jsx,ts,tsx,vue}',
+          'src/**/*.{js,jsx,ts,tsx,vue}',
+          'stores/**/*.{js,jsx,ts,tsx,vue}',
+          'styles/**/*.{js,jsx,ts,tsx,vue}',
+          'utils/**/*.{js,jsx,ts,tsx,vue}',
+          'app.vue',
+          'App.vue',
+          'error.vue',
+          'Error.vue',
+          'app.config.ts',
+          'nuxt.config.ts',
+        ],
+      }),
+    ],
+  },
+});
+```
+
+</details>
+
 ### `exclude`
 
 - Type: `string | string[]`

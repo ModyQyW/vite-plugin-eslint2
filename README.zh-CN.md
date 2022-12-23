@@ -104,6 +104,51 @@ export default defineConfig({
 
 这用于 [创建一个过滤器](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) 来确定 `files` 选项，这意味着你的 `files` 选项将被覆盖。
 
+如果你正在使用 `nuxt`，你可能需要改变这个选项的值。
+
+<details>
+  <summary>nuxt 例子</summary>
+
+```typescript
+// nuxt.config.ts
+import viteEslint from 'vite-plugin-eslint';
+
+export default defineNuxtConfig({
+  vite: {
+    plugins: [
+      viteEslint({
+        ...,
+        include: [
+          'components/**/*.{js,jsx,ts,tsx,vue}',
+          'composables/**/*.{js,jsx,ts,tsx,vue}',
+          'constants/**/*.{js,jsx,ts,tsx,vue}',
+          'content/**/*.{js,jsx,ts,tsx,vue}',
+          'helpers/**/*.{js,jsx,ts,tsx,vue}',
+          'layouts/**/*.{js,jsx,ts,tsx,vue}',
+          'middleware/**/*.{js,jsx,ts,tsx,vue}',
+          'middlewares/**/*.{js,jsx,ts,tsx,vue}',
+          'pages/**/*.{js,jsx,ts,tsx,vue}',
+          'plugins/**/*.{js,jsx,ts,tsx,vue}',
+          'server/**/*.{js,jsx,ts,tsx,vue}',
+          'src/**/*.{js,jsx,ts,tsx,vue}',
+          'stores/**/*.{js,jsx,ts,tsx,vue}',
+          'styles/**/*.{js,jsx,ts,tsx,vue}',
+          'utils/**/*.{js,jsx,ts,tsx,vue}',
+          'app.vue',
+          'App.vue',
+          'error.vue',
+          'Error.vue',
+          'app.config.ts',
+          'nuxt.config.ts',
+        ],
+      }),
+    ],
+  },
+});
+```
+
+</details>
+
 ### `exclude`
 
 - 类型：`string | string[]`
