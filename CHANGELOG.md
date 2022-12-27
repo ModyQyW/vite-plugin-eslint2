@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.3 (2022-12-27)
+
+- fix: fix judge order
+
 ## 3.1.2 (2022-12-20)
 
 - perf: avoid empty log
