@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.4 (2022-12-28)
+
+- fix: fix judge order
+
 ## 3.1.3 (2022-12-27)
 
 - fix: fix judge order
