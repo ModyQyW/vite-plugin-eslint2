@@ -68,8 +68,8 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       // !filter(file) will cause double lints and regressions
       if (isVirtualModule(id) || !filter(id)) return null;
       const file = normalizePath(id).split('?')[0];
-      if (await eslint.isPathIgnored(file)) return null;
-      else if (worker) worker.postMessage(file);
+      if (worker) worker.postMessage(file);
+      else if (await eslint.isPathIgnored(file)) return null;
       else await lintFiles(file, this);
       return null;
     },
