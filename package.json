@@ -76,7 +76,7 @@
     "eslint": "^7.0.0 || ^8.0.0",
     "vite": "^2.0.0 || ^3.0.0 || ^4.0.0"
   },
-  "packageManager": "pnpm@7.18.2",
+  "packageManager": "pnpm@7.21.0",
   "engines": {
     "node": ">=14.18"
   },
