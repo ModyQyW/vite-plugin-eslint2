@@ -265,3 +265,11 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 ## License
 
 MIT
+
+## [赞助者们](https://github.com/ModyQyW/sponsors)
+
+<p align="center">
+  <a href="https://cdn.jsdelivr.net/gh/ModyQyW/sponsors/sponsorkit/sponsors.svg">
+    <img src="https://cdn.jsdelivr.net/gh/ModyQyW/sponsors/sponsorkit/sponsors.svg"/>
+  </a>
+</p>
