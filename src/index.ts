@@ -1,7 +1,6 @@
 import { Worker } from 'node:worker_threads';
 import { extname, resolve } from 'node:path';
 import { normalizePath } from '@rollup/pluginutils';
-import type * as Vite from 'vite';
 import {
   getFilter,
   getOptions,
@@ -10,6 +9,7 @@ import {
   isVirtualModule,
   pluginName,
 } from './utils';
+import type * as Vite from 'vite';
 import type {
   ESLintPluginUserOptions,
   ESLintInstance,
