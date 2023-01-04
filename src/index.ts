@@ -66,7 +66,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       }
     },
     async transform(_, id) {
-      if (shouldIgnore(id, filter, eslint)) return null;
+      if (await shouldIgnore(id, filter, eslint)) return null;
       const file = normalizePath(id).split('?')[0];
       if (worker) worker.postMessage(file);
       else await lintFiles(file, this);

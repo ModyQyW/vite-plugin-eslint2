@@ -17,6 +17,8 @@ import type * as Rollup from 'rollup';
 
 export const pluginName = 'vite:eslint';
 
+export const extnamesWithStyleBlock = ['.vue', '.svelte'];
+
 export const colorMap: Record<TextType, keyof Omit<Colors, 'isColorSupported'>> = {
   error: 'red',
   warning: 'yellow',
@@ -30,12 +32,19 @@ export const isVirtualModule = (id: string) =>
 
 export const getFileFromId = (id: string) => normalizePath(id).split('?')[0];
 
-export const shouldIgnore = (id: string, filter: Filter, eslint?: ESLintInstance) => {
+export const shouldIgnore = async (id: string, filter: Filter, eslint?: ESLintInstance) => {
   if (isVirtualModule(id)) return true;
   if (!filter(id)) return true;
+  const file = getFileFromId(id);
+  if (
+    extnamesWithStyleBlock.some((extname) => file.endsWith(extname)) &&
+    id.includes('?') &&
+    id.includes('type=style')
+  ) {
+    return true;
+  }
   if (eslint) {
-    const file = getFileFromId(id);
-    return eslint.isPathIgnored(file);
+    return await eslint.isPathIgnored(file);
   }
   return false;
 };
