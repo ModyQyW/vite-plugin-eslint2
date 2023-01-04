@@ -50,11 +50,11 @@
     "@rollup/pluginutils": "^5.0.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.3.0",
-    "@commitlint/config-conventional": "^17.3.0",
-    "@commitlint/prompt": "^17.3.0",
+    "@commitlint/cli": "^17.4.0",
+    "@commitlint/config-conventional": "^17.4.0",
+    "@commitlint/prompt": "^17.4.0",
     "@modyqyw/fabric": "^5.14.0",
-    "@modyqyw/utils": "^3.0.6",
+    "@modyqyw/utils": "^3.0.10",
     "@release-it/conventional-changelog": "^5.1.1",
     "@tsconfig/node18": "^1.0.1",
     "@types/eslint": "^8.4.10",
