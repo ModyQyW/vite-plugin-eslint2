@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.1.5 (2023-01-04)
+
+- build: switch to rollup
+- refactor: `shouldIgnore` function
+
 ## 3.1.4 (2022-12-28)
 
 - fix: fix judge order
