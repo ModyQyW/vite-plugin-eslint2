@@ -1,3 +1,4 @@
 module.exports = {
-  '*.ts': 'eslint --fix',
+  '*.md': 'markdownlint --fix',
+  '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,vue}': 'eslint --fix',
 };
