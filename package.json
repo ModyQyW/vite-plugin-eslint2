@@ -31,7 +31,7 @@
   "scripts": {
     "build": "tsup",
     "check:types": "tsc --noEmit",
-    "commit": "cz",
+    "commit": "git-cz",
     "dev": "pnpm run build --watch src",
     "examples:react:build": "pnpm --filter react run build",
     "examples:react:dev": "pnpm --filter react run dev",
@@ -39,8 +39,9 @@
     "examples:solid:dev": "pnpm --filter solid run dev",
     "examples:vue:build": "pnpm --filter vue run build",
     "examples:vue:dev": "pnpm --filter vue run dev",
-    "lint": "run-p lint:eslint check:types",
-    "lint:eslint": "eslint src --fix",
+    "lint": "run-p lint:eslint lint:markdownlint check:types",
+    "lint:eslint": "eslint src --fix --ext=.js,.cjs,.mjs,.jsx,.ts,.cts,.mts,.tsx,.vue --ignore-path=.gitignore --cache",
+    "lint:markdownlint": "markdownlint . --fix --ignore-path=.gitignore",
     "prepare": "husky install",
     "prepublishOnly": "pnpm run build",
     "release": "release-it"
