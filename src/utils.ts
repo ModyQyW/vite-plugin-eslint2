@@ -75,7 +75,7 @@ export const customPrint = (
   isColorized = false,
 ) => {
   let t = text;
-  if (!hasPluginName) t += `  Plugin: ${colorize(pluginName, 'plugin')}\n`;
+  if (!hasPluginName) t += `  Plugin: ${colorize(pluginName, 'plugin')}\r\n`;
   if (textType === 'error' && emitError) {
     if (!isColorized) t = colorize(t, emitErrorAsWarning ? 'warning' : textType);
     console.log(t);
