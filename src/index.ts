@@ -8,6 +8,7 @@ import {
   initialESLint,
   isVirtualModule,
   pluginName,
+  shouldIgnore,
 } from './utils';
 import type * as Vite from 'vite';
 import type {
@@ -65,11 +66,9 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       }
     },
     async transform(_, id) {
-      // !filter(file) will cause double lints and regressions
-      if (isVirtualModule(id) || !filter(id)) return null;
+      if (shouldIgnore(id, filter, eslint)) return null;
       const file = normalizePath(id).split('?')[0];
       if (worker) worker.postMessage(file);
-      else if (await eslint.isPathIgnored(file)) return null;
       else await lintFiles(file, this);
       return null;
     },

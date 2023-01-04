@@ -1,5 +1,5 @@
 import pico from 'picocolors';
-import { createFilter } from '@rollup/pluginutils';
+import { createFilter, normalizePath } from '@rollup/pluginutils';
 import type { Colors } from 'picocolors/types';
 import type {
   ESLintConstructorOptions,
@@ -9,6 +9,7 @@ import type {
   ESLintOutputFixes,
   ESLintPluginOptions,
   ESLintPluginUserOptions,
+  Filter,
   LintFiles,
   TextType,
 } from './types';
@@ -26,6 +27,18 @@ export const colorMap: Record<TextType, keyof Omit<Colors, 'isColorSupported'>> 
 // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
 export const isVirtualModule = (id: string) =>
   id.startsWith('virtual:') || id.startsWith('\0') || !id.includes('/');
+
+export const getFileFromId = (id: string) => normalizePath(id).split('?')[0];
+
+export const shouldIgnore = (id: string, filter: Filter, eslint?: ESLintInstance) => {
+  if (isVirtualModule(id)) return true;
+  if (!filter(id)) return true;
+  if (eslint) {
+    const file = getFileFromId(id);
+    return eslint.isPathIgnored(file);
+  }
+  return false;
+};
 
 export const colorize = (text: string, textType: TextType) => pico[colorMap[textType]](text);
 

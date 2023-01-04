@@ -1,7 +1,9 @@
 import type * as ESLint from 'eslint';
 import type * as Rollup from 'rollup';
+import type { CreateFilter } from '@rollup/pluginutils';
 
 export type FilterPattern = string | string[];
+export type Filter = ReturnType<CreateFilter>;
 
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   dev: boolean;
