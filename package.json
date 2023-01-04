@@ -17,22 +17,22 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
   },
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "rollup -c rollup.config.ts --configPlugin esbuild",
     "check:types": "tsc --noEmit",
     "commit": "git-cz",
-    "dev": "pnpm run build --watch src",
+    "dev": "pnpm run build --watch",
     "examples:react:build": "pnpm --filter react run build",
     "examples:react:dev": "pnpm --filter react run dev",
     "examples:solid:build": "pnpm --filter solid run build",
