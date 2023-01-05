@@ -37,7 +37,8 @@ npm install eslint@^8 @types/eslint@^8 -D
 
 ## 使用
 
-```js
+```typescript
+// vite.config.ts
 import { defineConfig } from 'vite';
 import ESLintPlugin from '@modyqyw/vite-plugin-eslint';
 
@@ -50,13 +51,14 @@ export default defineConfig({
 
 你可以给这个插件传递 ESLint [Node.js API constructor options](https://eslint.org/docs/developer-guide/nodejs-api#-new-eslintoptions)。
 
-```ts
+```typescript
+// vite.config.ts
 import { defineConfig } from 'vite';
-import ESLintPlugin from 'vite-plugin-eslint';
+import eslint from 'vite-plugin-eslint';
 
 export default defineConfig({
   plugins: [
-    ESLintPlugin({
+    eslint({
       // 推荐启用自动修复
       fix: true,
       ...,
