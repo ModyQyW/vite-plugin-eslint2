@@ -20,7 +20,7 @@ importers:
       eslint-config-prettier: ^8.6.0
       eslint-plugin-prettier: ^4.2.1
       husky: ^8.0.3
-      markdownlint-cli: ^0.32.2
+      markdownlint-cli: ^0.33.0
       npm-run-all: ^4.1.5
       picocolors: ^1.0.0
       prettier: ^2.8.1
@@ -46,7 +46,7 @@ importers:
       eslint-config-prettier: 8.6.0_eslint@8.31.0
       eslint-plugin-prettier: 4.2.1_32m5uc2milwdw3tnkcq5del26y
       husky: 8.0.3
-      markdownlint-cli: 0.32.2
+      markdownlint-cli: 0.33.0
       npm-run-all: 4.1.5
       picocolors: 1.0.0
       prettier: 2.8.1
@@ -1139,7 +1139,7 @@ packages:
       debug: 4.3.4
       espree: 9.4.1
       globals: 13.19.0
-      ignore: 5.2.1
+      ignore: 5.2.4
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       minimatch: 3.1.2
@@ -1156,7 +1156,7 @@ packages:
       debug: 4.3.4
       espree: 9.4.1
       globals: 13.19.0
-      ignore: 5.2.1
+      ignore: 5.2.4
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       minimatch: 3.1.2
@@ -1223,7 +1223,7 @@ packages:
       debug: 4.3.4
       eslint: 8.31.0
       glob: 8.0.3
-      ignore: 5.2.1
+      ignore: 5.2.4
       is-language-code: 3.1.0
       js-yaml: 4.1.0
       json5: 2.2.1
@@ -2117,7 +2117,7 @@ packages:
       '@vue/compiler-sfc': 3.2.45
       '@vue/reactivity': 3.2.45
       '@vue/shared': 3.2.45
-      minimatch: 5.1.1
+      minimatch: 5.1.2
       vue-template-compiler: 2.7.14
     dev: true
 
@@ -3838,7 +3838,7 @@ packages:
     dependencies:
       escape-string-regexp: 1.0.5
       eslint: 8.31.0
-      ignore: 5.2.1
+      ignore: 5.2.4
     dev: true
 
   /eslint-plugin-functional/4.4.1_mfvkgvn7virdg2bz2hmf2alism:
@@ -4717,7 +4717,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 5.1.1
+      minimatch: 5.1.2
       once: 1.4.0
     dev: true
 
@@ -4760,7 +4760,7 @@ packages:
       dir-glob: 3.0.1
       fast-glob: 3.2.12
       glob: 7.2.3
-      ignore: 5.2.1
+      ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
     dev: true
@@ -4772,7 +4772,7 @@ packages:
       array-union: 2.1.0
       dir-glob: 3.0.1
       fast-glob: 3.2.12
-      ignore: 5.2.1
+      ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
     dev: true
@@ -4783,7 +4783,7 @@ packages:
     dependencies:
       dir-glob: 3.0.1
       fast-glob: 3.2.12
-      ignore: 5.2.1
+      ignore: 5.2.4
       merge2: 1.4.1
       slash: 4.0.0
     dev: true
@@ -5021,6 +5021,11 @@ packages:
 
   /ignore/5.2.1:
     resolution: {integrity: sha512-d2qQLzTJ9WxQftPAuEQpSPmKqzxePjzVbpAVv62AQ64NTL+wR4JkrVqR/LqFsFEUsHDAiId52mJteHDFuDkElA==}
+    engines: {node: '>= 4'}
+    dev: true
+
+  /ignore/5.2.4:
+    resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
     dev: true
 
@@ -5567,10 +5572,6 @@ packages:
       semver: 7.3.8
     dev: true
 
-  /jsonc-parser/3.1.0:
-    resolution: {integrity: sha512-DRf0QjnNeCUds3xTjKlQQ3DpJD51GvDjJfnxUVWg6PZTo2otSm+slzNAxU/35hF8/oJIKoG9slq30JYOsF2azg==}
-    dev: true
-
   /jsonc-parser/3.2.0:
     resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
     dev: true
@@ -5895,31 +5896,25 @@ packages:
       uc.micro: 1.0.6
     dev: true
 
-  /markdownlint-cli/0.32.2:
-    resolution: {integrity: sha512-xmJT1rGueUgT4yGNwk6D0oqQr90UJ7nMyakXtqjgswAkEhYYqjHew9RY8wDbOmh2R270IWjuKSeZzHDEGPAUkQ==}
+  /markdownlint-cli/0.33.0:
+    resolution: {integrity: sha512-zMK1oHpjYkhjO+94+ngARiBBrRDEUMzooDHBAHtmEIJ9oYddd9l3chCReY2mPlecwH7gflQp1ApilTo+o0zopQ==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
       commander: 9.4.1
       get-stdin: 9.0.0
       glob: 8.0.3
-      ignore: 5.2.1
+      ignore: 5.2.4
       js-yaml: 4.1.0
-      jsonc-parser: 3.1.0
-      markdownlint: 0.26.2
-      markdownlint-rule-helpers: 0.17.2
-      minimatch: 5.1.1
+      jsonc-parser: 3.2.0
+      markdownlint: 0.27.0
+      minimatch: 5.1.2
       run-con: 1.2.11
     dev: true
 
-  /markdownlint-rule-helpers/0.17.2:
-    resolution: {integrity: sha512-XaeoW2NYSlWxMCZM2B3H7YTG6nlaLfkEZWMBhr4hSPlq9MuY2sy83+Xr89jXOqZMZYjvi5nBCGoFh7hHoPKZmA==}
-    engines: {node: '>=12'}
-    dev: true
-
-  /markdownlint/0.26.2:
-    resolution: {integrity: sha512-2Am42YX2Ex5SQhRq35HxYWDfz1NLEOZWWN25nqd2h3AHRKsGRE+Qg1gt1++exW792eXTrR4jCNHfShfWk9Nz8w==}
-    engines: {node: '>=14'}
+  /markdownlint/0.27.0:
+    resolution: {integrity: sha512-HtfVr/hzJJmE0C198F99JLaeada+646B5SaG2pVoEakLFI6iRGsvMqrnnrflq8hm1zQgwskEgqSnhDW11JBp0w==}
+    engines: {node: '>=14.18.0'}
     dependencies:
       markdown-it: 13.0.1
     dev: true
@@ -6239,8 +6234,8 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
-  /minimatch/5.1.1:
-    resolution: {integrity: sha512-362NP+zlprccbEt/SkxKfRMHnNY85V74mVnpUpNyr3F35covl09Kec7/sEFLt3RA4oXmewtoaanoIf67SE5Y5g==}
+  /minimatch/5.1.2:
+    resolution: {integrity: sha512-bNH9mmM9qsJ2X4r2Nat1B//1dJVcn3+iBLa3IgqJ7EbGaDNepL9QSHOxN4ng33s52VMMhhIfgCYDk3C4ZmlDAg==}
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1
