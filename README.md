@@ -40,10 +40,10 @@ npm install eslint@^8 @types/eslint@^8 -D
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
-import ESLintPlugin from '@modyqyw/vite-plugin-eslint';
+import eslint from '@modyqyw/vite-plugin-eslint';
 
 export default defineConfig({
-  plugins: [ESLintPlugin(options)],
+  plugins: [eslint(options)],
 });
 ```
 
