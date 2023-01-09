@@ -17,9 +17,9 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "main": "./dist/index.cjs",
@@ -30,6 +30,7 @@
   ],
   "scripts": {
     "build": "rollup -c rollup.config.ts --configPlugin esbuild",
+    "check:deps": "ncu --dep dev,optional,prod,packageManager",
     "check:types": "tsc --noEmit",
     "commit": "git-cz",
     "dev": "pnpm run build --watch",
@@ -40,7 +41,7 @@
     "examples:vue:build": "pnpm --filter vue run build",
     "examples:vue:dev": "pnpm --filter vue run dev",
     "lint": "run-p lint:eslint lint:markdownlint check:types",
-    "lint:eslint": "eslint src --fix --ext=.js,.cjs,.mjs,.jsx,.ts,.cts,.mts,.tsx,.vue --ignore-path=.gitignore --cache",
+    "lint:eslint": "eslint ./src --ext=.js,.cjs,.mjs,.ts,.cts,.mts --fix --cache --no-error-on-unmatched-pattern --ignore-path=.gitignore",
     "lint:markdownlint": "markdownlint . --fix --ignore-path=.gitignore",
     "prepare": "husky install",
     "prepublishOnly": "pnpm run build",
@@ -53,8 +54,8 @@
     "@commitlint/cli": "^17.4.0",
     "@commitlint/config-conventional": "^17.4.0",
     "@commitlint/prompt": "^17.4.0",
-    "@modyqyw/fabric": "^5.14.0",
-    "@modyqyw/utils": "^3.0.10",
+    "@modyqyw/fabric": "^5.16.0",
+    "@modyqyw/utils": "^3.1.0",
     "@release-it/conventional-changelog": "^5.1.1",
     "@tsconfig/node18": "^1.0.1",
     "@types/eslint": "^8.4.10",
@@ -65,10 +66,10 @@
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
-    "markdownlint-cli": "^0.32.2",
+    "markdownlint-cli": "^0.33.0",
     "npm-run-all": "^4.1.5",
     "picocolors": "^1.0.0",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.2",
     "release-it": "^15.6.0",
     "rollup": "^3.9.1",
     "typescript": "^4.9.4",
@@ -79,7 +80,7 @@
     "eslint": "^7.0.0 || ^8.0.0",
     "vite": "^2.0.0 || ^3.0.0 || ^4.0.0"
   },
-  "packageManager": "pnpm@7.22.0",
+  "packageManager": "pnpm@7.23.0",
   "engines": {
     "node": ">=14.18"
   },
