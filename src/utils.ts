@@ -51,60 +51,15 @@ export const shouldIgnore = async (id: string, filter: Filter, eslint?: ESLintIn
 
 export const colorize = (text: string, textType: TextType) => pico[colorMap[textType]](text);
 
-export const contextPrint = (
-  text: string,
-  textType: TextType,
-  { emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
-  context: Rollup.PluginContext,
-) => {
-  if (textType === 'error' && emitError) {
-    if (emitErrorAsWarning) context.warn(text);
-    else context.error(text);
-  }
-  if (textType === 'warning' && emitWarning) {
-    if (emitWarningAsError) context.error(text);
-    else context.warn(text);
-  }
-};
-
-export const customPrint = (
-  text: string,
-  textType: TextType,
-  { emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
-  hasPluginName = false,
-  isColorized = false,
-) => {
-  let t = text;
-  if (!hasPluginName) t += `  Plugin: ${colorize(pluginName, 'plugin')}\r\n`;
-  if (textType === 'error' && emitError) {
-    if (!isColorized) t = colorize(t, emitErrorAsWarning ? 'warning' : textType);
-    console.log(t);
-  }
-  if (textType === 'warning' && emitWarning) {
-    if (!isColorized) t = colorize(t, emitWarningAsError ? 'error' : textType);
-    console.log(t);
-  }
-};
-
-export const print = (
-  text: string,
-  textType: TextType,
-  options: ESLintPluginOptions,
-  {
-    hasPluginName = false,
-    isColorized = false,
-    context,
-  }: {
-    context?: Rollup.PluginContext;
-    hasPluginName?: boolean;
-    isColorized?: boolean;
-  } = {},
-) => {
+export const print = (text: string, textType: TextType, context?: Rollup.PluginContext) => {
   console.log('');
-  if (context && options) {
-    return contextPrint(text, textType, options, context);
+  if (context) {
+    if (textType === 'error') context.error(text);
+    else if (textType === 'warning') context.warn(text);
+  } else {
+    const t = colorize(`${text}  Plugin: ${colorize(pluginName, 'plugin')}\r\n`, textType);
+    console.log(t);
   }
-  return customPrint(text, textType, options, hasPluginName, isColorized);
 };
 
 export const getOptions = ({
@@ -188,26 +143,66 @@ export const initialESLint = async (options: ESLintPluginOptions) => {
   }
 };
 
+export const removeErrorResults = (results: ESLintLintResults) =>
+  results.map((r) => {
+    const filteredMessages = r.messages.filter((m) => m.severity !== 2);
+    const filteredSuppressedMessages = r.suppressedMessages.filter((m) => m.severity !== 2);
+    return {
+      ...r,
+      messages: filteredMessages,
+      suppressedMessages: filteredSuppressedMessages,
+      errorCount: 0,
+      fatalErrorCount: 0,
+      fixableErrorCount: 0,
+    };
+  });
+
+export const removeWarningResults = (results: ESLintLintResults) =>
+  results.map((r) => {
+    const filteredMessages = r.messages.filter((m) => m.severity !== 1);
+    const filteredSuppressedMessages = r.suppressedMessages.filter((m) => m.severity !== 1);
+    return {
+      ...r,
+      messages: filteredMessages,
+      suppressedMessages: filteredSuppressedMessages,
+      warningCount: 0,
+      fixableWarningCount: 0,
+    };
+  });
+
 export const getLintFiles =
   (
     eslint: ESLintInstance,
     formatter: ESLintFormatter,
     outputFixes: ESLintOutputFixes,
-    options: ESLintPluginOptions,
+    { fix, emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
   ): LintFiles =>
   async (files, context) =>
     await eslint.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
+      // do nothing when there are no results
       if (!lintResults) return;
 
-      if (lintResults.length > 0 && options.fix) outputFixes(lintResults);
+      // output fixes
+      if (lintResults.length > 0 && fix) outputFixes(lintResults);
 
-      const results = lintResults.filter(
-        (result) => result.errorCount > 0 || result.warningCount > 0,
-      );
+      let results = [...lintResults];
+      // remove errors if emitError is false
+      if (!emitError) results = removeErrorResults(results);
+      // remove warnings if emitWarning is false
+      if (!emitWarning) results = removeWarningResults(results);
+      // remove results without errors and warnings
+      results = results.filter((r) => r.errorCount > 0 || r.warningCount > 0);
+
+      // do nothing when there are no results after processed
       if (results.length === 0) return;
-      const text = await formatter.format(results);
-      const textType = results.some((result) => result.errorCount > 0) ? 'error' : 'warning';
 
-      if (context) return print(text, textType, options, { context });
-      return print(text, textType, options);
+      const text = await formatter.format(results);
+      let textType: TextType;
+      if (results.some((r) => r.errorCount > 0)) {
+        textType = emitErrorAsWarning ? 'warning' : 'error';
+      } else {
+        textType = emitWarningAsError ? 'error' : 'warning';
+      }
+
+      return print(text, textType, context);
     });
