@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.1.6 (2023-01-04)
+
+- perf: better emit handling
+
 ## 3.1.5 (2023-01-04)
 
 - build: switch to rollup
