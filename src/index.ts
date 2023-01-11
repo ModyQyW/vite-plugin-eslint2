@@ -1,12 +1,12 @@
 import { Worker } from 'node:worker_threads';
 import { extname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { normalizePath } from '@rollup/pluginutils';
 import {
   getFilter,
   getOptions,
   getLintFiles,
   initialESLint,
-  isVirtualModule,
   pluginName,
   shouldIgnore,
 } from './utils';
@@ -19,6 +19,7 @@ import type {
   LintFiles,
 } from './types';
 
+const __filename = fileURLToPath(import.meta.url);
 const ext = extname(__filename);
 
 export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}): Vite.Plugin {
