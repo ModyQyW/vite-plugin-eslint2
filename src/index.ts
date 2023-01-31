@@ -38,6 +38,15 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       return (command === 'serve' && options.dev) || (command === 'build' && options.build);
     },
     async buildStart() {
+      // initial ESLint first
+      // may be used in shouldIgnore
+      if (!eslint) {
+        const result = await initialESLint(options);
+        eslint = result.eslint;
+        formatter = result.formatter;
+        outputFixes = result.outputFixes;
+        lintFiles = getLintFiles(eslint, formatter, outputFixes, options);
+      }
       // initial worker
       if (!worker && options.lintInWorker) {
         worker = new Worker(resolve(__dirname, `worker${ext}`), {
@@ -48,14 +57,6 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
           worker.postMessage(options.include);
         }
         return;
-      }
-      // initial ESLint
-      if (!eslint) {
-        const result = await initialESLint(options);
-        eslint = result.eslint;
-        formatter = result.formatter;
-        outputFixes = result.outputFixes;
-        lintFiles = getLintFiles(eslint, formatter, outputFixes, options);
       }
       // lint on start
       if (options.lintOnStart) {
