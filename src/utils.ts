@@ -1,6 +1,7 @@
 import pico from 'picocolors';
 import { createFilter, normalizePath } from '@rollup/pluginutils';
 import type { Colors } from 'picocolors/types';
+import type * as Rollup from 'rollup';
 import type {
   ESLintConstructorOptions,
   ESLintFormatter,
@@ -13,7 +14,11 @@ import type {
   LintFiles,
   TextType,
 } from './types';
-import type * as Rollup from 'rollup';
+
+const ESLINT_SEVERITY = {
+  ERROR: 2,
+  WARNING: 1,
+} as const;
 
 export const pluginName = 'vite:eslint';
 
@@ -144,11 +149,15 @@ export const initialESLint = async (options: ESLintPluginOptions) => {
 };
 
 export const removeErrorResults = (results: ESLintLintResults) =>
-  results.map((r) => {
-    const filteredMessages = r.messages.filter((m) => m.severity !== 2);
-    const filteredSuppressedMessages = r.suppressedMessages.filter((m) => m.severity !== 2);
+  results.map((result) => {
+    const filteredMessages = result.messages.filter(
+      (message) => message.severity !== ESLINT_SEVERITY.ERROR,
+    );
+    const filteredSuppressedMessages = result.suppressedMessages.filter(
+      (message) => message.severity !== ESLINT_SEVERITY.ERROR,
+    );
     return {
-      ...r,
+      ...result,
       messages: filteredMessages,
       suppressedMessages: filteredSuppressedMessages,
       errorCount: 0,
@@ -158,11 +167,15 @@ export const removeErrorResults = (results: ESLintLintResults) =>
   });
 
 export const removeWarningResults = (results: ESLintLintResults) =>
-  results.map((r) => {
-    const filteredMessages = r.messages.filter((m) => m.severity !== 1);
-    const filteredSuppressedMessages = r.suppressedMessages.filter((m) => m.severity !== 1);
+  results.map((result) => {
+    const filteredMessages = result.messages.filter(
+      (message) => message.severity !== ESLINT_SEVERITY.WARNING,
+    );
+    const filteredSuppressedMessages = result.suppressedMessages.filter(
+      (message) => message.severity !== ESLINT_SEVERITY.WARNING,
+    );
     return {
-      ...r,
+      ...result,
       messages: filteredMessages,
       suppressedMessages: filteredSuppressedMessages,
       warningCount: 0,
@@ -177,6 +190,7 @@ export const getLintFiles =
     outputFixes: ESLintOutputFixes,
     { fix, emitError, emitErrorAsWarning, emitWarning, emitWarningAsError }: ESLintPluginOptions,
   ): LintFiles =>
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   async (files, context) =>
     await eslint.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
       // do nothing when there are no results
@@ -191,14 +205,14 @@ export const getLintFiles =
       // remove warnings if emitWarning is false
       if (!emitWarning) results = removeWarningResults(results);
       // remove results without errors and warnings
-      results = results.filter((r) => r.errorCount > 0 || r.warningCount > 0);
+      results = results.filter((result) => result.errorCount > 0 || result.warningCount > 0);
 
       // do nothing when there are no results after processed
       if (results.length === 0) return;
 
       const text = await formatter.format(results);
       let textType: TextType;
-      if (results.some((r) => r.errorCount > 0)) {
+      if (results.some((result) => result.errorCount > 0)) {
         textType = emitErrorAsWarning ? 'warning' : 'error';
       } else {
         textType = emitWarningAsError ? 'error' : 'warning';

@@ -2,6 +2,7 @@ import { Worker } from 'node:worker_threads';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizePath } from '@rollup/pluginutils';
+import type * as Vite from 'vite';
 import {
   getFilter,
   getOptions,
@@ -10,7 +11,6 @@ import {
   pluginName,
   shouldIgnore,
 } from './utils';
-import type * as Vite from 'vite';
 import type {
   ESLintPluginUserOptions,
   ESLintInstance,
@@ -35,9 +35,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
   return {
     name: pluginName,
     apply(_, { command }) {
-      if (command === 'serve' && options.dev) return true;
-      if (command === 'build' && options.build) return true;
-      return false;
+      return (command === 'serve' && options.dev) || (command === 'build' && options.build);
     },
     async buildStart() {
       // initial worker
