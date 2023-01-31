@@ -13,7 +13,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@modyqyw/vite-plugin-eslint": "workspace:*",
     "@types/eslint": "^8.4.10",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
@@ -34,6 +33,6 @@
     "tailwindcss": "^3.2.4",
     "typescript": "^4.9.4",
     "vite": "^4.0.4",
-    "vite-plugin-inspect": "^0.7.14"
+    "vite-plugin-eslint2": "workspace:*",
   }
 }

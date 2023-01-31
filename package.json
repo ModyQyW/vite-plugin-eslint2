@@ -1,13 +1,13 @@
 {
-  "name": "@modyqyw/vite-plugin-eslint",
+  "name": "vite-plugin-eslint2",
   "version": "3.1.6",
   "description": "ESLint plugin for Vite.",
   "keywords": [
     "eslint",
     "vite-plugin"
   ],
-  "homepage": "https://github.com/ModyQyW/vite-plugin-eslint",
-  "repository": "git+https://github.com:ModyQyW/vite-plugin-eslint.git",
+  "homepage": "https://github.com/ModyQyW/vite-plugin-eslint2",
+  "repository": "git+https://github.com:ModyQyW/vite-plugin-eslint2.git",
   "license": "MIT",
   "author": {
     "name": "ModyQyW",

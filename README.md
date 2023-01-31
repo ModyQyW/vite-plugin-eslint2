@@ -1,7 +1,7 @@
-# @modyqyw/vite-plugin-eslint
+# vite-plugin-eslint2
 
-[![npm](https://img.shields.io/npm/v/@modyqyw/vite-plugin-eslint)](https://www.npmjs.com/package/@modyqyw/vite-plugin-eslint)
-[![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint)](https://github.com/ModyQyW/vite-plugin-eslint/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/vite-plugin-eslint2)](https://www.npmjs.com/package/vite-plugin-eslint2)
+[![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint2)](https://github.com/ModyQyW/vite-plugin-eslint2/blob/master/LICENSE)
 
 Vite ESLint plugin. Supports Vite v2, v3 and v4. Requires `node >= 14.18`.
 
@@ -10,10 +10,10 @@ You may want [Vite Stylelint plugin](https://github.com/ModyQyW/vite-plugin-styl
 ## Install
 
 ```sh
-npm install @modyqyw/vite-plugin-eslint -D
+npm install vite-plugin-eslint2 -D
 ```
 
-`@modyqyw/vite-plugin-eslint` does not install and config ESLint for you. You should handle these yourself.
+`vite-plugin-eslint2` does not install and config ESLint for you. You should handle these yourself.
 
 <details>
 
@@ -40,7 +40,7 @@ npm install eslint@^8 @types/eslint@^8 -D
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
-import eslint from '@modyqyw/vite-plugin-eslint';
+import eslint from 'vite-plugin-eslint2';
 
 export default defineConfig({
   plugins: [eslint(options)],
@@ -54,7 +54,7 @@ You can pass ESLint [Node.js API constructor options](https://eslint.org/docs/de
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
-import eslint from 'vite-plugin-eslint';
+import eslint from 'vite-plugin-eslint2';
 
 export default defineConfig({
   plugins: [
@@ -113,7 +113,7 @@ You may want to change this option if you are using `nuxt`.
 
 ```typescript
 // nuxt.config.ts
-import viteEslint from 'vite-plugin-eslint';
+import viteEslint from 'vite-plugin-eslint2';
 
 export default defineNuxtConfig({
   vite: {
@@ -247,14 +247,14 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
 
 <details>
   <summary>What's the difference between <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and this project?</summary>
-  <p>This project is initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
+  <p>This project is initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and named <code>@modyqyw/vite-plugin-eslint</code>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
   <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintInWorker</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
-  <p>I will still keep updating this project. Feel free to choose one.</p>
+  <p>I think <code>vite-plugin-eslint</code> is dead. So I rename this project to <code>vite-plugin-eslint2</code> in 2023/01/31, hoping I can provide a better DX. Feel free to choose one.</p>
 </details>
 
 ## Examples
 
-See [examples](https://github.com/ModyQyW/vite-plugin-eslint/tree/main/examples).
+See [examples](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/examples).
 
 ## CHANGELOG
 

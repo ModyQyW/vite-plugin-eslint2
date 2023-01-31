@@ -1,7 +1,7 @@
 # @modyqyw/vite-plugin-eslint
 
-[![npm](https://img.shields.io/npm/v/@modyqyw/vite-plugin-eslint)](https://www.npmjs.com/package/@modyqyw/vite-plugin-eslint)
-[![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint)](https://github.com/ModyQyW/vite-plugin-eslint/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/vite-plugin-eslint2)](https://www.npmjs.com/package/vite-plugin-eslint2)
+[![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint2)](https://github.com/ModyQyW/vite-plugin-eslint2/blob/master/LICENSE)
 
 Vite ESLint 插件。支持 Vite v2、v3 和 v4。要求 `node >= 14.18`。
 
@@ -10,10 +10,10 @@ Vite ESLint 插件。支持 Vite v2、v3 和 v4。要求 `node >= 14.18`。
 ## Install
 
 ```sh
-npm install @modyqyw/vite-plugin-eslint -D
+npm install vite-plugin-eslint2 -D
 ```
 
-`vite-plugin-eslint` 不会为你安装和配置 ESLint。你应该自己处理这些。
+`vite-plugin-eslint2` 不会为你安装和配置 ESLint。你应该自己处理这些。
 
 <details>
 
@@ -40,7 +40,7 @@ npm install eslint@^8 @types/eslint@^8 -D
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
-import eslint from '@modyqyw/vite-plugin-eslint';
+import eslint from 'vite-plugin-eslint2';
 
 export default defineConfig({
   plugins: [eslint(options)],
@@ -54,7 +54,7 @@ export default defineConfig({
 ```typescript
 // vite.config.ts
 import { defineConfig } from 'vite';
-import eslint from 'vite-plugin-eslint';
+import eslint from 'vite-plugin-eslint2';
 
 export default defineConfig({
   plugins: [
@@ -113,7 +113,7 @@ export default defineConfig({
 
 ```typescript
 // nuxt.config.ts
-import viteEslint from 'vite-plugin-eslint';
+import viteEslint from 'vite-plugin-eslint2';
 
 export default defineNuxtConfig({
   vite: {
@@ -249,7 +249,7 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
   <summary>这个项目和 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 的区别是什么？</summary>
   <p>这个项目最初从 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 分叉出来，因为当时它有很多 issue 和 PR 等待处理，看起来没有人维护。我给作者发了邮件但我没有得到任何回应。<p>
   <p>我增加了一些功能来满足我自己的需求，包括<code>eslint@8</code> 支持，<code>eslintPath</code> 选项，<code>lintInWorker</code> 选项，<code>lintOnStart</code> 选项，还有默认忽略虚拟模块。</p>
-  <p>我会继续更新这个项目。请自行选择一个。</p>
+  <p>我认为 <code>vite-plugin-eslint</code> 缺少维护，所以我在 2023-01-31 将这个项目重命名为 <code>vite-plugin-eslint2</code>。请根据你的意愿选择一个来使用。</p>
 </details>
 
 ## 例子
