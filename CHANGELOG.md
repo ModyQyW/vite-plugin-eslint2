@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.2.1 (2023-01-31)
+
+- fix: fix eslint initial params
+
 ## 3.2.0 (2023-01-31)
 
 This project is named `vite-plugin-eslint2` now.
