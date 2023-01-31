@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 3.2.0 (2023-01-31)
+
+This project is named `vite-plugin-eslint2` now.
+
+- feat: add `chokidar` option
+- fix: use `__dirname` directly by accident
+- fix: maybe lint files should be ignored
+- build: update minify and generate sourcemap
+
 ## 3.1.6 (2023-01-04)
 
 - perf: better emit handling
