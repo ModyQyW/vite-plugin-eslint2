@@ -1,5 +1,5 @@
 import { Worker } from 'node:worker_threads';
-import { extname, resolve } from 'node:path';
+import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizePath } from '@rollup/pluginutils';
 import {
@@ -20,6 +20,7 @@ import type {
 } from './types';
 
 const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const ext = extname(__filename);
 
 export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}): Vite.Plugin {
