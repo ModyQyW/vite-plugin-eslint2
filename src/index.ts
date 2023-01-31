@@ -3,6 +3,7 @@ import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizePath } from '@rollup/pluginutils';
 import type * as Vite from 'vite';
+import type { FSWatcher } from 'chokidar';
 import {
   getFilter,
   getOptions,
@@ -10,6 +11,7 @@ import {
   initialESLint,
   pluginName,
   shouldIgnore,
+  getWatcher,
 } from './utils';
 import type {
   ESLintPluginUserOptions,
@@ -30,6 +32,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
   let formatter: ESLintFormatter;
   let outputFixes: ESLintOutputFixes;
   let lintFiles: LintFiles;
+  let watcher: FSWatcher;
   let worker: Worker;
 
   return {
@@ -52,11 +55,15 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
         worker = new Worker(resolve(__dirname, `worker${ext}`), {
           workerData: { options },
         });
-        // initial ESLint and lint on start in worker
+        // initial ESLint, initial chokidar and lint on start in worker
         if (options.lintOnStart) {
           worker.postMessage(options.include);
         }
         return;
+      }
+      // initial chokidar
+      if (!watcher && options.chokidar) {
+        watcher = getWatcher(lintFiles, options);
       }
       // lint on start
       if (options.lintOnStart) {
@@ -67,11 +74,18 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       }
     },
     async transform(_, id) {
+      if (options.chokidar) return null;
       if (await shouldIgnore(id, filter, eslint)) return null;
       const file = normalizePath(id).split('?')[0];
       if (worker) worker.postMessage(file);
       else await lintFiles(file, this);
       return null;
+    },
+    async buildEnd() {
+      if (watcher?.close) await watcher.close();
+    },
+    async closeBundle() {
+      if (watcher?.close) await watcher.close();
     },
   };
 }

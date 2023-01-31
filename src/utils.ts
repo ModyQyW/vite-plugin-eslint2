@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+import chokidar from 'chokidar';
 import pico from 'picocolors';
 import { createFilter, normalizePath } from '@rollup/pluginutils';
 import type { Colors } from 'picocolors/types';
@@ -19,6 +21,8 @@ const ESLINT_SEVERITY = {
   ERROR: 2,
   WARNING: 1,
 } as const;
+
+export const cwd = process.cwd();
 
 export const pluginName = 'vite:eslint';
 
@@ -78,6 +82,7 @@ export const getOptions = ({
   formatter,
   lintInWorker,
   lintOnStart,
+  chokidar,
   emitError,
   emitErrorAsWarning,
   emitWarning,
@@ -94,6 +99,7 @@ export const getOptions = ({
   formatter: formatter ?? 'stylish',
   lintInWorker: lintInWorker ?? false,
   lintOnStart: lintOnStart ?? false,
+  chokidar: chokidar ?? false,
   emitError: emitError ?? true,
   emitErrorAsWarning: emitErrorAsWarning ?? false,
   emitWarning: emitWarning ?? true,
@@ -220,3 +226,9 @@ export const getLintFiles =
 
       return print(text, textType, context);
     });
+
+export const getWatcher = (lintFiles: LintFiles, { include, exclude }: ESLintPluginOptions) =>
+  chokidar.watch(include, { ignored: exclude }).on('change', async (path) => {
+    const fullPath = resolve(cwd, path);
+    await lintFiles(fullPath);
+  });

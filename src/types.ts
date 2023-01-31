@@ -16,6 +16,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   formatter: string;
   lintInWorker: boolean;
   lintOnStart: boolean;
+  chokidar: boolean;
   emitError: boolean;
   emitErrorAsWarning: boolean;
   emitWarning: boolean;
