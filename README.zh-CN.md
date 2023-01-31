@@ -17,20 +17,20 @@ npm install vite-plugin-eslint2 -D
 
 <details>
 
-<summary>ESLint@7</summary>
+<summary>ESLint@8</summary>
 
 ```sh
-npm install eslint@^7 @types/eslint@^7 -D
+npm install eslint@^8 @types/eslint@^8 -D
 ```
 
 </details>
 
 <details>
 
-<summary>ESLint@8</summary>
+<summary>ESLint@7</summary>
 
 ```sh
-npm install eslint@^8 @types/eslint@^8 -D
+npm install eslint@^7 @types/eslint@^7 -D
 ```
 
 </details>
@@ -134,7 +134,7 @@ export default defineNuxtConfig({
           'server/**/*.{js,jsx,ts,tsx,vue}',
           'src/**/*.{js,jsx,ts,tsx,vue}',
           'stores/**/*.{js,jsx,ts,tsx,vue}',
-          'styles/**/*.{js,jsx,ts,tsx,vue}',
+          'styles/**/*.{js,jsx,ts,tsx,vue}', // vanilla-extract may need
           'utils/**/*.{js,jsx,ts,tsx,vue}',
           'app.vue',
           'App.vue',
@@ -196,6 +196,15 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 
 如果你没有缓存而且没有启用 `lintInWorker`，这将大大降低 Vite 的初次启动速度。
 
+### `chokidar`
+
+- 类型：`boolean`
+- 默认值：`false`
+
+启用时，插件会尝试在 Chokidar `change` 事件中运行 ESLint，而不是在 `transform` 钩子中运行。默认禁用。
+
+如果你启用这个功能，建议同时启用 `lintOnStart`。
+
 ### `emitError`
 
 - 类型：`boolean`
@@ -227,6 +236,13 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 ## FAQ
 
 <details>
+  <summary>这个项目和 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 的区别是什么？</summary>
+  <p>这个项目最初从 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 分叉出来，因为当时它有很多 issue 和 PR 等待处理，看起来没有人维护。我给作者发了邮件但我没有得到任何回应。<p>
+  <p>我增加了一些功能来满足我自己的需求，包括<code>eslint@8</code> 支持，<code>eslintPath</code> 选项，<code>lintInWorker</code> 选项，<code>lintOnStart</code> 选项，还有默认忽略虚拟模块。</p>
+  <p>我认为 <code>vite-plugin-eslint</code> 缺少维护，所以我在 2023-01-31 将这个项目重命名为 <code>vite-plugin-eslint2</code>。请根据你的意愿选择一个来使用。</p>
+</details>
+
+<details>
   <summary>Cache 失效</summary>
   <ul>
     <li>禁用 <code>cache</code> 选项。</li>
@@ -243,13 +259,6 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
     <li>或试试 <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>。</li>
     <li>或在 Vite 外直接运行 ESLint</li>
   </ul>
-</details>
-
-<details>
-  <summary>这个项目和 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 的区别是什么？</summary>
-  <p>这个项目最初从 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 分叉出来，因为当时它有很多 issue 和 PR 等待处理，看起来没有人维护。我给作者发了邮件但我没有得到任何回应。<p>
-  <p>我增加了一些功能来满足我自己的需求，包括<code>eslint@8</code> 支持，<code>eslintPath</code> 选项，<code>lintInWorker</code> 选项，<code>lintOnStart</code> 选项，还有默认忽略虚拟模块。</p>
-  <p>我认为 <code>vite-plugin-eslint</code> 缺少维护，所以我在 2023-01-31 将这个项目重命名为 <code>vite-plugin-eslint2</code>。请根据你的意愿选择一个来使用。</p>
 </details>
 
 ## 例子

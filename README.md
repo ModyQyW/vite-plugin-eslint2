@@ -17,20 +17,20 @@ npm install vite-plugin-eslint2 -D
 
 <details>
 
-<summary>ESLint@7</summary>
+<summary>ESLint@8</summary>
 
 ```sh
-npm install eslint@^7 @types/eslint@^7 -D
+npm install eslint@^8 @types/eslint@^8 -D
 ```
 
 </details>
 
 <details>
 
-<summary>ESLint@8</summary>
+<summary>ESLint@7</summary>
 
 ```sh
-npm install eslint@^8 @types/eslint@^8 -D
+npm install eslint@^7 @types/eslint@^7 -D
 ```
 
 </details>
@@ -134,7 +134,7 @@ export default defineNuxtConfig({
           'server/**/*.{js,jsx,ts,tsx,vue}',
           'src/**/*.{js,jsx,ts,tsx,vue}',
           'stores/**/*.{js,jsx,ts,tsx,vue}',
-          'styles/**/*.{js,jsx,ts,tsx,vue}',
+          'styles/**/*.{js,jsx,ts,tsx,vue}', // vanilla-extract may need
           'utils/**/*.{js,jsx,ts,tsx,vue}',
           'app.vue',
           'App.vue',
@@ -196,6 +196,15 @@ Lint on start (in `buildStart` hook). Useful to lint all files once to find pote
 
 This will significantly slow down Vite first starting if you has no caches and don't enable `lintInWorker`.
 
+### `chokidar`
+
+- Type: `boolean`
+- Default: `false`
+
+With this option enabled, this plugin will try to run ESLint in Chokidar `change` event instead of `transform` hook. This is disabled by default.
+
+Recommend to enable `lintOnStart` too, if you enable this one.
+
 ### `emitError`
 
 - Type: `boolean`
@@ -227,6 +236,13 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
 ## FAQ
 
 <details>
+  <summary>What's the difference between <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and this project?</summary>
+  <p>This project is initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and named <code>@modyqyw/vite-plugin-eslint</code>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
+  <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintInWorker</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
+  <p>I think <code>vite-plugin-eslint</code> is dead. So I rename this project to <code>vite-plugin-eslint2</code> in 2023/01/31, hoping I can provide a better DX. Feel free to choose one.</p>
+</details>
+
+<details>
   <summary>Cache is broken</summary>
   <ul>
     <li>Disable <code>cache</code> option.</li>
@@ -243,13 +259,6 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
     <li>Or try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a></li>
     <li>Or run ESLint directly besides Vite</li>
   </ul>
-</details>
-
-<details>
-  <summary>What's the difference between <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and this project?</summary>
-  <p>This project is initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and named <code>@modyqyw/vite-plugin-eslint</code>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
-  <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintInWorker</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
-  <p>I think <code>vite-plugin-eslint</code> is dead. So I rename this project to <code>vite-plugin-eslint2</code> in 2023/01/31, hoping I can provide a better DX. Feel free to choose one.</p>
 </details>
 
 ## Examples
