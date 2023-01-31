@@ -2,20 +2,18 @@ import { builtinModules } from 'node:module';
 import { defineConfig } from 'rollup';
 import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import esbuild from 'rollup-plugin-esbuild';
+import esbuild, { minify } from 'rollup-plugin-esbuild';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
-import terser from '@rollup/plugin-terser';
-// @ts-ignore
-import bundleSize from 'rollup-plugin-bundle-size';
 import clean from 'rollup-plugin-delete';
 import { getPackageJson } from '@modyqyw/utils';
 
 const isDevelopment = !!process.env.ROLLUP_WATCH;
+const isProduction = !isDevelopment;
 
 const {
-  main = './dist/index.cjs',
-  module = './dist/index.mjs',
+  main: cjs = './dist/index.cjs',
+  module: esm = './dist/index.mjs',
   types = './dist/index.d.ts',
   dependencies = {},
   peerDependencies = {},
@@ -33,14 +31,16 @@ export default defineConfig([
     input: './src/index.ts',
     output: [
       {
-        file: main,
+        file: cjs,
         format: 'cjs',
         exports: 'named',
         footer: 'module.exports = Object.assign(exports.default || {}, exports)',
+        sourcemap: isProduction,
       },
       {
-        file: module,
+        file: esm,
         format: 'esm',
+        sourcemap: isProduction,
       },
     ],
     plugins: [
@@ -48,10 +48,9 @@ export default defineConfig([
       nodeResolve({ preferBuiltins: true }),
       esbuild({ target: 'node14.18' }),
       commonjs(),
-      isDevelopment ? null : terser({ format: { ascii_only: true } }),
-      isDevelopment ? null : bundleSize(),
+      isProduction ? minify({ charset: 'ascii' }) : null,
       clean({
-        targets: [main, module],
+        targets: [cjs, esm, `${cjs}.map`, `${esm}.map`],
         runOnce: isDevelopment,
       }),
     ],
@@ -69,7 +68,6 @@ export default defineConfig([
         compilerOptions: { preserveSymlinks: false },
         respectExternal: true,
       }),
-      isDevelopment ? null : bundleSize(),
       clean({
         targets: [types],
         runOnce: isDevelopment,
@@ -80,18 +78,22 @@ export default defineConfig([
   {
     input: './src/worker.ts',
     output: [
-      { file: './dist/worker.cjs', format: 'cjs', exports: 'named' },
-      { file: './dist/worker.mjs', format: 'esm' },
+      { file: './dist/worker.cjs', format: 'cjs', exports: 'named', sourcemap: isProduction },
+      { file: './dist/worker.mjs', format: 'esm', sourcemap: isProduction },
     ],
     plugins: [
       json({ preferConst: true }),
       nodeResolve({ preferBuiltins: true }),
       esbuild({ target: 'node14.18' }),
       commonjs(),
-      isDevelopment ? null : terser({ format: { ascii_only: true } }),
-      isDevelopment ? null : bundleSize(),
+      isProduction ? minify({ charset: 'ascii' }) : null,
       clean({
-        targets: ['./dist/worker.cjs', './dist/worker.mjs'],
+        targets: [
+          './dist/worker.cjs',
+          './dist/worker.mjs',
+          './dist/worker.cjs.map',
+          './dist/worker.mjs.map',
+        ],
         runOnce: isDevelopment,
       }),
     ],
