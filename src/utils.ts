@@ -125,6 +125,7 @@ export const getESLintConstructorOptions = (
           'formatter',
           'lintInWorker',
           'lintOnStart',
+          'chokidar',
           'emitError',
           'emitErrorAsWarning',
           'emitWarning',
