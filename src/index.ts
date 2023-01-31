@@ -43,7 +43,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
         worker = new Worker(resolve(__dirname, `worker${ext}`), {
           workerData: { options },
         });
-        // lint on start in worker
+        // initial ESLint and lint on start in worker
         if (options.lintOnStart) {
           worker.postMessage(options.include);
         }
