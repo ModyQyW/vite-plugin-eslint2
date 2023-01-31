@@ -41,7 +41,7 @@
     "examples:vue:build": "pnpm --filter vue run build",
     "examples:vue:dev": "pnpm --filter vue run dev",
     "lint": "run-p lint:eslint lint:markdownlint check:types",
-    "lint:eslint": "eslint ./src --ext=.js,.cjs,.mjs,.ts,.cts,.mts --fix --cache --no-error-on-unmatched-pattern --ignore-path=.gitignore",
+    "lint:eslint": "eslint ./src --fix --cache --no-error-on-unmatched-pattern",
     "lint:markdownlint": "markdownlint . --fix --ignore-path=.gitignore",
     "prepare": "is-ci || husky install",
     "prepublishOnly": "pnpm run build",
