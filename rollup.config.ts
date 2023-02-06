@@ -2,14 +2,13 @@ import { builtinModules } from 'node:module';
 import { defineConfig } from 'rollup';
 import json from '@rollup/plugin-json';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import esbuild, { minify } from 'rollup-plugin-esbuild';
+import esbuild from 'rollup-plugin-esbuild';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
 import clean from 'rollup-plugin-delete';
 import { getPackageJson } from '@modyqyw/utils';
 
 const isDevelopment = !!process.env.ROLLUP_WATCH;
-const isProduction = !isDevelopment;
 
 const {
   main: cjs = './dist/index.cjs',
@@ -35,12 +34,10 @@ export default defineConfig([
         format: 'cjs',
         exports: 'named',
         footer: 'module.exports = Object.assign(exports.default || {}, exports)',
-        sourcemap: isProduction,
       },
       {
         file: esm,
         format: 'esm',
-        sourcemap: isProduction,
       },
     ],
     plugins: [
@@ -48,9 +45,8 @@ export default defineConfig([
       nodeResolve({ preferBuiltins: true }),
       esbuild({ target: 'node14.18' }),
       commonjs(),
-      isProduction ? minify({ charset: 'ascii' }) : null,
       clean({
-        targets: [cjs, esm, `${cjs}.map`, `${esm}.map`],
+        targets: [cjs, esm],
         runOnce: isDevelopment,
       }),
     ],
@@ -78,22 +74,16 @@ export default defineConfig([
   {
     input: './src/worker.ts',
     output: [
-      { file: './dist/worker.cjs', format: 'cjs', exports: 'named', sourcemap: isProduction },
-      { file: './dist/worker.mjs', format: 'esm', sourcemap: isProduction },
+      { file: './dist/worker.cjs', format: 'cjs' },
+      { file: './dist/worker.mjs', format: 'esm' },
     ],
     plugins: [
       json({ preferConst: true }),
       nodeResolve({ preferBuiltins: true }),
       esbuild({ target: 'node14.18' }),
       commonjs(),
-      isProduction ? minify({ charset: 'ascii' }) : null,
       clean({
-        targets: [
-          './dist/worker.cjs',
-          './dist/worker.mjs',
-          './dist/worker.cjs.map',
-          './dist/worker.mjs.map',
-        ],
+        targets: ['./dist/worker.cjs', './dist/worker.mjs'],
         runOnce: isDevelopment,
       }),
     ],
