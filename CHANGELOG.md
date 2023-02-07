@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- build: switch to `unbuild`
+
 ## 3.2.1 (2023-01-31)
 
 - fix: fix eslint initial params
