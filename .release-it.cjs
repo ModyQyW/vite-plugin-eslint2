@@ -9,6 +9,9 @@ module.exports = {
       preset: 'conventionalcommits',
     },
   },
+  npm: {
+    publish: false,
+  },
   hooks: {
     'before:init': 'pnpm install && pnpm run lint',
   },
