@@ -1,3 +1,5 @@
+import { unlinkSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
@@ -9,6 +11,11 @@ export default defineBuildConfig({
     inlineDependencies: true,
     esbuild: {
       target: 'node14.18',
+    },
+  },
+  hooks: {
+    'build:done': (ctx) => {
+      unlinkSync(resolve(ctx.options.outDir, 'worker.d.ts'));
     },
   },
 });
