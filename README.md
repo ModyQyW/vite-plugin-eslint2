@@ -194,7 +194,7 @@ It is similar with [vite-plugin-checker](https://github.com/fi3ework/vite-plugin
 
 Lint on start (in `buildStart` hook). Useful to lint all files once to find potential errors. This is disabled by default.
 
-This will significantly slow down Vite first starting if you has no caches and don't enable `lintInWorker`.
+This will significantly slow down Vite first starting if you have no caches and don't enable `lintInWorker`.
 
 ### `chokidar`
 
