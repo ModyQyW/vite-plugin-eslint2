@@ -89,3 +89,5 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
     },
   };
 }
+
+export { type ESLintPluginOptions, type ESLintPluginUserOptions } from './types';
