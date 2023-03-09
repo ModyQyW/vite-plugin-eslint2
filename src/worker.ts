@@ -12,7 +12,7 @@ let lintFiles: LintFiles;
 let watcher: FSWatcher;
 
 // this file needs to be compiled into cjs, which doesn't support top-level await
-// eslint-disable-next-line unicorn/prefer-top-level-await
+
 (async () => {
   const result = await initialESLint(options);
   eslint = result.eslint;
