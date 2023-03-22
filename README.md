@@ -236,6 +236,16 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
 ## FAQ
 
 <details>
+  <summary>Do I need this plugin?</summary>
+  <p>In short, <strong>NO</strong>.</p>
+  <p>It is usual to use <a href="https://github.com/webpack-contrib/eslint-webpack-plugin">eslint-webpack-plugin</a> in <code>webpack</code>. And this plugin does almost the same in <code>vite</code>.</p>
+  <p>However, our IDE is already probably giving all the info we need. We only need to add <a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">ESLint plugin</a> in VSCode. WebStorm already includes the functionality. We can also run ESLint in CI to prevent someone else breaks things.</p>
+  <p>Since we have these ways to run ESLint, it is unnecessary to run ESLint in <code>vite</code>, which means we don't need this plugin.</p>
+  <p>If you really want some errors and warnings, try <code>lintInWorker</code> option, which prints in console.</p>
+  <p>Or try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>, which prints in browser.
+</details>
+
+<details>
   <summary>What's the difference between <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and this project?</summary>
   <p>This project is initially forked from <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> and named <code>@modyqyw/vite-plugin-eslint</code>. Because the project looked like dead at that time, leaving issues and PRs. I sent an email to the author but I got no response.<p>
   <p>I add some functions to meet my needs, like <code>eslint@8</code> support, <code>eslintPath</code> option, <code>lintInWorker</code> option, <code>lintOnStart</code> option and ignore virtual modules by default.</p>
@@ -249,15 +259,15 @@ The warnings found will be emitted as errors when enabled. This is disabled by d
     <li>Or delete the cache file (default <code>.eslintcache</code>), fix errors manully and restart Vite.
     </li>
   </ul>
-  This problem should only happens when starting Vite with ESLint errors. Have a better solution? PR welcome. :)
+  <p>This problem should only happens when starting Vite with ESLint errors. Have a better solution? PR welcome. :)</p>
 </details>
 
 <details>
   <summary><code>Vite</code> is slow when using this plugin</summary>
   <ul>
-    <li>Try enable <code>lintInWorker</code> option</li>
-    <li>Or try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a></li>
-    <li>Or run ESLint directly besides Vite</li>
+    <li>Try enable <code>lintInWorker</code> option.</li>
+    <li>Or try <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>.</li>
+    <li>Or run ESLint directly besides Vite.</li>
   </ul>
 </details>
 

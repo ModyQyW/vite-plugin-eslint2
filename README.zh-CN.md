@@ -236,6 +236,16 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 ## FAQ
 
 <details>
+  <summary>我需要这个插件吗？</summary>
+  <p>长话短说，<strong>不需要</strong>。</p>
+  <p>在 <code>webpack</code> 使用 <a href="https://github.com/webpack-contrib/eslint-webpack-plugin">eslint-webpack-plugin</a> 是很常见的。而这个插件在 <code>vite</code> 中做着几乎一样的事情。</p>
+  <p>但是，我们的 IDE 可能已经提供了我们需要的所有信息。对于 VSCode，我们只需要添加 <a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">ESLint 插件</a>。 WebStorm 已经内置了这个功能。我们也可以在 CI 中运行 ESLint，阻止其它人破坏代码。</p>
+  <p>既然我们有这么多方法运行 ESLint，那就没有必要在 <code>vite</code> 中运行 ESLint 了，这也就意味着我们并不需要这个插件。</p>
+  <p>如果你真的很需要查看错误和警告，尝试一下 <code>lintInWorker</code> 选项，它会在 console 中打印信息。</p>
+  <p>或者尝试一下 <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>，它会在浏览器中打印信息。
+</details>
+
+<details>
   <summary>这个项目和 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 的区别是什么？</summary>
   <p>这个项目最初从 <a href="https://github.com/gxmari007/vite-plugin-eslint">gxmari007/vite-plugin-eslint</a> 分叉出来，因为当时它有很多 issue 和 PR 等待处理，看起来没有人维护。我给作者发了邮件但我没有得到任何回应。<p>
   <p>我增加了一些功能来满足我自己的需求，包括<code>eslint@8</code> 支持，<code>eslintPath</code> 选项，<code>lintInWorker</code> 选项，<code>lintOnStart</code> 选项，还有默认忽略虚拟模块。</p>
@@ -249,7 +259,7 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
     <li>或删除缓存文件（默认是 <code>.eslintcache</code>），手动修复错误后重启 Vite。
     </li>
   </ul>
-  这个问题应该只会在启动 Vite 出现校验错误时出现。如果你有更好的解决方案，欢迎 PR。:)
+  <p>这个问题应该只会在启动 Vite 出现校验错误时出现。如果你有更好的解决方案，欢迎 PR。:)</p>
 </details>
 
 <details>
