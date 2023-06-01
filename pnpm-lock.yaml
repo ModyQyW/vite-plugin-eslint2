@@ -8,7 +8,7 @@ importers:
       '@commitlint/config-conventional': ^17.4.4
       '@commitlint/prompt': ^17.5.0
       '@modyqyw/fabric': ^7.4.1
-      '@modyqyw/utils': ^5.0.0
+      '@modyqyw/utils': ^7.0.0
       '@rollup/pluginutils': ^5.0.2
       '@tsconfig/node18': ^1.0.1
       '@types/eslint': ^8.21.3
@@ -40,7 +40,7 @@ importers:
       '@commitlint/config-conventional': 17.4.4
       '@commitlint/prompt': 17.5.0
       '@modyqyw/fabric': 7.4.1_4lm3rwwmqnnsdbt4jfnpg3oj7q
-      '@modyqyw/utils': 5.0.0
+      '@modyqyw/utils': 7.0.1
       '@tsconfig/node18': 1.0.1
       '@types/eslint': 8.21.3
       '@types/node': 18.15.5
@@ -1294,7 +1294,7 @@ packages:
       '@intlify/eslint-plugin-vue-i18n': 2.0.0_eslint@8.36.0
       '@rushstack/eslint-patch': 1.2.0
       '@types/eslint': 8.21.3
-      '@types/node': 18.15.5
+      '@types/node': 20.2.5
       '@types/prettier': 2.7.2
       '@typescript-eslint/eslint-plugin': 5.56.0_iskin7c6dxqunwflhstekcjqmq
       '@typescript-eslint/parser': 5.56.0_vgl77cfdswitgr47lm5swmv43m
@@ -1363,8 +1363,8 @@ packages:
       - supports-color
     dev: true
 
-  /@modyqyw/utils/5.0.0:
-    resolution: {integrity: sha512-B5bOmXzbUPYP5+kTZcbMNQLBhZUgwivfgq8dw6oJYXgH+R5lL8STaa2IQBqyWVRa5RrEhkX9UiBDSPNlgXSxPw==}
+  /@modyqyw/utils/7.0.1:
+    resolution: {integrity: sha512-flQ86trujjbq/idVoDwhtCqqovP+9bS77l9KSvMkj1mAyTHbXrOrYdGz9dfowLKc40vQb/1Ufb/DVyY3EWgW2A==}
     engines: {node: '>=14.18'}
     dev: true
 
@@ -1708,6 +1708,10 @@ packages:
 
   /@types/node/18.15.5:
     resolution: {integrity: sha512-Ark2WDjjZO7GmvsyFFf81MXuGTA/d6oP38anyxWOL6EREyBKAxKoFHwBhaZxCfLRLpO8JgVXwqOwSwa7jRcjew==}
+    dev: true
+
+  /@types/node/20.2.5:
+    resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
