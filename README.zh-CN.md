@@ -267,7 +267,7 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
   <ul>
     <li>试试启用 <code>lintInWorker</code> 选项。</li>
     <li>或试试 <a href="https://github.com/fi3ework/vite-plugin-checker">vite-plugin-checker</a>。</li>
-    <li>或在 Vite 外直接运行 ESLint</li>
+    <li>或在 Vite 外直接运行 ESLint。</li>
   </ul>
 </details>
 
