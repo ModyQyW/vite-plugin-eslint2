@@ -10,7 +10,7 @@ importers:
       '@modyqyw/fabric': ^7.4.1
       '@modyqyw/utils': ^5.0.0
       '@rollup/pluginutils': ^5.0.2
-      '@tsconfig/node18': ^1.0.1
+      '@tsconfig/node18': ^18.0.0
       '@types/eslint': ^8.21.3
       '@types/node': ^18.15.5
       '@typescript-eslint/eslint-plugin': ^5.56.0
@@ -41,7 +41,7 @@ importers:
       '@commitlint/prompt': 17.5.0
       '@modyqyw/fabric': 7.4.1_4lm3rwwmqnnsdbt4jfnpg3oj7q
       '@modyqyw/utils': 5.0.0
-      '@tsconfig/node18': 1.0.1
+      '@tsconfig/node18': 18.2.0
       '@types/eslint': 8.21.3
       '@types/node': 18.15.5
       '@typescript-eslint/eslint-plugin': 5.56.0_2hcjazgfnbtq42tcc73br2vup4
@@ -1294,7 +1294,7 @@ packages:
       '@intlify/eslint-plugin-vue-i18n': 2.0.0_eslint@8.36.0
       '@rushstack/eslint-patch': 1.2.0
       '@types/eslint': 8.21.3
-      '@types/node': 18.15.5
+      '@types/node': 20.3.3
       '@types/prettier': 2.7.2
       '@typescript-eslint/eslint-plugin': 5.56.0_iskin7c6dxqunwflhstekcjqmq
       '@typescript-eslint/parser': 5.56.0_vgl77cfdswitgr47lm5swmv43m
@@ -1653,8 +1653,8 @@ packages:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
-  /@tsconfig/node18/1.0.1:
-    resolution: {integrity: sha512-sNFeK6X2ATlhlvzyH4kKYQlfHXE2f2/wxtB9ClvYXevWpmwkUT7VaSrjIN9E76Qebz8qP5JOJJ9jD3QoD/Z9TA==}
+  /@tsconfig/node18/18.2.0:
+    resolution: {integrity: sha512-yhxwIlFVSVcMym3O31HoMnRXpoenmpIxcj4Yoes2DUpe+xCJnA7ECQP1Vw889V0jTt/2nzvpLQ/UuMYCd3JPIg==}
     dev: true
 
   /@tufjs/models/1.0.1:
@@ -1708,6 +1708,10 @@ packages:
 
   /@types/node/18.15.5:
     resolution: {integrity: sha512-Ark2WDjjZO7GmvsyFFf81MXuGTA/d6oP38anyxWOL6EREyBKAxKoFHwBhaZxCfLRLpO8JgVXwqOwSwa7jRcjew==}
+    dev: true
+
+  /@types/node/20.3.3:
+    resolution: {integrity: sha512-wheIYdr4NYML61AjC8MKj/2jrR/kDQri/CIpVoZwldwhnIrD/j9jIU5bJ8yBKuB2VhpFV7Ab6G2XkBjv9r9Zzw==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:

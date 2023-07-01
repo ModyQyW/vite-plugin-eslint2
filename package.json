@@ -58,7 +58,7 @@
     "@commitlint/prompt": "^17.5.0",
     "@modyqyw/fabric": "^7.4.1",
     "@modyqyw/utils": "^5.0.0",
-    "@tsconfig/node18": "^1.0.1",
+    "@tsconfig/node18": "^18.0.0",
     "@types/eslint": "^8.21.3",
     "@types/node": "^18.15.5",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
