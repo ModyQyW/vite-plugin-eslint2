@@ -26,7 +26,7 @@ importers:
       npm-run-all: ^4.1.5
       picocolors: ^1.0.0
       prettier: ^2.8.6
-      publint: ^0.1.11
+      publint: ^0.2.0
       rollup: ^3.20.0
       sort-package-json: ^2.4.1
       typescript: ^5.0.2
@@ -56,7 +56,7 @@ importers:
       npm-run-all: 4.1.5
       picocolors: 1.0.0
       prettier: 2.8.6
-      publint: 0.1.11
+      publint: 0.2.0
       rollup: 3.20.0
       sort-package-json: 2.4.1
       typescript: 5.0.2
@@ -1294,7 +1294,7 @@ packages:
       '@intlify/eslint-plugin-vue-i18n': 2.0.0_eslint@8.36.0
       '@rushstack/eslint-patch': 1.2.0
       '@types/eslint': 8.21.3
-      '@types/node': 18.15.5
+      '@types/node': 20.4.5
       '@types/prettier': 2.7.2
       '@typescript-eslint/eslint-plugin': 5.56.0_iskin7c6dxqunwflhstekcjqmq
       '@typescript-eslint/parser': 5.56.0_vgl77cfdswitgr47lm5swmv43m
@@ -1708,6 +1708,10 @@ packages:
 
   /@types/node/18.15.5:
     resolution: {integrity: sha512-Ark2WDjjZO7GmvsyFFf81MXuGTA/d6oP38anyxWOL6EREyBKAxKoFHwBhaZxCfLRLpO8JgVXwqOwSwa7jRcjew==}
+    dev: true
+
+  /@types/node/20.4.5:
+    resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
@@ -7324,8 +7328,8 @@ packages:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
     dev: true
 
-  /publint/0.1.11:
-    resolution: {integrity: sha512-sD0rtIEadks83MkpomJswBO/YHExJLkta1TyqUhb0/aVV+o3ZlVnwsDPjCAow8tpfxmLGutCSLWq32yfhPB98w==}
+  /publint/0.2.0:
+    resolution: {integrity: sha512-h8lxdjhQjpDw+A4BgY4sE7Z4CU3x5tCGGpERVdKGDQmWMtr1P7kvptJS2P10HhmNnS7Yeny37zfQE5+xRZ6nig==}
     engines: {node: '>=16'}
     hasBin: true
     dependencies:
