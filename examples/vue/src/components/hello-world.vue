@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+
+defineOptions({
+  name: 'HelloWorld',
+});
+
+defineProps<{ msg: string }>();
+
+const count = ref(0);
+</script>
+
 <template>
   <h1>{{ msg }}</h1>
 
@@ -22,23 +34,6 @@
     <code>components/HelloWorld.vue</code> to test hot module replacement.
   </p>
 </template>
-
-<script lang="ts">
-import { ref, defineComponent } from 'vue';
-export default defineComponent({
-  name: 'HelloWorld',
-  props: {
-    msg: {
-      type: String,
-      required: true,
-    },
-  },
-  setup: () => {
-    const count = ref(0);
-    return { count };
-  },
-});
-</script>
 
 <style scoped>
 a {
