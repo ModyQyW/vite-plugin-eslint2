@@ -1,35 +1,53 @@
 import { workerData, parentPort } from 'node:worker_threads';
-import type { FSWatcher } from 'chokidar';
-import { initialESLint, getLintFiles, getWatcher } from './utils';
-import type { ESLintInstance, ESLintFormatter, LintFiles, ESLintOutputFixes } from './types';
+import debugWrap from 'debug';
+import type {
+  ESLintInstance,
+  ESLintFormatter,
+  ESLintOutputFixes,
+  ESLintPluginOptions,
+} from './types';
+import { getFilter, initializeESLint, lintFiles, shouldIgnoreModule } from './utils';
+import { PLUGIN_NAME } from './constants';
 
-const { options } = workerData;
+const debug = debugWrap(`${PLUGIN_NAME}:worker`);
 
-let eslint: ESLintInstance;
+const options = workerData.options as ESLintPluginOptions;
+const filter = getFilter(options);
+let eslintInstance: ESLintInstance;
 let formatter: ESLintFormatter;
 let outputFixes: ESLintOutputFixes;
-let lintFiles: LintFiles;
-let watcher: FSWatcher;
 
 // this file needs to be compiled into cjs, which doesn't support top-level await
-
+// so we use iife here
 (async () => {
-  const result = await initialESLint(options);
-  eslint = result.eslint;
+  debug(`Initialize ESLint`);
+  const result = await initializeESLint(options);
+  eslintInstance = result.eslintInstance;
   formatter = result.formatter;
   outputFixes = result.outputFixes;
-  lintFiles = getLintFiles(eslint, formatter, outputFixes, options);
-  if (options.chokidar) {
-    watcher = getWatcher(lintFiles, options);
+  if (options.lintOnStart) {
+    debug(`Lint on start`);
+    lintFiles({
+      files: options.include,
+      eslintInstance,
+      formatter,
+      outputFixes,
+      options,
+    }); // don't use context
   }
 })();
 
 parentPort?.on('message', async (files) => {
-  lintFiles(files);
-});
-
-parentPort?.on('close', async () => {
-  if (watcher?.close) {
-    await watcher.close();
-  }
+  debug(`==== message event ====`);
+  debug(`message: ${files}`);
+  const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
+  debug(`should ignore: ${shouldIgnore}`);
+  if (shouldIgnore) return;
+  lintFiles({
+    files: options.lintDirtyOnly ? files : options.include,
+    eslintInstance,
+    formatter,
+    outputFixes,
+    options,
+  }); // don't use context
 });

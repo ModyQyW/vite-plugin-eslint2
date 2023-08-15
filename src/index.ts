@@ -1,90 +1,139 @@
 import { Worker } from 'node:worker_threads';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { normalizePath } from '@rollup/pluginutils';
 import type * as Vite from 'vite';
 import type { FSWatcher } from 'chokidar';
+import chokidar from 'chokidar';
+import debugWrap from 'debug';
 import {
-  getFilter,
   getOptions,
-  getLintFiles,
-  initialESLint,
-  pluginName,
-  shouldIgnore,
-  getWatcher,
+  getFilter,
+  shouldIgnoreModule,
+  initializeESLint,
+  lintFiles,
+  getFilePath,
 } from './utils';
 import type {
   ESLintPluginUserOptions,
   ESLintInstance,
   ESLintFormatter,
   ESLintOutputFixes,
-  LintFiles,
 } from './types';
+import { PLUGIN_NAME, CWD } from './constants';
 
+const debug = debugWrap(PLUGIN_NAME);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ext = extname(__filename);
 
 export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}): Vite.Plugin {
   const options = getOptions(userOptions);
+
+  let worker: Worker;
+  let watcher: FSWatcher;
+
   const filter = getFilter(options);
-  let eslint: ESLintInstance;
+  let eslintInstance: ESLintInstance;
   let formatter: ESLintFormatter;
   let outputFixes: ESLintOutputFixes;
-  let lintFiles: LintFiles;
-  let watcher: FSWatcher;
-  let worker: Worker;
 
   return {
-    name: pluginName,
+    name: PLUGIN_NAME,
     apply(_, { command }) {
-      return (command === 'serve' && options.dev) || (command === 'build' && options.build);
+      debug(`==== apply hook ====`);
+      const shouldApply =
+        (command === 'serve' && options.dev) || (command === 'build' && options.build);
+      debug(`should apply this plugin: ${shouldApply}`);
+      return shouldApply;
     },
     async buildStart() {
-      // initial ESLint first
-      // may be used in shouldIgnore
-      if (!eslint) {
-        const result = await initialESLint(options);
-        eslint = result.eslint;
-        formatter = result.formatter;
-        outputFixes = result.outputFixes;
-        lintFiles = getLintFiles(eslint, formatter, outputFixes, options);
-      }
-      // initial worker
-      if (!worker && options.lintInWorker) {
-        worker = new Worker(resolve(__dirname, `worker${ext}`), {
-          workerData: { options },
-        });
-        // initial ESLint, initial chokidar and lint on start in worker
-        if (options.lintOnStart) {
-          worker.postMessage(options.include);
-        }
+      debug(`==== buildStart hook ====`);
+      // initialize worker
+      if (options.lintInWorker) {
+        if (worker) return;
+        debug(`Initialize worker`);
+        worker = new Worker(resolve(__dirname, `worker${ext}`), { workerData: { options } });
         return;
       }
-      // initial chokidar
-      if (!watcher && options.chokidar) {
-        watcher = getWatcher(lintFiles, options);
-      }
-      // lint on start
+      // initialize ESLint
+      debug(`Initial ESLint`);
+      const result = await initializeESLint(options);
+      eslintInstance = result.eslintInstance;
+      formatter = result.formatter;
+      outputFixes = result.outputFixes;
+      // lint on start if needed
       if (options.lintOnStart) {
-        this.warn(
-          `\nESLint is linting all files in the project because \`lintOnStart\` is true. This will significantly slow down Vite.`,
+        debug(`Lint on start`);
+        await lintFiles(
+          {
+            files: options.include,
+            eslintInstance,
+            formatter,
+            outputFixes,
+            options,
+          },
+          this, // use buildStart hook context
         );
-        await lintFiles(options.include, this);
       }
     },
     async transform(_, id) {
-      if (options.chokidar) return null;
-      if (await shouldIgnore(id, filter, eslint)) return null;
-      const file = normalizePath(id).split('?')[0];
-      if (worker) worker.postMessage(file);
-      else await lintFiles(file, this);
-      return null;
+      debug('==== transform hook ====');
+      // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias
+      const context = this;
+      // initialize watcher
+      if (options.chokidar) {
+        if (watcher) return;
+        debug(`Initialize watcher`);
+        watcher = chokidar
+          .watch(options.include, { ignored: options.exclude })
+          .on('change', async (path) => {
+            console.log('isEqual', this === context);
+            debug(`==== change event ====`);
+            const fullPath = resolve(CWD, path);
+            // worker + watcher
+            if (worker) return worker.postMessage(fullPath);
+            // watcher only
+            const shouldIgnore = await shouldIgnoreModule(fullPath, filter, eslintInstance);
+            debug(`should ignore: ${shouldIgnore}`);
+            if (shouldIgnore) return;
+            return await lintFiles(
+              {
+                files: options.lintDirtyOnly ? fullPath : options.include,
+                eslintInstance,
+                formatter,
+                outputFixes,
+                options,
+              },
+              // this, // TODO: use transform hook context will breaks build
+            );
+          });
+        return;
+      }
+      // no watcher
+      debug('id: ', id);
+      const filePath = getFilePath(id);
+      debug(`filePath`, filePath);
+      // worker
+      if (worker) return worker.postMessage(filePath);
+      // no worker
+      const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
+      debug(`should ignore: ${shouldIgnore}`);
+      if (shouldIgnore) return;
+      return await lintFiles(
+        {
+          files: options.lintDirtyOnly ? filePath : options.include,
+          eslintInstance,
+          formatter,
+          outputFixes,
+          options,
+        },
+        this, // use transform hook context
+      );
     },
     async buildEnd() {
-      if (watcher?.close) await watcher.close();
-    },
-    async closeBundle() {
+      debug('==== buildEnd ====');
+      debug('watcher', watcher);
+      debug('watcher?.close', watcher?.close);
       if (watcher?.close) await watcher.close();
     },
   };
