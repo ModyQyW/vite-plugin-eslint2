@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/vite-plugin-eslint2)](https://www.npmjs.com/package/vite-plugin-eslint2)
 [![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint2)](https://github.com/ModyQyW/vite-plugin-eslint2/blob/master/LICENSE)
 
-Vite ESLint 插件，默认在 `transform` 生命周期中同步运行 ESLint，支持自定义。
+Vite ESLint 插件，默认在 `transform` 生命周期中运行 ESLint，支持自定义。
 
 支持 Vite v2、v3 和 v4。要求 `node >= 14.18`。
 

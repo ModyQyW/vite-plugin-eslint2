@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/vite-plugin-eslint2)](https://www.npmjs.com/package/vite-plugin-eslint2)
 [![GitHub license](https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint2)](https://github.com/ModyQyW/vite-plugin-eslint2/blob/master/LICENSE)
 
-Vite ESLint plugin. Runs ESLint synchronously in `transform` hook by default.
+Vite ESLint plugin. Runs ESLint in `transform` hook by default.
 
 Supports Vite v2, v3 and v4. Requires `node >= 14.18`.
 
