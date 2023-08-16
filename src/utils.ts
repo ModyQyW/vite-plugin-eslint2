@@ -168,6 +168,46 @@ export const removeESLintWarningResults = (results: ESLintLintResults) =>
     };
   });
 
+export const transformESLintResults = (results: ESLintLintResults, options: ESLintPluginOptions) =>
+  results.map((result) => {
+    let errorCount = 0;
+    let fatalErrorCount = 0;
+    let fixableErrorCount = 0;
+    let warningCount = 0;
+    let fixableWarningCount = 0;
+    const messages = result.messages.map((message) => {
+      if (message.severity === ESLINT_SEVERITY.ERROR && options.emitErrorAsWarning) {
+        message.severity = ESLINT_SEVERITY.WARNING;
+        warningCount += 1;
+        fixableWarningCount += message.fix ? 1 : 0;
+      } else if (message.severity === ESLINT_SEVERITY.WARNING && options.emitWarningAsError) {
+        message.severity = ESLINT_SEVERITY.ERROR;
+        errorCount += 1;
+        fatalErrorCount += message.fatal ? 1 : 0;
+        fixableErrorCount += message.fix ? 1 : 0;
+      }
+      return message;
+    });
+    const suppressedMessages = result.suppressedMessages.map((message) => {
+      if (message.severity === ESLINT_SEVERITY.ERROR && options.emitErrorAsWarning) {
+        message.severity = ESLINT_SEVERITY.WARNING;
+      } else if (message.severity === ESLINT_SEVERITY.WARNING && options.emitWarningAsError) {
+        message.severity = ESLINT_SEVERITY.ERROR;
+      }
+      return message;
+    });
+    return {
+      ...result,
+      messages,
+      suppressedMessages,
+      errorCount,
+      fatalErrorCount,
+      fixableErrorCount,
+      warningCount,
+      fixableWarningCount,
+    };
+  });
+
 export const filterESLintLintResults = (results: ESLintLintResults) =>
   results.filter((result) => result.errorCount > 0 || result.warningCount > 0);
 
@@ -200,12 +240,10 @@ export const lintFiles: LintFiles = async (
     results = filterESLintLintResults(results);
     if (results.length === 0) return;
 
+    results = transformESLintResults(results, options);
     const formattedText = await formatter.format(results);
-    let formattedTextType: TextType;
-    if (results.some((result) => result.errorCount > 0)) {
-      formattedTextType = options.emitErrorAsWarning ? 'warning' : 'error';
-    } else {
-      formattedTextType = options.emitWarningAsError ? 'error' : 'warning';
-    }
+    const formattedTextType: TextType = results.some((result) => result.errorCount > 0)
+      ? 'error'
+      : 'warning';
     return log(formattedText, formattedTextType, context);
   });
