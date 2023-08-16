@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.2 (2023-08-16)
+
+- fix: transform errors ↔ warnings for real emitErrorAsWarning and emitWarningAsError
+
 ## 4.0.1 (2023-08-16)
 
 - fix: fix internal function `shouldIgnoreModule` judgement
