@@ -123,7 +123,7 @@ export const shouldIgnoreModule = async (
   const filePath = getFilePath(id);
   if (
     ['.vue', '.svelte'].some((extname) => filePath.endsWith(extname)) &&
-    filePath !== id &&
+    id.includes('?') &&
     id.includes('type=style')
   ) {
     return true;
