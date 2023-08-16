@@ -78,8 +78,6 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
     },
     async transform(_, id) {
       debug('==== transform hook ====');
-      // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias
-      const context = this;
       // initialize watcher
       if (options.chokidar) {
         if (watcher) return;
@@ -87,7 +85,6 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
         watcher = chokidar
           .watch(options.include, { ignored: options.exclude })
           .on('change', async (path) => {
-            console.log('isEqual', this === context);
             debug(`==== change event ====`);
             const fullPath = resolve(CWD, path);
             // worker + watcher
