@@ -144,7 +144,7 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 - 类型：`boolean`
 - 默认值：`false`
 
-在 [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-tran)  中校验。默认禁用。
+在 [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-tran) 中校验。默认禁用。
 
 在 worker 中校验时，Vite 的构建过程会更快。即使终端显示了错误，Vite 的构建过程也不会停止。
 
