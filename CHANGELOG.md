@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.1 (2023-08-16)
+
+- fix: fix internal function `shouldIgnoreModule` judgement
+
 ## 4.0.0 (2023-08-15)
 
 I completely rewrote the plugin. It's still backward compatible, but there is still a possibility that the changes may affect some projects. So I bumped a major version.
