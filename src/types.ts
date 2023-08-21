@@ -7,6 +7,17 @@ export type Filter = ReturnType<CreateFilter>;
 
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   /**
+   * Run ESLint under `test` mode. See [Command Line
+   * Interface](https://vitejs.dev/guide/#command-line-interface) and [Configuring
+   * Vitest](https://vitest.dev/guide/#configuring-vitest) for more.
+   *
+   * 在 `test` 模式下运行 ESLint。查看 [命令行界面](https://cn.vitejs.dev/guide/#command-line-interface) 和 [配置
+   * Vitest](https://cn.vitest.dev/guide/) 了解更多。
+   *
+   * @default false
+   */
+  test: boolean;
+  /**
    * Run ESLint under `serve` command. See [Command Line
    * Interface](https://vitejs.dev/guide/#command-line-interface) for more.
    *

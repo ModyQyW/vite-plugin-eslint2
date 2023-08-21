@@ -15,6 +15,7 @@ import type {
 import { COLOR_MAPPING, ESLINT_SEVERITY, PLUGIN_NAME } from './constants';
 
 export const getOptions = ({
+  test,
   dev,
   build,
   cache,
@@ -33,6 +34,7 @@ export const getOptions = ({
   emitWarningAsError,
   ...eslintConstructorOptions
 }: ESLintPluginUserOptions): ESLintPluginOptions => ({
+  test: test ?? false,
   dev: dev ?? true,
   build: build ?? false,
   cache: cache ?? true,
@@ -62,6 +64,7 @@ export const getESLintConstructorOptions = (
     Object.entries(options).filter(
       ([key]) =>
         ![
+          'test',
           'dev',
           'build',
           'include',
