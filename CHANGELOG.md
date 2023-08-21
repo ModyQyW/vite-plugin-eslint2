@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.1.0 (2023-08-21)
+
+- feat: add `test` option
+
 ## 4.0.3 (2023-08-17)
 
 - revert: revert "fix: transform errors ↔ warnings for real emitErrorAsWarning and emitWarningAsError"
@@ -17,6 +21,7 @@
 I completely rewrote the plugin. It's still backward compatible, but there is still a possibility that the changes may affect some projects. So I bumped a major version.
 
 - feat: add `lintDirtyOnly` option
+- feat: add `debug`
 - types: add descriptions
 - docs: update README
 - feat!: update **internal functions**

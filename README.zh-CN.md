@@ -71,6 +71,13 @@ export default defineConfig({
 
 额外的选项和解释列写在下方。
 
+### `test`
+
+- 类型：`boolean`
+- 默认值：`false`
+
+在 `test` 模式下运行 ESLint。查看 [命令行界面](https://cn.vitejs.dev/guide/#command-line-interface) 和 [配置 Vitest](https://cn.vitest.dev/guide/) 了解更多。
+
 ### `dev`
 
 - 类型：`boolean`

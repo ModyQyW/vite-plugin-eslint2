@@ -71,6 +71,13 @@ export default defineConfig({
 
 Additional options and explanations are listed below.
 
+### `test`
+
+- Type: `boolean`
+- Default: `false`
+
+Run ESLint under `test` mode. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) and [Configuring Vitest](https://vitest.dev/guide/#configuring-vitest) for more.
+
 ### `dev`
 
 - Type: `boolean`
