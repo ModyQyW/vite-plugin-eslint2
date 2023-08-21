@@ -36,8 +36,6 @@
     "dev": "unbuild --stub",
     "examples:react:build": "pnpm --filter react run build",
     "examples:react:dev": "pnpm --filter react run dev",
-    "examples:solid:build": "pnpm --filter solid run build",
-    "examples:solid:dev": "pnpm --filter solid run dev",
     "examples:vue:build": "pnpm --filter vue run build",
     "examples:vue:dev": "pnpm --filter vue run dev",
     "lint": "conc \"pnpm:lint:eslint\" \"pnpm:lint:markdownlint\" \"pnpm:lint:publint\"",
