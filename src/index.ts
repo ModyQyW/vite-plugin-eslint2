@@ -130,8 +130,6 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
     },
     async buildEnd() {
       debug('==== buildEnd ====');
-      debug('watcher', watcher);
-      debug('watcher?.close', watcher?.close);
       if (watcher?.close) await watcher.close();
     },
   };
