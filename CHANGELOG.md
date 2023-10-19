@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.2.0 (2023-10-19)
+
+- feat: try to support flat config system
+
 ## 4.1.0 (2023-08-21)
 
 - feat: add `test` option
