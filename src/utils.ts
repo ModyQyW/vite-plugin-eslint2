@@ -89,11 +89,11 @@ export const initializeESLint = async (options: ESLintPluginOptions) => {
   const { eslintPath, formatter } = options;
   try {
     const module = await import(eslintPath);
-    const eslintInstance = new module.ESLint(
-      getESLintConstructorOptions(options),
-    ) as ESLintInstance;
+    const ESLintClass =
+      module.ESLint || module.default.ESLint || module.FlatESLint || module.default.FlatESLint;
+    const eslintInstance = new ESLintClass(getESLintConstructorOptions(options)) as ESLintInstance;
     const loadedFormatter = await eslintInstance.loadFormatter(formatter);
-    const outputFixes = module.ESLint.outputFixes.bind(module.ESLint) as ESLintOutputFixes;
+    const outputFixes = ESLintClass.outputFixes.bind(ESLintClass) as ESLintOutputFixes;
     return {
       eslintInstance,
       formatter: loadedFormatter,
