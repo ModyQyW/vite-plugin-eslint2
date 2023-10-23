@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.3.0 (2023-10-23)
+
+- feat: support `rollup@4` and `vite@5`, **ATTENTION**: `rollup@4` is supported since `vite@5.0.0-beta.10`
+
 ## 4.2.0 (2023-10-19)
 
 - feat: try to support flat config system
