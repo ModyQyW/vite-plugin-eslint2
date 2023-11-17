@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.3.1 (2023-11-17)
+
+- chore: update `peerDependencies`
+
 ## 4.3.0 (2023-10-23)
 
 - feat: support `rollup@4` and `vite@5`, **ATTENTION**: `rollup@4` is supported since `vite@5.0.0-beta.10`
