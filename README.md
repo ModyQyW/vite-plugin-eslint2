@@ -5,7 +5,7 @@
 
 Vite ESLint plugin. Runs ESLint in `transform` hook by default.
 
-Supports Vite v2, v3 and v4. Requires `node >= 14.18`.
+Supports Vite v2 ~ v5. Requires `node>=18`.
 
 You may want [Vite Stylelint plugin](https://github.com/ModyQyW/vite-plugin-stylelint).
 

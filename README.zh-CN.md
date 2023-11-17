@@ -5,7 +5,7 @@
 
 Vite ESLint 插件，默认在 `transform` 生命周期中运行 ESLint，支持自定义。
 
-支持 Vite v2、v3 和 v4。要求 `node >= 14.18`。
+支持 Vite v2 ~ v5。要求 `node>=18`。
 
 你可能需要 [Vite Stylelint 插件](https://github.com/ModyQyW/vite-plugin-stylelint)。
 
