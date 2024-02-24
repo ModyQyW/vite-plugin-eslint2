@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.4.0 (2024-02-24)
+
+- feat: support `eslint@9`
+- feat: try `loadESLint` first, fallback to read explicit classes
+
 ## 4.3.1 (2023-11-17)
 
 - chore: update `peerDependencies`
