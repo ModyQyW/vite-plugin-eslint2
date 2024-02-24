@@ -44,11 +44,11 @@
     "lint:eslint": "eslint ./src --fix --cache",
     "lint:markdownlint": "markdownlint . --fix --ignore-path=.gitignore",
     "lint:oxlint": "oxlint ./src --deny=correctness --deny=perf --fix",
-    "lint:publint": "publint",
+    "lint:publint": "pnpm run build && publint",
     "lint:script": "pnpm run lint:eslint && pnpm run lint:oxlint",
     "prepare": "is-ci || simple-git-hooks",
     "prepublishOnly": "pnpm run build",
-    "release": "pnpm install && pnpm run build && pnpm run lint && bumpp",
+    "release": "pnpm install && pnpm run lint && bumpp",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
