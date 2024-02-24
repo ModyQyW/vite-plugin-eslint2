@@ -33,9 +33,8 @@
   ],
   "scripts": {
     "build": "unbuild",
-    "check:deps": "taze -f",
-    "check:types": "tsc --noEmit",
     "commit": "git-cz",
+    "depupdate": "taze -fwr",
     "dev": "unbuild --stub",
     "examples:react:build": "pnpm --filter react run build",
     "examples:react:dev": "pnpm --filter react run dev",
@@ -47,7 +46,8 @@
     "lint:publint": "publint",
     "prepare": "is-ci || simple-git-hooks",
     "prepublishOnly": "pnpm run build",
-    "release": "pnpm install && pnpm run build && pnpm run lint && bumpp"
+    "release": "pnpm install && pnpm run build && pnpm run lint && bumpp",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@rollup/pluginutils": "^5.1.0",
