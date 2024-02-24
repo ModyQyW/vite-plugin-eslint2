@@ -14,6 +14,10 @@ import type {
 } from './types';
 import { COLOR_MAPPING, ESLINT_SEVERITY, PLUGIN_NAME } from './constants';
 
+export function interopDefault(m: any) {
+  return m.default || m;
+}
+
 export const getOptions = ({
   test,
   dev,
@@ -88,9 +92,11 @@ export const getESLintConstructorOptions = (
 export const initializeESLint = async (options: ESLintPluginOptions) => {
   const { eslintPath, formatter } = options;
   try {
-    const module = await import(eslintPath);
-    const ESLintClass =
-      module.ESLint || module.default.ESLint || module.FlatESLint || module.default.FlatESLint;
+    const _module = await import(eslintPath);
+    const module = interopDefault(_module);
+    const ESLintClass = module.loadESLint
+      ? await module.loadESLint()
+      : module.ESLint || module.FlatESLint || module.LegacyESLint;
     const eslintInstance = new ESLintClass(getESLintConstructorOptions(options)) as ESLintInstance;
     const loadedFormatter = await eslintInstance.loadFormatter(formatter);
     const outputFixes = ESLintClass.outputFixes.bind(ESLintClass) as ESLintOutputFixes;
