@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- feat: support `astro` by default
+
 ## 4.4.0 (2024-02-24)
 
 - feat: support `eslint@9`

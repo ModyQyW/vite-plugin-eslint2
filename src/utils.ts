@@ -43,7 +43,7 @@ export const getOptions = ({
   build: build ?? false,
   cache: cache ?? true,
   cacheLocation: cacheLocation ?? '.eslintcache',
-  include: include ?? ['src/**/*.{js,jsx,ts,tsx,vue,svelte}'],
+  include: include ?? ['src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}'],
   exclude: exclude ?? ['node_modules', 'virtual:'],
   eslintPath: eslintPath ?? 'eslint',
   formatter: formatter ?? 'stylish',
@@ -128,10 +128,12 @@ export const shouldIgnoreModule = async (
   if (isVirtualModule(id)) return true;
   // not included
   if (!filter(id)) return true;
-  // xxx.vue?type=style or yyy.svelte?type=style style modules
+  // style modules like xxx.vue?type=style
   const filePath = getFilePath(id);
   if (
-    ['.vue', '.svelte'].some((extname) => filePath.endsWith(extname)) &&
+    ['.vue', '.svelte', '.astro'].some((extname) =>
+      filePath.endsWith(extname),
+    ) &&
     id.includes('?') &&
     id.includes('type=style')
   ) {

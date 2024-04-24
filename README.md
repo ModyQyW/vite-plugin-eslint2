@@ -109,7 +109,7 @@ Path to a file or directory for the cache location. `.eslintcache` is the defaul
 ### `include`
 
 - Type: `string | string[]`
-- Default: `['src/**/*.{js,jsx,ts,tsx,vue,svelte}']`
+- Default: `['src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}']`
 
 This option specifies the files you want to lint. You don't need to change it in most cases, unless you're using a framework like Nuxt, or if the `include` and `exclude` ranges overlap.
 

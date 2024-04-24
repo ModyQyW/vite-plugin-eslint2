@@ -109,7 +109,7 @@ export default defineConfig({
 ### `include`
 
 - 类型：`string | string[]`
-- 默认值：`['src/**/*.{js,jsx,ts,tsx,vue,svelte}']`
+- 默认值：`['src/**/*.{js,jsx,ts,tsx,vue,svelte,astro}']`
 
 这个选项指定你想要校验的文件模式。在绝大部分情况下，你并不需要调整它，除非你正在使用 Nuxt 等框架，或者 `include` 和 `exclude` 范围有重合。
 
