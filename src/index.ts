@@ -26,7 +26,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ext = extname(__filename);
 
-export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}): Vite.Plugin {
+export default function ESLintPlugin(
+  userOptions: ESLintPluginUserOptions = {},
+): Vite.Plugin {
   const options = getOptions(userOptions);
 
   let worker: Worker;
@@ -57,7 +59,9 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
       if (options.lintInWorker) {
         if (worker) return;
         debug(`Initialize worker`);
-        worker = new Worker(resolve(__dirname, `worker${ext}`), { workerData: { options } });
+        worker = new Worker(resolve(__dirname, `worker${ext}`), {
+          workerData: { options },
+        });
         return;
       }
       // initialize ESLint
@@ -95,7 +99,11 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
             // worker + watcher
             if (worker) return worker.postMessage(fullPath);
             // watcher only
-            const shouldIgnore = await shouldIgnoreModule(fullPath, filter, eslintInstance);
+            const shouldIgnore = await shouldIgnoreModule(
+              fullPath,
+              filter,
+              eslintInstance,
+            );
             debug(`should ignore: ${shouldIgnore}`);
             if (shouldIgnore) return;
             return await lintFiles(
@@ -139,4 +147,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
   };
 }
 
-export { type ESLintPluginOptions, type ESLintPluginUserOptions } from './types';
+export {
+  type ESLintPluginOptions,
+  type ESLintPluginUserOptions,
+} from './types';

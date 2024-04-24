@@ -97,9 +97,13 @@ export const initializeESLint = async (options: ESLintPluginOptions) => {
     const ESLintClass = module.loadESLint
       ? await module.loadESLint()
       : module.ESLint || module.FlatESLint || module.LegacyESLint;
-    const eslintInstance = new ESLintClass(getESLintConstructorOptions(options)) as ESLintInstance;
+    const eslintInstance = new ESLintClass(
+      getESLintConstructorOptions(options),
+    ) as ESLintInstance;
     const loadedFormatter = await eslintInstance.loadFormatter(formatter);
-    const outputFixes = ESLintClass.outputFixes.bind(ESLintClass) as ESLintOutputFixes;
+    const outputFixes = ESLintClass.outputFixes.bind(
+      ESLintClass,
+    ) as ESLintOutputFixes;
     return {
       eslintInstance,
       formatter: loadedFormatter,
@@ -182,15 +186,23 @@ export const removeESLintWarningResults = (results: ESLintLintResults) =>
 export const filterESLintLintResults = (results: ESLintLintResults) =>
   results.filter((result) => result.errorCount > 0 || result.warningCount > 0);
 
-export const colorize = (text: string, textType: TextType) => pico[COLOR_MAPPING[textType]](text);
+export const colorize = (text: string, textType: TextType) =>
+  pico[COLOR_MAPPING[textType]](text);
 
-export const log = (text: string, textType: TextType, context?: Rollup.PluginContext) => {
+export const log = (
+  text: string,
+  textType: TextType,
+  context?: Rollup.PluginContext,
+) => {
   console.log('');
   if (context) {
     if (textType === 'error') context.error(text);
     else if (textType === 'warning') context.warn(text);
   } else {
-    const t = colorize(`${text}  Plugin: ${colorize(PLUGIN_NAME, 'plugin')}\r\n`, textType);
+    const t = colorize(
+      `${text}  Plugin: ${colorize(PLUGIN_NAME, 'plugin')}\r\n`,
+      textType,
+    );
     console.log(t);
   }
 };
@@ -199,24 +211,26 @@ export const lintFiles: LintFiles = async (
   { files, eslintInstance, formatter, outputFixes, options },
   context,
 ) =>
-  await eslintInstance.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
-    // do nothing if there are no results
-    if (!lintResults || lintResults.length === 0) return;
-    // output fixes
-    if (options.fix) outputFixes(lintResults);
-    // filter results
-    let results = [...lintResults];
-    if (!options.emitError) results = removeESLintErrorResults(results);
-    if (!options.emitWarning) results = removeESLintWarningResults(results);
-    results = filterESLintLintResults(results);
-    if (results.length === 0) return;
+  await eslintInstance
+    .lintFiles(files)
+    .then(async (lintResults: ESLintLintResults | void) => {
+      // do nothing if there are no results
+      if (!lintResults || lintResults.length === 0) return;
+      // output fixes
+      if (options.fix) outputFixes(lintResults);
+      // filter results
+      let results = [...lintResults];
+      if (!options.emitError) results = removeESLintErrorResults(results);
+      if (!options.emitWarning) results = removeESLintWarningResults(results);
+      results = filterESLintLintResults(results);
+      if (results.length === 0) return;
 
-    const formattedText = await formatter.format(results);
-    let formattedTextType: TextType;
-    if (results.some((result) => result.errorCount > 0)) {
-      formattedTextType = options.emitErrorAsWarning ? 'warning' : 'error';
-    } else {
-      formattedTextType = options.emitWarningAsError ? 'error' : 'warning';
-    }
-    return log(formattedText, formattedTextType, context);
-  });
+      const formattedText = await formatter.format(results);
+      let formattedTextType: TextType;
+      if (results.some((result) => result.errorCount > 0)) {
+        formattedTextType = options.emitErrorAsWarning ? 'warning' : 'error';
+      } else {
+        formattedTextType = options.emitWarningAsError ? 'error' : 'warning';
+      }
+      return log(formattedText, formattedTextType, context);
+    });

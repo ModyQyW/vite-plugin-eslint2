@@ -10,7 +10,10 @@ export const CWD = process.cwd();
 
 export const PLUGIN_NAME = 'vite-plugin-eslint2';
 
-export const COLOR_MAPPING: Record<TextType, keyof Omit<Colors, 'isColorSupported'>> = {
+export const COLOR_MAPPING: Record<
+  TextType,
+  keyof Omit<Colors, 'isColorSupported'>
+> = {
   error: 'red',
   warning: 'yellow',
   plugin: 'magenta',

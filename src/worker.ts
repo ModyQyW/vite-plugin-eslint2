@@ -6,7 +6,12 @@ import type {
   ESLintOutputFixes,
   ESLintPluginOptions,
 } from './types';
-import { getFilter, initializeESLint, lintFiles, shouldIgnoreModule } from './utils';
+import {
+  getFilter,
+  initializeESLint,
+  lintFiles,
+  shouldIgnoreModule,
+} from './utils';
 import { PLUGIN_NAME } from './constants';
 
 const debug = debugWrap(`${PLUGIN_NAME}:worker`);
