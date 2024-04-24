@@ -20,6 +20,7 @@ let outputFixes: ESLintOutputFixes;
 // this file needs to be compiled into cjs, which doesn't support top-level await
 // so we use iife here
 (async () => {
+  debug(`==== Worker start ====`);
   debug(`Initialize ESLint`);
   const result = await initializeESLint(options);
   eslintInstance = result.eslintInstance;
@@ -38,10 +39,10 @@ let outputFixes: ESLintOutputFixes;
 })();
 
 parentPort?.on('message', async (files) => {
-  debug(`==== message event ====`);
-  debug(`message: ${files}`);
+  debug(`==== Worker on message ====`);
+  debug(`Message: ${files}`);
   const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
-  debug(`should ignore: ${shouldIgnore}`);
+  debug(`Should ignore: ${shouldIgnore}`);
   if (shouldIgnore) return;
   lintFiles({
     files: options.lintDirtyOnly ? files : options.include,

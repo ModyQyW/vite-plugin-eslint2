@@ -41,10 +41,14 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
     name: PLUGIN_NAME,
     apply(config, { command }) {
       debug(`==== apply hook ====`);
-      if (config.mode === 'test' || process.env.VITEST) return options.test;
+      if (config.mode === 'test' || process.env.VITEST) {
+        debug(`Should apply this plugin: ${options.test}`);
+        return options.test;
+      }
       const shouldApply =
-        (command === 'serve' && options.dev) || (command === 'build' && options.build);
-      debug(`should apply this plugin: ${shouldApply}`);
+        (command === 'serve' && options.dev) ||
+        (command === 'build' && options.build);
+      debug(`Should apply this plugin: ${shouldApply}`);
       return shouldApply;
     },
     async buildStart() {
@@ -57,7 +61,7 @@ export default function ESLintPlugin(userOptions: ESLintPluginUserOptions = {}):
         return;
       }
       // initialize ESLint
-      debug(`Initial ESLint`);
+      debug(`Initialize ESLint`);
       const result = await initializeESLint(options);
       eslintInstance = result.eslintInstance;
       formatter = result.formatter;
