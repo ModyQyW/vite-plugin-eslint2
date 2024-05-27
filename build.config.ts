@@ -1,4 +1,4 @@
-import { unlinkSync } from 'node:fs';
+import { unlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { defineBuildConfig } from 'unbuild';
 
@@ -14,8 +14,12 @@ export default defineBuildConfig({
     },
   },
   hooks: {
-    'build:done': (ctx) => {
-      unlinkSync(resolve(ctx.options.outDir, 'worker.d.ts'));
+    'build:done': async (ctx) => {
+      await Promise.all(
+        ['.d.ts', '.d.cts', '.d.mts'].map((ext) =>
+          unlink(resolve(ctx.options.outDir, `worker${ext}`)),
+        ),
+      );
     },
   },
 });
