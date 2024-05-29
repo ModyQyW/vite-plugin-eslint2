@@ -16,8 +16,8 @@ export default defineBuildConfig({
   hooks: {
     'build:done': async (ctx) => {
       await Promise.all(
-        ['.d.ts', '.d.cts', '.d.mts'].map((ext) =>
-          unlink(resolve(ctx.options.outDir, `worker${ext}`)),
+        ['ts', 'cts', 'mts'].map((ext) =>
+          unlink(resolve(ctx.options.outDir, `worker.d.${ext}`)),
         ),
       );
     },
