@@ -4,7 +4,7 @@ English | [简体中文](./README-zh_CN.md)
 
 👇 See the documentation for specific usage and examples.
 
-[Netlify](https://vite-plugin-eslint2.netlify.app/) | [Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
+[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
 
 ## Introductions
 

@@ -4,7 +4,7 @@
 
 👇 请查看文档了解具体用法和示例。
 
-[Netlify](https://vite-plugin-eslint2.netlify.app/) | [Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
+[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
 
 ## 介绍
 

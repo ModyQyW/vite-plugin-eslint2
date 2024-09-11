@@ -20,7 +20,7 @@ ESLint plugin for Vite. Supports Vite v2 ~ v5 and ESLint v7 ~ v9. Requires `node
 
 👇 See the documentation for specific usage and examples.
 
-[Netlify](https://vite-plugin-eslint2.netlify.app/) | [Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
+[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
 
 > You may also want [Stylelint plugin for Vite](https://github.com/ModyQyW/vite-plugin-stylelint).
 
@@ -78,7 +78,7 @@ export default defineConfig({
 
 👇 See the documentation for specific usage and examples.
 
-[Netlify](https://vite-plugin-eslint2.netlify.app/) | [Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
+[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
 
 ## Acknowledge
 
