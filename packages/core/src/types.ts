@@ -1,6 +1,6 @@
-import type * as ESLint from 'eslint';
-import type * as Rollup from 'rollup';
-import type { CreateFilter } from '@rollup/pluginutils';
+import type { CreateFilter } from "@rollup/pluginutils";
+import type * as ESLint from "eslint";
+import type * as Rollup from "rollup";
 
 export type FilterPattern = string | string[];
 export type Filter = ReturnType<CreateFilter>;
@@ -256,4 +256,4 @@ export type LintFiles = (
   context?: Rollup.PluginContext,
 ) => Promise<void>;
 
-export type TextType = 'error' | 'warning' | 'plugin';
+export type TextType = "error" | "warning" | "plugin";

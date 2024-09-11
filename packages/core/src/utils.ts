@@ -1,6 +1,7 @@
-import pico from 'picocolors';
-import { createFilter, normalizePath } from '@rollup/pluginutils';
-import type * as Rollup from 'rollup';
+import { createFilter, normalizePath } from "@rollup/pluginutils";
+import pico from "picocolors";
+import type * as Rollup from "rollup";
+import { COLOR_MAPPING, ESLINT_SEVERITY, PLUGIN_NAME } from "./constants";
 import type {
   ESLintConstructorOptions,
   ESLintInstance,
@@ -11,8 +12,7 @@ import type {
   Filter,
   LintFiles,
   TextType,
-} from './types';
-import { COLOR_MAPPING, ESLINT_SEVERITY, PLUGIN_NAME } from './constants';
+} from "./types";
 
 export function interopDefault(m: any) {
   return m.default || m;
@@ -42,11 +42,11 @@ export const getOptions = ({
   dev: dev ?? true,
   build: build ?? false,
   cache: cache ?? true,
-  cacheLocation: cacheLocation ?? '.eslintcache',
-  include: include ?? ['src/**/*.{js,jsx,ts,tsx,vue,svelte}'],
-  exclude: exclude ?? ['node_modules', 'virtual:'],
-  eslintPath: eslintPath ?? 'eslint',
-  formatter: formatter ?? 'stylish',
+  cacheLocation: cacheLocation ?? ".eslintcache",
+  include: include ?? ["src/**/*.{js,jsx,ts,tsx,vue,svelte}"],
+  exclude: exclude ?? ["node_modules", "virtual:"],
+  eslintPath: eslintPath ?? "eslint",
+  formatter: formatter ?? "stylish",
   lintInWorker: lintInWorker ?? false,
   lintOnStart: lintOnStart ?? false,
   lintDirtyOnly: lintDirtyOnly ?? true,
@@ -68,21 +68,21 @@ export const getESLintConstructorOptions = (
     Object.entries(options).filter(
       ([key]) =>
         ![
-          'test',
-          'dev',
-          'build',
-          'include',
-          'exclude',
-          'eslintPath',
-          'formatter',
-          'lintInWorker',
-          'lintOnStart',
-          'lintDirtyOnly',
-          'chokidar',
-          'emitError',
-          'emitErrorAsWarning',
-          'emitWarning',
-          'emitWarningAsError',
+          "test",
+          "dev",
+          "build",
+          "include",
+          "exclude",
+          "eslintPath",
+          "formatter",
+          "lintInWorker",
+          "lintOnStart",
+          "lintDirtyOnly",
+          "chokidar",
+          "emitError",
+          "emitErrorAsWarning",
+          "emitWarning",
+          "emitWarningAsError",
         ].includes(key),
     ),
   ),
@@ -97,9 +97,13 @@ export const initializeESLint = async (options: ESLintPluginOptions) => {
     const ESLintClass = module.loadESLint
       ? await module.loadESLint()
       : module.ESLint || module.FlatESLint || module.LegacyESLint;
-    const eslintInstance = new ESLintClass(getESLintConstructorOptions(options)) as ESLintInstance;
+    const eslintInstance = new ESLintClass(
+      getESLintConstructorOptions(options),
+    ) as ESLintInstance;
     const loadedFormatter = await eslintInstance.loadFormatter(formatter);
-    const outputFixes = ESLintClass.outputFixes.bind(ESLintClass) as ESLintOutputFixes;
+    const outputFixes = ESLintClass.outputFixes.bind(
+      ESLintClass,
+    ) as ESLintOutputFixes;
     return {
       eslintInstance,
       formatter: loadedFormatter,
@@ -115,9 +119,9 @@ export const initializeESLint = async (options: ESLintPluginOptions) => {
 // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/importMetaGlob.ts
 // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
 export const isVirtualModule = (id: string) =>
-  id.startsWith('virtual:') || id[0] === '\0' || !id.includes('/');
+  id.startsWith("virtual:") || id[0] === "\0" || !id.includes("/");
 
-export const getFilePath = (id: string) => normalizePath(id).split('?')[0];
+export const getFilePath = (id: string) => normalizePath(id).split("?")[0];
 
 export const shouldIgnoreModule = async (
   id: string,
@@ -131,9 +135,9 @@ export const shouldIgnoreModule = async (
   // xxx.vue?type=style or yyy.svelte?type=style style modules
   const filePath = getFilePath(id);
   if (
-    ['.vue', '.svelte'].some((extname) => filePath.endsWith(extname)) &&
-    id.includes('?') &&
-    id.includes('type=style')
+    [".vue", ".svelte"].some((extname) => filePath.endsWith(extname)) &&
+    id.includes("?") &&
+    id.includes("type=style")
   ) {
     return true;
   }
@@ -180,15 +184,23 @@ export const removeESLintWarningResults = (results: ESLintLintResults) =>
 export const filterESLintLintResults = (results: ESLintLintResults) =>
   results.filter((result) => result.errorCount > 0 || result.warningCount > 0);
 
-export const colorize = (text: string, textType: TextType) => pico[COLOR_MAPPING[textType]](text);
+export const colorize = (text: string, textType: TextType) =>
+  pico[COLOR_MAPPING[textType]](text);
 
-export const log = (text: string, textType: TextType, context?: Rollup.PluginContext) => {
-  console.log('');
+export const log = (
+  text: string,
+  textType: TextType,
+  context?: Rollup.PluginContext,
+) => {
+  console.log("");
   if (context) {
-    if (textType === 'error') context.error(text);
-    else if (textType === 'warning') context.warn(text);
+    if (textType === "error") context.error(text);
+    else if (textType === "warning") context.warn(text);
   } else {
-    const t = colorize(`${text}  Plugin: ${colorize(PLUGIN_NAME, 'plugin')}\r\n`, textType);
+    const t = colorize(
+      `${text}  Plugin: ${colorize(PLUGIN_NAME, "plugin")}\r\n`,
+      textType,
+    );
     console.log(t);
   }
 };
@@ -197,24 +209,26 @@ export const lintFiles: LintFiles = async (
   { files, eslintInstance, formatter, outputFixes, options },
   context,
 ) =>
-  await eslintInstance.lintFiles(files).then(async (lintResults: ESLintLintResults | void) => {
-    // do nothing if there are no results
-    if (!lintResults || lintResults.length === 0) return;
-    // output fixes
-    if (options.fix) outputFixes(lintResults);
-    // filter results
-    let results = [...lintResults];
-    if (!options.emitError) results = removeESLintErrorResults(results);
-    if (!options.emitWarning) results = removeESLintWarningResults(results);
-    results = filterESLintLintResults(results);
-    if (results.length === 0) return;
+  await eslintInstance
+    .lintFiles(files)
+    .then(async (lintResults: ESLintLintResults) => {
+      // do nothing if there are no results
+      if (!lintResults || lintResults.length === 0) return;
+      // output fixes
+      if (options.fix) outputFixes(lintResults);
+      // filter results
+      let results = [...lintResults];
+      if (!options.emitError) results = removeESLintErrorResults(results);
+      if (!options.emitWarning) results = removeESLintWarningResults(results);
+      results = filterESLintLintResults(results);
+      if (results.length === 0) return;
 
-    const formattedText = await formatter.format(results);
-    let formattedTextType: TextType;
-    if (results.some((result) => result.errorCount > 0)) {
-      formattedTextType = options.emitErrorAsWarning ? 'warning' : 'error';
-    } else {
-      formattedTextType = options.emitWarningAsError ? 'error' : 'warning';
-    }
-    return log(formattedText, formattedTextType, context);
-  });
+      const formattedText = await formatter.format(results);
+      let formattedTextType: TextType;
+      if (results.some((result) => result.errorCount > 0)) {
+        formattedTextType = options.emitErrorAsWarning ? "warning" : "error";
+      } else {
+        formattedTextType = options.emitWarningAsError ? "error" : "warning";
+      }
+      return log(formattedText, formattedTextType, context);
+    });

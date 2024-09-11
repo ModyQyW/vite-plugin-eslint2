@@ -1,13 +1,18 @@
-import { workerData, parentPort } from 'node:worker_threads';
-import debugWrap from 'debug';
+import { parentPort, workerData } from "node:worker_threads";
+import debugWrap from "debug";
+import { PLUGIN_NAME } from "./constants";
 import type {
-  ESLintInstance,
   ESLintFormatter,
+  ESLintInstance,
   ESLintOutputFixes,
   ESLintPluginOptions,
-} from './types';
-import { getFilter, initializeESLint, lintFiles, shouldIgnoreModule } from './utils';
-import { PLUGIN_NAME } from './constants';
+} from "./types";
+import {
+  getFilter,
+  initializeESLint,
+  lintFiles,
+  shouldIgnoreModule,
+} from "./utils";
 
 const debug = debugWrap(`${PLUGIN_NAME}:worker`);
 
@@ -20,13 +25,13 @@ let outputFixes: ESLintOutputFixes;
 // this file needs to be compiled into cjs, which doesn't support top-level await
 // so we use iife here
 (async () => {
-  debug(`Initialize ESLint`);
+  debug("Initialize ESLint");
   const result = await initializeESLint(options);
   eslintInstance = result.eslintInstance;
   formatter = result.formatter;
   outputFixes = result.outputFixes;
   if (options.lintOnStart) {
-    debug(`Lint on start`);
+    debug("Lint on start");
     lintFiles({
       files: options.include,
       eslintInstance,
@@ -37,8 +42,8 @@ let outputFixes: ESLintOutputFixes;
   }
 })();
 
-parentPort?.on('message', async (files) => {
-  debug(`==== message event ====`);
+parentPort?.on("message", async (files) => {
+  debug("==== message event ====");
   debug(`message: ${files}`);
   const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
   debug(`should ignore: ${shouldIgnore}`);
