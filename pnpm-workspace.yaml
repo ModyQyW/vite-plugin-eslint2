@@ -1,2 +1,5 @@
 packages:
-  - 'examples/*'
+  - playground
+  - docs
+  - packages/*
+  - examples/*

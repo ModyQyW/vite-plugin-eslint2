@@ -1,108 +1,61 @@
 {
-  "name": "vite-plugin-eslint2",
-  "version": "4.4.0",
-  "description": "ESLint plugin for Vite.",
-  "keywords": [
-    "eslint",
-    "vite-plugin"
-  ],
+  "name": "monorepo",
+  "version": "0.0.0",
+  "private": true,
   "homepage": "https://github.com/ModyQyW/vite-plugin-eslint2",
+  "bugs": {
+    "url": "https://github.com/ModyQyW/vite-plugin-eslint2/issues"
+  },
   "repository": "git+https://github.com:ModyQyW/vite-plugin-eslint2.git",
   "license": "MIT",
   "author": {
     "name": "ModyQyW",
-    "email": "wurui-dev@foxmail.com",
-    "url": "https://modyqyw.github.io"
+    "email": "wurui.dev@gmail.com",
+    "url": "https://modyqyw.top"
   },
+  "sideEffects": false,
   "type": "module",
-  "exports": {
-    ".": {
-      "types": {
-        "import": "./dist/index.d.mts",
-        "require": "./dist/index.d.cts"
-      },
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "unbuild",
-    "depupdate": "taze -fwr",
-    "dev": "unbuild --stub",
-    "examples:react:build": "pnpm --filter react run build",
-    "examples:react:dev": "pnpm --filter react run dev",
-    "examples:vue:build": "pnpm --filter vue run build",
-    "examples:vue:dev": "pnpm --filter vue run dev",
-    "format": "prettier . \"!**/package-lock.json*\" \"!**/yarn.lock\" \"!**/pnpm-lock.yaml\" --ignore-unknown --write --cache --log-level=warn",
-    "lint": "conc \"pnpm:lint:script\" \"pnpm:lint:markdownlint\" \"pnpm:lint:publint\"",
-    "lint:eslint": "eslint ./src --fix --cache",
-    "lint:markdownlint": "markdownlint . --fix --ignore-path=.gitignore",
-    "lint:oxlint": "oxlint ./src --deny=correctness --deny=perf --fix",
-    "lint:publint": "pnpm run build && publint",
-    "lint:script": "pnpm run lint:eslint && pnpm run lint:oxlint",
+    "build": "rimraf packages/*/dist --glob && pnpm -r --filter=./packages/* run build && pnpm -r run build-post",
+    "check": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+    "dep-update": "taze -fw",
+    "dev": "pnpm stub",
+    "docs:build": "pnpm -C docs run build",
+    "docs:dev": "pnpm -C docs run dev",
+    "docs:preview": "pnpm -C docs run preview",
+    "preinstall": "npx only-allow pnpm",
+    "play:build": "pnpm build && pnpm -C playground run build",
+    "play:dev": "pnpm dev && pnpm -C playground run dev",
     "prepare": "is-ci || simple-git-hooks",
     "prepublishOnly": "pnpm run build",
-    "release": "pnpm install && pnpm run lint && bumpp",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@rollup/pluginutils": "^5.1.0",
-    "chokidar": "^3.6.0",
-    "debug": "^4.3.4"
+    "release": "lerna version",
+    "stub": "pnpm -r --filter=./packages/* --parallel run stub",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "preversion": "pnpm run check"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.6.1",
-    "@commitlint/config-conventional": "^18.6.2",
-    "@commitlint/prompt": "^18.6.1",
-    "@modyqyw/fabric": "^10.4.0",
-    "@tsconfig/node20": "^20.1.2",
-    "@types/debug": "^4.1.12",
-    "@types/eslint": "^8.56.3",
-    "@types/node": "^20.11.20",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "bumpp": "^9.3.0",
-    "concurrently": "^8.2.2",
-    "esbuild-register": "^3.5.0",
-    "eslint": "^8.57.0",
+    "@biomejs/biome": "^1.8.3",
+    "@commitlint/cli": "^19.4.1",
+    "@commitlint/config-conventional": "^19.4.1",
+    "@commitlint/config-pnpm-scopes": "^19.1.0",
+    "@lerna-lite/cli": "^3.9.0",
+    "@lerna-lite/version": "^3.9.0",
+    "@types/node": "^20.16.3",
+    "@vitest/coverage-v8": "^2.0.5",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
     "is-ci": "^3.0.1",
-    "lint-staged": "^15.2.2",
-    "markdownlint-cli": "^0.39.0",
-    "oxlint": "^0.2.10",
-    "picocolors": "^1.0.0",
-    "prettier": "^3.2.5",
-    "publint": "^0.2.7",
-    "rollup": "^4.12.0",
-    "simple-git-hooks": "^2.9.0",
-    "sort-package-json": "^2.8.0",
-    "taze": "^0.13.3",
-    "typescript": "^5.3.3",
+    "lint-staged": "^15.2.10",
+    "rimraf": "^6.0.1",
+    "simple-git-hooks": "^2.11.1",
+    "taze": "^0.16.7",
+    "typescript": "^5.5.4",
     "unbuild": "^2.0.0",
-    "vite": "^5.1.4"
+    "vitest": "^2.0.5"
   },
-  "peerDependencies": {
-    "@types/eslint": "^7.0.0 || ^8.0.0 || ^9.0.0-0",
-    "eslint": "^7.0.0 || ^8.0.0 || ^9.0.0-0",
-    "rollup": "^2.0.0 || ^3.0.0 || ^4.0.0",
-    "vite": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
-  },
-  "peerDependenciesMeta": {
-    "rollup": {
-      "optional": true
-    }
-  },
-  "packageManager": "pnpm@8.15.3",
+  "packageManager": "pnpm@9.9.0",
   "engines": {
-    "node": ">=18"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "node": ">=20.11.0 || >=21.2.0"
   }
 }

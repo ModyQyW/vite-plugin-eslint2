@@ -59,9 +59,6 @@ web_modules
 # Optional eslint cache
 .eslintcache
 
-# Optional stylelint cache
-.stylelintcache
-
 # Microbundle cache
 .rpt2_cache
 .rts2_cache_cjs
@@ -124,6 +121,10 @@ dist
 # Vuepress build output
 .vuepress/dist
 
+# Vitepress build output
+**/.vitepress/cache
+**/.vitepress/dist
+
 # SSR
 dist-ssr
 dist_ssr
@@ -154,7 +155,6 @@ dist_ssg
 .vscode/**
 !.vscode/extensions.json
 !.vscode/settings.json
-*.vsix
 .idea
 .hbuilder
 .hbuilderx
