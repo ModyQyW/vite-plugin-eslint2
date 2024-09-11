@@ -30,8 +30,8 @@
     "prepublishOnly": "pnpm run build",
     "release": "lerna version",
     "stub": "pnpm -r --filter=./packages/* --parallel run stub",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --passWithNoTests --coverage",
     "type-check": "tsc --noEmit",
     "preversion": "pnpm run check"
   },
