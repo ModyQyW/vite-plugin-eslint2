@@ -17,14 +17,14 @@ export default defineConfig({
     // ],
     // Google Analytics
     [
-      'script',
+      "script",
       {
-        async: '',
-        src: `https://www.googletagmanager.com/gtag/js?id=G-GBE9KNFWLS`,
+        async: "",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-GBE9KNFWLS",
       },
     ],
     [
-      'script',
+      "script",
       {},
       `window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -33,11 +33,11 @@ export default defineConfig({
     ],
     // Google AdSense
     [
-      'script',
+      "script",
       {
-        async: '',
-        crossorigin: 'anonymous',
-        src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3102250747488251`,
+        async: "",
+        crossorigin: "anonymous",
+        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3102250747488251",
       },
     ],
   ],
