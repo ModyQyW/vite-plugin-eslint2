@@ -22,19 +22,18 @@ let eslintInstance: ESLintInstance;
 let formatter: ESLintFormatter;
 let outputFixes: ESLintOutputFixes;
 
-// this file needs to be compiled into cjs, which doesn't support top-level await
-// so we use iife here
-let resolve: () => void;
-const p = new Promise<void>((r) => {
-  resolve = r;
-});
-const init = async () => {
-  debug("Initialize ESLint");
-  const result = await initializeESLint(options);
+const initPromise = initializeESLint(options).then((result) => {
   eslintInstance = result.eslintInstance;
   formatter = result.formatter;
   outputFixes = result.outputFixes;
-  resolve();
+  return result;
+});
+
+// this file needs to be compiled into cjs, which doesn't support top-level await
+// so we use iife here
+(async () => {
+  debug("Initialize ESLint");
+  const { eslintInstance, formatter, outputFixes } = await initPromise;
   if (options.lintOnStart) {
     debug("Lint on start");
     lintFiles({
@@ -45,11 +44,10 @@ const init = async () => {
       options,
     }); // don't use context
   }
-};
-init();
+})();
 
 parentPort?.on("message", async (files) => {
-  await p;
+  if (!eslintInstance) await initPromise;
   debug("==== message event ====");
   debug(`message: ${files}`);
   const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
