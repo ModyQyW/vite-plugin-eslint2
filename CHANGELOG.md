@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.2](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v4.4.1...v4.4.2) (2024-09-25)
+
+### Bug Fixes
+
+* eslintInstance may not be initialized when calling lintFiles in the worker ([#40](https://github.com/ModyQyW/vite-plugin-eslint2/issues/40)) ([afc7bee](https://github.com/ModyQyW/vite-plugin-eslint2/commit/afc7bee0f04a7eb467dab49351bbb25e94bbd2f4)) - by @fuxichen
+* fix types ([654c4bc](https://github.com/ModyQyW/vite-plugin-eslint2/commit/654c4bc018225f8805e597fde27aee8ec810e0b9)) - by @
+
 ## [4.4.1](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v4.4.0...v4.4.1) (2024-09-11)
 
 - fix: make `@types/eslint` optional
