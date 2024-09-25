@@ -22,14 +22,19 @@ let eslintInstance: ESLintInstance;
 let formatter: ESLintFormatter;
 let outputFixes: ESLintOutputFixes;
 
+const initPromise = initializeESLint(options).then((result) => {
+  eslintInstance = result.eslintInstance;
+  formatter = result.formatter;
+  outputFixes = result.outputFixes;
+  return result;
+});
+
 // this file needs to be compiled into cjs, which doesn't support top-level await
 // so we use iife here
 (async () => {
   debug("Initialize ESLint");
-  const result = await initializeESLint(options);
-  eslintInstance = result.eslintInstance;
-  formatter = result.formatter;
-  outputFixes = result.outputFixes;
+  // remove this line will cause ts2454
+  const { eslintInstance, formatter, outputFixes } = await initPromise;
   if (options.lintOnStart) {
     debug("Lint on start");
     lintFiles({
@@ -43,6 +48,8 @@ let outputFixes: ESLintOutputFixes;
 })();
 
 parentPort?.on("message", async (files) => {
+  // make sure eslintInstance is initialized
+  if (!eslintInstance) await initPromise;
   debug("==== message event ====");
   debug(`message: ${files}`);
   const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
