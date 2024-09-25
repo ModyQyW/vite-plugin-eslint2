@@ -33,6 +33,7 @@ const initPromise = initializeESLint(options).then((result) => {
 // so we use iife here
 (async () => {
   debug("Initialize ESLint");
+  // remove this line will cause ts2454
   const { eslintInstance, formatter, outputFixes } = await initPromise;
   if (options.lintOnStart) {
     debug("Lint on start");
@@ -47,6 +48,7 @@ const initPromise = initializeESLint(options).then((result) => {
 })();
 
 parentPort?.on("message", async (files) => {
+  // make sure eslintInstance is initialized
   if (!eslintInstance) await initPromise;
   debug("==== message event ====");
   debug(`message: ${files}`);
