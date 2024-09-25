@@ -200,6 +200,8 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    * 如果你启用这个选项，建议也启用 `lintOnStart`。
    *
    * @default false
+   *
+   * @deprecated
    */
   chokidar: boolean;
   /**
