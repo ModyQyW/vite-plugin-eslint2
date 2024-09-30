@@ -8,168 +8,168 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * eslintInstance may not be initialized when calling lintFiles in the worker ([#40](https://github.com/ModyQyW/vite-plugin-eslint2/issues/40)) ([afc7bee](https://github.com/ModyQyW/vite-plugin-eslint2/commit/afc7bee0f04a7eb467dab49351bbb25e94bbd2f4)) - by @fuxichen
-* fix types ([654c4bc](https://github.com/ModyQyW/vite-plugin-eslint2/commit/654c4bc018225f8805e597fde27aee8ec810e0b9)) - by @
+* fix types ([654c4bc](https://github.com/ModyQyW/vite-plugin-eslint2/commit/654c4bc018225f8805e597fde27aee8ec810e0b9)) - by @ModyQyW
 
 ## [4.4.1](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v4.4.0...v4.4.1) (2024-09-11)
 
-- fix: make `@types/eslint` optional
+* fix: make `@types/eslint` optional
 
 ## 4.4.0 (2024-02-24)
 
-- feat: support `eslint@9`
-- feat: try `loadESLint` first, fallback to read explicit classes
+* feat: support `eslint@9`
+* feat: try `loadESLint` first, fallback to read explicit classes
 
 ## 4.3.1 (2023-11-17)
 
-- chore: update `peerDependencies`
+* chore: update `peerDependencies`
 
 ## 4.3.0 (2023-10-23)
 
-- feat: support `rollup@4` and `vite@5`, **ATTENTION**: `rollup@4` is supported since `vite@5.0.0-beta.10`
+* feat: support `rollup@4` and `vite@5`, **ATTENTION**: `rollup@4` is supported since `vite@5.0.0-beta.10`
 
 ## 4.2.0 (2023-10-19)
 
-- feat: try to support flat config system
+* feat: try to support flat config system
 
 ## 4.1.0 (2023-08-21)
 
-- feat: add `test` option
+* feat: add `test` option
 
 ## 4.0.3 (2023-08-17)
 
-- revert: revert "fix: transform errors ↔ warnings for real emitErrorAsWarning and emitWarningAsError"
+* revert: revert "fix: transform errors ↔ warnings for real emitErrorAsWarning and emitWarningAsError"
 
 ## 4.0.2 (2023-08-16)
 
-- fix: transform errors ↔ warnings for real emitErrorAsWarning and emitWarningAsError
+* fix: transform errors ↔ warnings for real emitErrorAsWarning and emitWarningAsError
 
 ## 4.0.1 (2023-08-16)
 
-- fix: fix internal function `shouldIgnoreModule` judgement
+* fix: fix internal function `shouldIgnoreModule` judgement
 
 ## 4.0.0 (2023-08-15)
 
 I completely rewrote the plugin. It's still backward compatible, but there is still a possibility that the changes may affect some projects. So I bumped a major version.
 
-- feat: add `lintDirtyOnly` option
-- feat: add `debug`
-- types: add descriptions
-- docs: update README
-- feat!: update **internal functions**
+* feat: add `lintDirtyOnly` option
+* feat: add `debug`
+* types: add descriptions
+* docs: update README
+* feat!: update **internal functions**
 
 ## 3.3.0 (2023-03-09)
 
-- build: switch to `unbuild`
-- feat: export more types
+* build: switch to `unbuild`
+* feat: export more types
 
 ## 3.2.1 (2023-01-31)
 
-- fix: fix eslint initial params
+* fix: fix eslint initial params
 
 ## 3.2.0 (2023-01-31)
 
 This project is named `vite-plugin-eslint2` now.
 
-- feat: add `chokidar` option
-- fix: use `__dirname` directly by accident
-- fix: maybe lint files should be ignored
-- build: update minify and generate sourcemap
+* feat: add `chokidar` option
+* fix: use `__dirname` directly by accident
+* fix: maybe lint files should be ignored
+* build: update minify and generate sourcemap
 
 ## 3.1.6 (2023-01-04)
 
-- perf: better emit handling
+* perf: better emit handling
 
 ## 3.1.5 (2023-01-04)
 
-- build: switch to rollup
-- refactor: `shouldIgnore` function
+* build: switch to rollup
+* refactor: `shouldIgnore` function
 
 ## 3.1.4 (2022-12-28)
 
-- fix: fix judge order
+* fix: fix judge order
 
 ## 3.1.3 (2022-12-27)
 
-- fix: fix judge order
+* fix: fix judge order
 
 ## 3.1.2 (2022-12-20)
 
-- perf: avoid empty log
+* perf: avoid empty log
 
 ## 3.1.1 (2022-12-20)
 
-- perf: avoid logging twice for one file
+* perf: avoid logging twice for one file
 
 ## 3.1.0 (2022-12-16)
 
-- feat: add `lintInWorker` option
-- perf: initialESLint params
+* feat: add `lintInWorker` option
+* perf: initialESLint params
 
 ## 3.0.1 (2022-12-15)
 
-- fix: fix build
+* fix: fix build
 
 ## 3.0.0 (2022-12-09)
 
-- feat: support `vite@4`
-- feat!: require `node>=14.18`
-- feat!: `build` option defaults to `false`
-- feat!: `cacheLocation` option defaults to `.eslintcache`
-- feat: esm by default
-  - don't be afraid as commonjs is also supported
+* feat: support `vite@4`
+* feat!: require `node>=14.18`
+* feat!: `build` option defaults to `false`
+* feat!: `cacheLocation` option defaults to `.eslintcache`
+* feat: esm by default
+  * don't be afraid as commonjs is also supported
 
 ## 2.1.1 (2022-12-04)
 
-- fix: fix ESLint options lost
+* fix: fix ESLint options lost
 
 ## 2.1.0 (2022-11-28)
 
-- feat: add `dev` and `build` option
+* feat: add `dev` and `build` option
 
 ## 2.0.14 (2022-11-25)
 
-- perf: improve types
+* perf: improve types
 
 ## 2.0.13 (2022-11-25)
 
-- refactor
+* refactor
 
 ## 2.0.12 (2022-11-25)
 
-- revert: revert `perf: reduce dependencies`, which breaks vite@2
+* revert: revert `perf: reduce dependencies`, which breaks vite@2
 
 ## 2.0.11 (2022-11-24)
 
-- perf: reduce dependencies
+* perf: reduce dependencies
 
 ## 2.0.10
 
-- fix: fix build
+* fix: fix build
 
 ## 2.0.9
 
-- perf: use `config.cacheDir` to get default `cacheLocation`
+* perf: use `config.cacheDir` to get default `cacheLocation`
 
 ## 2.0.8
 
-- fix: pass `ctx` to lintFiles method
+* fix: pass `ctx` to lintFiles method
 
 ## 2.0.7
 
-- fix: warning styles
+* fix: warning styles
 
 ## 2.0.6
 
-- fix: fix typo
+* fix: fix typo
 
 ## 2.0.5
 
-- perf: warn when `lintOnStart` is true
+* perf: warn when `lintOnStart` is true
 
 ## 2.0.4
 
-- perf: import path from `node:path` instead of `path`
-- fix: fix `type: "module"` support
+* perf: import path from `node:path` instead of `path`
+* fix: fix `type: "module"` support
 
 ## 2.0.3
 
@@ -177,64 +177,64 @@ Just update `peerDependencies` in `package.json`.
 
 ## 2.0.2
 
-- fix: omit keys to avoid `new ESLint` error
+* fix: omit keys to avoid `new ESLint` error
 
 ## 2.0.1
 
-- fix: fix type
+* fix: fix type
 
 ## 2.0.0
 
 This version supports vite@2 and vite@3. The breaking changes are caused by aligning behaviors with `ESLint` Node.js API.
 
-- feat!: remove `throwOnError` and `throwOnWarning` options (marked as `deprecated` before)
-- feat!: `include` and `exclude` options now accept `string | string[]` only to align with `eslint.lintFiles`
-- feat: add `lintOnStart` option
-- feat: exclude `virtual:` by default
+* feat!: remove `throwOnError` and `throwOnWarning` options (marked as `deprecated` before)
+* feat!: `include` and `exclude` options now accept `string | string[]` only to align with `eslint.lintFiles`
+* feat: add `lintOnStart` option
+* feat: exclude `virtual:` by default
 
 ## 1.4.1
 
-- fix: show error message when importing `eslint` if possible
-- fix: include `shims` into `dist`
+* fix: show error message when importing `eslint` if possible
+* fix: include `shims` into `dist`
 
 ## 1.4.0
 
-- feat: support `vite@3`
-- feat: ignore virtual modules
-- perf: not to add `build.outDir` into `exclude`
-- fix: fix `then` handling
+* feat: support `vite@3`
+* feat: ignore virtual modules
+* perf: not to add `build.outDir` into `exclude`
+* fix: fix `then` handling
 
 ## 1.3.2
 
-- fix: remove `allowSyntheticDefaultImports` and `esModuleInterop` in `tsconfig.json`
+* fix: remove `allowSyntheticDefaultImports` and `esModuleInterop` in `tsconfig.json`
 
 ## 1.3.1
 
-- fix: fix regressions
+* fix: fix regressions
 
 ## 1.3.0
 
-- feat: include `.svelte` files by default
+* feat: include `.svelte` files by default
 
 ## 1.2.0
 
-- perf: better output format
-- feat: add `emitErrorAsWarning` and `emitWarningAsError` options
+* perf: better output format
+* feat: add `emitErrorAsWarning` and `emitWarningAsError` options
 
 ## 1.1.0
 
-- fix: fix `index.html` dealing
+* fix: fix `index.html` dealing
 
 ## 1.1.0-beta.1
 
-- feat: support ESLint options
-- feat: recommend `throwOnError` -> `emitError` and `throwOnWarning` -> `emitWarning`
+* feat: support ESLint options
+* feat: recommend `throwOnError` -> `emitError` and `throwOnWarning` -> `emitWarning`
 
 The plugin recommends `emitError` / `emitWarning` instead of `throwOnError` / `throwOnWarning` now. However, you can stay with `throwOnError` / `throwOnWarning` safely. This is a backward-compatible version update.
 
 ## 1.1.0-beta.0
 
-- feat: add `eslintPath` option
+* feat: add `eslintPath` option
 
 ## 1.0.0
 
