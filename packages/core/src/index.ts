@@ -1,11 +1,9 @@
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
-import type { FSWatcher } from "chokidar";
-import chokidar from "chokidar";
 import debugWrap from "debug";
 import type * as Vite from "vite";
-import { CWD, PLUGIN_NAME } from "./constants";
+import { PLUGIN_NAME } from "./constants";
 import type {
   ESLintFormatter,
   ESLintInstance,
@@ -32,7 +30,6 @@ export default function ESLintPlugin(
   const options = getOptions(userOptions);
 
   let worker: Worker;
-  let watcher: FSWatcher;
 
   const filter = getFilter(options);
   let eslintInstance: ESLintInstance;
@@ -84,39 +81,6 @@ export default function ESLintPlugin(
     },
     async transform(_, id) {
       debug("==== transform hook ====");
-      // initialize watcher
-      if (options.chokidar) {
-        if (watcher) return;
-        debug("Initialize watcher");
-        watcher = chokidar
-          .watch(options.include, { ignored: options.exclude })
-          .on("change", async (path) => {
-            debug("==== change event ====");
-            const fullPath = resolve(CWD, path);
-            // worker + watcher
-            if (worker) return worker.postMessage(fullPath);
-            // watcher only
-            const shouldIgnore = await shouldIgnoreModule(
-              fullPath,
-              filter,
-              eslintInstance,
-            );
-            debug(`should ignore: ${shouldIgnore}`);
-            if (shouldIgnore) return;
-            return await lintFiles(
-              {
-                files: options.lintDirtyOnly ? fullPath : options.include,
-                eslintInstance,
-                formatter,
-                outputFixes,
-                options,
-              },
-              // this, // TODO: use transform hook context will breaks build
-            );
-          });
-        return;
-      }
-      // no watcher
       debug(`id: ${id}`);
       const filePath = getFilePath(id);
       debug(`filePath: ${filePath}`);
@@ -136,10 +100,6 @@ export default function ESLintPlugin(
         },
         this, // use transform hook context
       );
-    },
-    async buildEnd() {
-      debug("==== buildEnd ====");
-      if (watcher?.close) await watcher.close();
     },
   };
 }

@@ -191,20 +191,6 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    */
   lintDirtyOnly: boolean;
   /**
-   * Run ESLint in Chokidar `change` event instead of `transform` hook. This is disabled by default.
-   *
-   * Recommend to enable `lintOnStart` if you enable this one.
-   *
-   * 在 Chokidar `change` 事件中而不是在 `transform` 生命周期中运行 ESLint。默认禁用。
-   *
-   * 如果你启用这个选项，建议也启用 `lintOnStart`。
-   *
-   * @default false
-   *
-   * @deprecated
-   */
-  chokidar: boolean;
-  /**
    * Emit found errors. This is enabled by default.
    *
    * 输出发现的错误。默认启用。

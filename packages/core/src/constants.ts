@@ -6,8 +6,6 @@ export const ESLINT_SEVERITY = {
   WARNING: 1,
 } as const;
 
-export const CWD = process.cwd();
-
 export const PLUGIN_NAME = "vite:eslint2";
 
 export const COLOR_MAPPING: Record<
