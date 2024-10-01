@@ -19,7 +19,7 @@ Whether to automatically fix.
 - ESLint default: `false`
 - Plugin default: `true`
 
-Whether to enable the cache. The cache is enabled by default to improve speed.
+Whether to enable the cache. This is disabled in ESLint by default and enabled in plugin by default to improve speed.
 
 ### `cacheLocation`
 
@@ -62,9 +62,11 @@ This option specifies the files you want to lint. You don't need to change it in
 
 If you're using the plugin defaults, the plugin will only call [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) in the `transform` hook. The option value will be used to [create a filter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to determine if the call should be made and the parameter of the call, which means that the option value needs to fulfill the requirements of [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1).
 
-If you enable the `lintOnStart` option, the plugin will also call `eslint.lintFiles` in the `buildStart` hook. The option value will not be used to create a filter, but will be used directly as the call parameter, which means that the option value also needs to fulfill the [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) requirement.
+If you enable the `lintOnStart` option, the plugin will also call [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) in the `buildStart` hook. The option value will not be used to create a filter, but will be used directly as the call parameter, which means that the option value also needs to fulfill the [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) requirement.
 
-If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter every time it calls `eslint.lintFiles`, which means that the option value also needs to fulfill the requirements of `minimatch@3.1.2`.
+If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter every time it calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns), which means that the option value also needs to fulfill the requirements of [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
+
+If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter when it calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) outside of the `buildStart` lifecycle. This means that this option value also needs to fulfill the requirements of [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
 
 ### `exclude`
 
@@ -82,20 +84,20 @@ If you enable the `lintOnStart` option or disable the `lintDirtyOnly` option, th
 ### `eslintPath`
 
 - Type: `string`
-- Default: `'eslint'`
+- Default: `"eslint"`
 
 Path to ESLint that will be used for linting. Use [dynamic import](https://javascript.info/modules-dynamic-imports) under the hood. Read [server.fs](https://vitejs.dev/guide/#command-line-interface) first.
 
-If you want to use the flat config system in ESLint v8, set the value to `'eslint/use-at-your-own-risk'`. Place a flat config file in the root of your project or set the `ESLINT_USE_FLAT_CONFIG` environment variable to true and pass the option `overrideConfigFile` to the plugin if you are using other config files. You can learn more from [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
+If you want to use the flat config system in ESLint v8, set the value to `'eslint/use-at-your-own-risk'`. Place a flat config file in the root of your project or set the `ESLINT_USE_FLAT_CONFIG` environment variable to true and pass the option `overrideConfigFile` to the plugin if you are using other config files.
+
+You can learn more from [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
 
 ### `formatter`
 
 - Type: `string`
-- Default: `'stylish'`
+- Default: `"stylish"`
 
-The name or the path of a formatter.
-
-This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) in order to convert lint results to a human- or machine-readable string.
+The name or the path of a formatter. This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) in order to convert lint results to a human- or machine-readable string.
 
 ### `lintInWorker`
 
@@ -122,24 +124,9 @@ This will significantly slow down Vite first starting if you have no caches and 
 - Type: `boolean`
 - Default: `true`
 
-Lint changed files only when running ESLint except from `buildStart` hook. This is enabled by default.
+Whether or not to checkout only modified files that are not included in the `exclude` option value when running ESLint outside of the `buildStart` lifecycle. Enabled by default.
 
-This plugin will lint `include` option specified files when disabled.
-
-### `chokidar` (deprecate soon)
-
-::: warning
-
-Deprecate soon. Do not use.
-
-:::
-
-- Type: `boolean`
-- Default: `false`
-
-Run ESLint in Chokidar `change` event instead of `transform` hook.
-
-If you enable this one, it is recommended to also enable `lintOnStart`.
+When disabled, files are checked against the `include` and `exclude` option values.
 
 ### `emitError`
 
