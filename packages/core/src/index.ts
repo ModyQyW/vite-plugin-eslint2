@@ -101,6 +101,9 @@ export default function ESLintPlugin(
         this, // use transform hook context
       );
     },
+    async buildEnd() {
+      if (worker) await worker.terminate();
+    },
   };
 }
 
