@@ -192,11 +192,7 @@ export const log = (
     if (textType === "error") context.error(text);
     else if (textType === "warning") context.warn(text);
   } else {
-    const t = colorize(
-      `${text}  Plugin: ${colorize(PLUGIN_NAME, "plugin")}\r\n`,
-      textType,
-    );
-    console.log(t);
+    console.log(`${text}  Plugin: ${colorize(PLUGIN_NAME, "plugin")}\r\n`);
   }
 };
 
