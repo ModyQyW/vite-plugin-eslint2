@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v4.4.2...v5.0.0) (2024-10-01)
+
+### ⚠ BREAKING CHANGES
+
+* remove chokidar option
+
+### Features
+
+* remove chokidar option ([e33e7f0](https://github.com/ModyQyW/vite-plugin-eslint2/commit/e33e7f0f09b61eba0a0d686c62004658d2a01380)) - by @ModyQyW
+
+### Bug Fixes
+
+* fix wrong colorize ([cc20565](https://github.com/ModyQyW/vite-plugin-eslint2/commit/cc20565c1463c73ce31641771ccbdcf25c2ea05a)) - by @ModyQyW
+* remove extra parsing ([495b39f](https://github.com/ModyQyW/vite-plugin-eslint2/commit/495b39f41b278224690e636f2e1745cd9eefcb0d)) - by @ModyQyW
+* terminate worker if possible ([3304fb4](https://github.com/ModyQyW/vite-plugin-eslint2/commit/3304fb4719121f1a0b7be9610a7a1e21efaf5935)) - by @ModyQyW
+
 ## [4.4.2](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v4.4.1...v4.4.2) (2024-09-25)
 
 ### Bug Fixes
