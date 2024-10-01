@@ -32,6 +32,7 @@ const initPromise = initializeESLint(options).then((result) => {
 // this file needs to be compiled into cjs, which doesn't support top-level await
 // so we use iife here
 (async () => {
+  debug("==== worker start ====");
   debug("Initialize ESLint");
   // remove this line will cause ts2454
   const { eslintInstance, formatter, outputFixes } = await initPromise;
@@ -50,7 +51,7 @@ const initPromise = initializeESLint(options).then((result) => {
 parentPort?.on("message", async (files) => {
   // make sure eslintInstance is initialized
   if (!eslintInstance) await initPromise;
-  debug("==== message event ====");
+  debug("==== worker message event ====");
   debug(`message: ${files}`);
   const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
   debug(`should ignore: ${shouldIgnore}`);
