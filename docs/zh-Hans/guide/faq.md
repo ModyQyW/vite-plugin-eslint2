@@ -14,8 +14,27 @@
 
 ## 缓存失效了？
 
-你可以禁用 `cache` 选项，或者删除缓存文件，手动修复错误后重启 Vite。
+删除缓存文件，手动修复错误后重启 Vite 即可。
 
 ## 插件运行非常慢？
 
 默认地，插件是同步运行的，这可能会造成阻塞。请尝试启用 `lintInWorker` 选项，它保持了 Vite 的速度，并在控制台中打印信息。你也可以尝试一下社区内的 [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker)，或者在 Vite 之外直接运行 ESLint。
+
+## 推荐配置？
+
+```ts
+import { defineConfig } from "vite";
+import eslint from "vite-plugin-eslint2";
+
+export default defineConfig({
+  plugins: [eslint({
+    lintInWorker: true,
+    lintOnStart: true,
+  })],
+});
+
+```
+
+## 错误信息全红？
+
+Vite 的错误遮罩层不支持显示 `PluginContext.warn` 信息和全色消息，还有一些限制（参见 [#2076](https://github.com/vitejs/vite/issues/2076)、[#6274](https://github.com/vitejs/vite/pull/6274) 和 [#8327](https://github.com/vitejs/vite/discussions/8327)）。

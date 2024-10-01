@@ -14,8 +14,27 @@ If you really want to check errors and warnings, try enable `lintInWorker` optio
 
 ## Cache is broken?
 
-You can disable `cache` option, or delete the cache, fix errors manully and restart Vite.
+Delete the cache file, fix the error manually and restart Vite.
 
 ## Plugin is running very slow?
 
 By default, the plugin is synchronous, which may cause blocking. Please try to enable `lintInWorker` option, which keeps Vite speed and prints in console. You can also try [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker), or run ESLint directly besides Vite.
+
+## Recommended configuration?
+
+```ts
+import { defineConfig } from "vite";
+import eslint from "vite-plugin-eslint2";
+
+export default defineConfig({
+  plugins: [eslint({
+    lintInWorker: true,
+    lintOnStart: true,
+  })],
+});
+
+```
+
+## Error messages in full red?
+
+Vite's error mask layer does not support displaying `PluginContext.warn` information and full-color messages, and there are some limitations (see [#2076](https://github.com/vitejs/vite/issues/2076), [#6274](https://github.com/vitejs/vite/pull/6274) and [#8327](https://github.com/vitejs/vite/discussions/8327).
