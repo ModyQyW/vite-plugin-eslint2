@@ -119,11 +119,9 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    */
   lintInWorker: boolean;
   /**
-   * Lint `include` option specified files once in `buildStart` hook to find potential errors. This
-   * is disabled by default.
+   * Lint `include` option specified files once in `buildStart` hook to find potential errors. This is disabled by default.
    *
-   * This will significantly slow down Vite first starting if you have no caches and don't enable
-   * `lintInWorker`.
+   * This will significantly slow down Vite first starting if you have no caches and don't enable `lintInWorker`.
    *
    * 在 `buildStart` 生命周期中校验 `include` 选项指定的文件一次以发现潜在的错误。默认禁用。
    *
