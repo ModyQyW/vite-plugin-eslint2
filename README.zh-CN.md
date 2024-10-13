@@ -14,7 +14,6 @@
 | --------------------------------------------------------------------------------- | ------------------------------ |
 | [core](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/packages/core)    | 核心                           |
 | [docs](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/docs)             | 文档                           |
-| [playground](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/playground) | 轻量游乐场，可拉取到本地后尝试 |
 | [examples](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/examples)     | 与特定框架或库集成的示例       |
 
 ## 致谢

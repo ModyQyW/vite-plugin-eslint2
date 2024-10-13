@@ -1,6 +1,6 @@
 # vite-plugin-eslint2
 
-English | [简体中文](./README-zh_CN.md)
+English | [简体中文](./README.zh-CN.md)
 
 <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
   <a href="https://github.com/ModyQyW/vite-plugin-eslint2/blob/main/LICENSE">
