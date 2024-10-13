@@ -36,25 +36,25 @@
     "preversion": "pnpm run check"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.2",
+    "@biomejs/biome": "^1.9.3",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/config-pnpm-scopes": "^19.5.0",
-    "@lerna-lite/cli": "^3.9.2",
-    "@lerna-lite/version": "^3.9.2",
-    "@types/node": "^20.16.10",
-    "@vitest/coverage-v8": "^2.1.1",
+    "@lerna-lite/cli": "^3.9.3",
+    "@lerna-lite/version": "^3.9.3",
+    "@types/node": "^20.16.11",
+    "@vitest/coverage-v8": "^2.1.2",
     "conventional-changelog-conventionalcommits": "^7.0.2",
     "is-ci": "^3.0.1",
     "lint-staged": "^15.2.10",
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.11.1",
     "taze": "^0.17.2",
-    "typescript": "^5.6.2",
-    "unbuild": "^3.0.0-rc.8",
-    "vitest": "^2.1.1"
+    "typescript": "^5.6.3",
+    "unbuild": "^3.0.0-rc.11",
+    "vitest": "^2.1.2"
   },
-  "packageManager": "pnpm@9.11.0",
+  "packageManager": "pnpm@9.12.1",
   "engines": {
     "node": ">=20.11.0 || >=21.2.0"
   }
