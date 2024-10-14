@@ -102,6 +102,7 @@ export default function ESLintPlugin(
       );
     },
     async buildEnd() {
+      debug("==== buildEnd hook ====");
       if (worker) await worker.terminate();
     },
   };
