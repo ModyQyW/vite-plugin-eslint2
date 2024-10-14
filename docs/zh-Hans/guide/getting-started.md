@@ -4,7 +4,7 @@
 
 `vite-plugin-eslint2` 是 Vite ESLint 插件。支持 Vite v2 ~ v5 和 ESLint v7 ~ v9。要求 `node>=18`。
 
-> 对于 Nuxt 项目，请使用 对于 请使用 [@nuxt/eslint](https://github.com/nuxt/eslint)。
+> 对于 Nuxt 项目，请使用 [@nuxt/eslint](https://github.com/nuxt/eslint)。
 
 > 你也可能想要 [Vite Stylelint 插件](https://github.com/ModyQyW/vite-plugin-stylelint)。
 

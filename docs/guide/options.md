@@ -4,7 +4,7 @@ You can pass ESLint [Node.js API constructor options](https://eslint.org/docs/de
 
 ## Constructor Options
 
-Common options and descriptions are listed below, complete links are provided in the sidebar.
+Common options and descriptions are listed below, complete links are provided above.
 
 ### `fix`
 
