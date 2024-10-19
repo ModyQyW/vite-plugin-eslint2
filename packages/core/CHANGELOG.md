@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.0.0...v5.0.1) (2024-10-19)
+
+**Note:** Version bump only for package vite-plugin-eslint2
+
 ## [5.0.0](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v4.4.2...v5.0.0) (2024-10-01)
 
 ### ⚠ BREAKING CHANGES
