@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/ModyQyW/vite-plugin-eslint2/issues"
   },
-  "repository": "git+https://github.com:ModyQyW/vite-plugin-eslint2.git",
+  "repository": "git+https://github.com/ModyQyW/vite-plugin-eslint2.git",
   "license": "MIT",
   "author": {
     "name": "ModyQyW",
