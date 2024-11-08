@@ -24,8 +24,6 @@
     "docs:dev": "pnpm -C docs run dev",
     "docs:preview": "pnpm -C docs run preview",
     "preinstall": "npx only-allow pnpm",
-    "play:build": "pnpm build && pnpm -C playground run build",
-    "play:dev": "pnpm dev && pnpm -C playground run dev",
     "prepare": "is-ci || simple-git-hooks",
     "prepublishOnly": "pnpm run build",
     "release": "lerna version",
@@ -33,7 +31,7 @@
     "test": "vitest run --passWithNoTests",
     "test:coverage": "vitest run --passWithNoTests --coverage",
     "type-check": "tsc --noEmit",
-    "preversion": "pnpm run check"
+    "preversion": "git-branch-is main && conc \"pnpm:check\" \"pnpm:type-check\" \"pnpm:test\""
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -42,19 +40,21 @@
     "@commitlint/config-pnpm-scopes": "^19.5.0",
     "@lerna-lite/cli": "^3.10.0",
     "@lerna-lite/version": "^3.10.0",
-    "@types/node": "^20.16.13",
-    "@vitest/coverage-v8": "^2.1.3",
+    "@types/node": "^22.9.0",
+    "@vitest/coverage-v8": "^2.1.4",
+    "concurrently": "^9.1.0",
     "conventional-changelog-conventionalcommits": "^7.0.2",
+    "git-branch-is": "^4.0.0",
     "is-ci": "^3.0.1",
     "lint-staged": "^15.2.10",
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.11.1",
-    "taze": "^0.17.2",
+    "taze": "^0.18.0",
     "typescript": "^5.6.3",
     "unbuild": "^3.0.0-rc.11",
-    "vitest": "^2.1.3"
+    "vitest": "^2.1.4"
   },
-  "packageManager": "pnpm@9.12.2",
+  "packageManager": "pnpm@9.12.3",
   "engines": {
     "node": ">=20.11.0 || >=21.2.0"
   }
