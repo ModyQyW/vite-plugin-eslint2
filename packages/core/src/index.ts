@@ -81,15 +81,15 @@ export default function ESLintPlugin(
     },
     async transform(_, id) {
       debug("==== transform hook ====");
-      debug(`id: ${id}`);
-      const filePath = getFilePath(id);
-      debug(`filePath: ${filePath}`);
       // worker
-      if (worker) return worker.postMessage(filePath);
+      if (worker) return worker.postMessage(id);
       // no worker
+      debug(`id: ${id}`);
       const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
       debug(`should ignore: ${shouldIgnore}`);
       if (shouldIgnore) return;
+      const filePath = getFilePath(id);
+      debug(`filePath: ${filePath}`);
       return await lintFiles(
         {
           files: options.lintDirtyOnly ? filePath : options.include,

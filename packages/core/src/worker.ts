@@ -8,6 +8,7 @@ import type {
   ESLintPluginOptions,
 } from "./types";
 import {
+  getFilePath,
   getFilter,
   initializeESLint,
   lintFiles,
@@ -48,16 +49,18 @@ const initPromise = initializeESLint(options).then((result) => {
   }
 })();
 
-parentPort?.on("message", async (files) => {
+parentPort?.on("message", async (id) => {
   // make sure eslintInstance is initialized
   if (!eslintInstance) await initPromise;
   debug("==== worker message event ====");
-  debug(`message: ${files}`);
-  const shouldIgnore = await shouldIgnoreModule(files, filter, eslintInstance);
+  debug(`id: ${id}`);
+  const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
   debug(`should ignore: ${shouldIgnore}`);
   if (shouldIgnore) return;
+  const filePath = getFilePath(id);
+  debug(`filePath: ${filePath}`);
   lintFiles({
-    files: options.lintDirtyOnly ? files : options.include,
+    files: options.lintDirtyOnly ? filePath : options.include,
     eslintInstance,
     formatter,
     outputFixes,
