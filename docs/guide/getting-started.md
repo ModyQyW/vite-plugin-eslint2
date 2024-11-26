@@ -2,7 +2,7 @@
 
 ## Overview
 
-`vite-plugin-eslint2` is a project providing ESLint plugin for Vite. Supports Vite v2 ~ v5 and ESLint v7 ~ v9. Requires `node>=18`.
+`vite-plugin-eslint2` is a project providing ESLint plugin for Vite. Supports Vite v2 ~ v6 and ESLint v7 ~ v9. Requires `node>=18`.
 
 > For Nuxt projects, please use [@nuxt/eslint](https://github.com/nuxt/eslint).
 

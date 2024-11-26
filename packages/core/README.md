@@ -16,7 +16,7 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Introduction
 
-ESLint plugin for Vite. Supports Vite v2 ~ v5 and ESLint v7 ~ v9. Requires `node>=18`.
+ESLint plugin for Vite. Supports Vite v2 ~ v6 and ESLint v7 ~ v9. Requires `node>=18`.
 
 👇 See the documentation for specific usage and examples.
 
