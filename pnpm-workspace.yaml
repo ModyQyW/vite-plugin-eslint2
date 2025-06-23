@@ -3,3 +3,11 @@ packages:
   - docs
   - packages/*
   - examples/*
+
+configDependencies:
+  '@pnpm/trusted-deps': 0.1.1+sha512-jI3PWNv2zCg9+KHI3qQTsa534c5nisZQrHFeWSyyHoUXcuzvjkXxQKPFLJ/qtNAF+PtKHDlRntO2aZKb3VDuHQ==
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - esbuild
+  - simple-git-hooks
