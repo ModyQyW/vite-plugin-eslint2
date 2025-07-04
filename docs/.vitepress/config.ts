@@ -47,6 +47,7 @@ export default defineConfig({
       label: "English",
       description: "ESLint plugin for Vite.",
       themeConfig: {
+        logo: "/vite-plugin-eslint2.svg",
         nav: [
           {
             text: "Guide",
@@ -88,8 +89,9 @@ export default defineConfig({
     "zh-Hans": {
       lang: "zh-Hans",
       label: "简体中文",
-      description: "_description_",
+      description: "Vite ESLint 插件",
       themeConfig: {
+        logo: "/vite-plugin-eslint2.svg",
         nav: [
           {
             text: "指南",

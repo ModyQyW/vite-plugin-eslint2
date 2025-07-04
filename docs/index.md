@@ -3,8 +3,9 @@
 layout: home
 
 hero:
-  name: "vite-plugin-eslint2"
-  tagline: "ESLint plugin for Vite"
+  name: vite-plugin-eslint2
+  text: ESLint plugin for Vite
+  tagline: Integrate ESLint into Vite in minutes! 🚀
   actions:
     - theme: brand
       text: Get Started →
@@ -15,9 +16,9 @@ hero:
     - theme: alt
       text: View on GitHub
       link: https://github.com/ModyQyW/vite-plugin-eslint2
-  # image:
-  #   src: /logo.png
-  #   alt: _repo_
+  image:
+    src: /vite-plugin-eslint2.svg
+    alt: vite-plugin-eslint2
 # features:
 #   - title: "_feature_"
 #     details: _feature-details_
