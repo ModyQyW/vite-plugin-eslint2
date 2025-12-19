@@ -1,4 +1,3 @@
-# https://github.com/unocss/unocss/blob/fe83a90b59cf4599be57ea825166bb74d92b104c/.github/workflows/autofix.yml
 name: autofix.ci
 
 on:
@@ -17,23 +16,23 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
       - name: Setup corepack
-        run: corepack enable
+        run: npm install -f -g npm@latest corepack@latest && corepack enable
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Check
         run: pnpm check
