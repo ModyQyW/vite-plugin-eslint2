@@ -16,7 +16,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "rimraf packages/*/dist --glob && pnpm -r --filter=./packages/* run build && pnpm -r run build-post",
+    "build": "rimraf packages/*/dist --glob && pnpm -r --filter='./packages/*' run build && pnpm -r run build-post",
     "check": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
     "dep-update": "taze -fw",
     "dev": "pnpm -r --filter=./packages/* --parallel run dev",
