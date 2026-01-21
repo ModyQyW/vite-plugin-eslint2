@@ -5,6 +5,42 @@ import type * as Rollup from "rollup";
 export type FilterPattern = string | string[];
 export type Filter = ReturnType<CreateFilter>;
 
+export interface OverlayConfig {
+  /**
+   * Position：'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+   *
+   * 位置：'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+   *
+   * @default 'bottom-right'
+   */
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+
+  /**
+   * Whether to expand initially
+   *
+   * 初始是否展开
+   *
+   * @default true（有错误时 / when there are errors）
+   */
+  initialIsOpen?: boolean
+
+  /**
+   * Maximum number of issues to display per file
+   *
+   * 单文件最大显示问题数
+   *
+   * @default 50
+   */
+  maxIssues?: number
+
+  /**
+   * Custom styles
+   *
+   * 自定义样式
+   */
+  style?: Record<string, string>
+}
+
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   /**
    * Whether to enable the cache. This is disabled in ESLint by default and enabled in plugin by default to improve speed.
@@ -175,6 +211,22 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    * @default false
    */
   emitWarningAsError: boolean;
+  /**
+   * Whether to enable runtime overlay in dev mode
+   *
+   * 是否在 dev 模式启用运行时 overlay
+   *
+   * @default true（在支持的环境下 / in supported environments）
+   */
+  overlay?: boolean | OverlayConfig
+  /**
+   * Whether to output in terminal
+   *
+   * 是否在终端输出
+   *
+   * @default true
+   */
+  terminal?: boolean
 }
 export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
 
