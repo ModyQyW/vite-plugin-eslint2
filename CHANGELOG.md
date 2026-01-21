@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [Unreleased]
+
+### Features
+
+- **Runtime Overlay** - Display ESLint errors and warnings in browser during development
+  - Auto-detect environment (Web, mini-programs, etc.)
+  - Show overlay in supported environments automatically
+  - Graceful degradation to terminal output in unsupported environments
+- **Overlay Configuration** - New options for customizing overlay behavior
+  - `overlay`: Enable/disable runtime overlay (boolean | OverlayConfig)
+  - `terminal`: Control terminal output (boolean)
+  - `overlay.position`: Choose overlay position (top-right, top-left, bottom-right, bottom-left)
+  - `overlay.initialIsOpen`: Control initial open state
+  - `overlay.maxIssues`: Limit displayed issues per file
+  - `overlay.style`: Custom overlay styles
+- **New Package** - `@vite-plugin-eslint2/runtime` for overlay UI
+
+### Changed
+
+- **Build System** - Migrated from tsdown to Vite for building
+  - Faster build times
+  - Better TypeScript integration
+  - Improved tree-shaking
+- **Plugin Architecture**
+  - Added WebSocket server for dev mode communication
+  - Added environment detection for runtime injection
+  - Refactored diagnostic formatting
+
+### Fixed
+
+- TypeScript type errors in runtime components
+- Resource leak in WebSocket client connection handling
+
+### Technical Details
+
+**Architecture:**
+- Core package: Vite plugin logic + WebSocket server
+- Runtime package: Browser-side overlay UI (Vue 3)
+- Communication: WebSocket (ws://host:port/__eslint_ws)
+
+**Supported Environments:**
+- Vite dev mode (Web): Full overlay support
+- Vite dev mode (H5): Full overlay support
+- Mini-programs: Terminal output only (no overlay)
+- Build mode: Terminal output only (no overlay)
+
+**Breaking Changes:**
+None - all existing configurations continue to work
+
+---
+
 ## [5.0.4](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.0.3...v5.0.4) (2025-07-04)
 
 ### Bug Fixes
