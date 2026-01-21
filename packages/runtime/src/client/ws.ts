@@ -21,8 +21,10 @@ const messageHandlers: MessageHandler[] = []
 
 export function createWebSocket(serverUrl: string): WebSocket {
   // 先关闭现有连接
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.close()
+  if (ws) {
+    if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+      ws.close()
+    }
   }
 
   ws = new WebSocket(serverUrl)
