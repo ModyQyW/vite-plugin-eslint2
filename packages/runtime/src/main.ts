@@ -13,6 +13,10 @@ interface RuntimeInstance {
   disconnect: () => void;
 }
 
+// Singleton instance to prevent multiple injections
+let instance: RuntimeInstance | null = null;
+let isDisconnected = false;
+
 let overlayInstance: ReturnType<typeof createDefaultOverlay> | null = null;
 let unsubscribeDiagnostic: (() => void) | null = null;
 
@@ -40,6 +44,12 @@ function getWebSocketServerUrl(): string {
  * @returns Runtime instance with disconnect method for cleanup
  */
 export function inject(): RuntimeInstance {
+  // Singleton protection - return existing instance if already injected
+  if (instance) {
+    console.warn("[ESLint Runtime] Already injected, returning existing instance");
+    return instance;
+  }
+
   console.log("[ESLint Runtime] Injecting runtime...");
 
   // Get WebSocket server URL
@@ -52,39 +62,59 @@ export function inject(): RuntimeInstance {
   // Create overlay UI
   overlayInstance = createDefaultOverlay();
 
-  // Subscribe to diagnostic messages
+  // Subscribe to diagnostic messages with connection state check
   unsubscribeDiagnostic = onDiagnostic((data: DiagnosticData) => {
-    if (overlayInstance) {
+    // Check if WebSocket is still connected before updating overlay
+    if (ws.readyState === WebSocket.OPEN && overlayInstance) {
       overlayInstance.updateDiagnostics([data]);
+    } else if (ws.readyState === WebSocket.CLOSED) {
+      console.error("[ESLint Runtime] WebSocket disconnected. Disabling overlay.");
+      performCleanup();
     }
   });
 
-  // Handle connection errors - silently fail without overlay
-  ws.onerror = () => {
-    console.error("[ESLint Runtime] WebSocket connection failed. Disabling overlay.");
-    if (overlayInstance) {
-      overlayInstance.destroy();
-      overlayInstance = null;
-    }
-    if (unsubscribeDiagnostic) {
-      unsubscribeDiagnostic();
-      unsubscribeDiagnostic = null;
-    }
-  };
+  // Listen for WebSocket close event to trigger cleanup
+  ws.addEventListener("close", () => {
+    console.error("[ESLint Runtime] WebSocket connection closed. Cleaning up resources.");
+    performCleanup();
+  });
 
-  return {
+  // Create and store the singleton instance
+  instance = {
     disconnect: () => {
-      if (overlayInstance) {
-        overlayInstance.destroy();
-        overlayInstance = null;
+      if (isDisconnected) {
+        console.warn("[ESLint Runtime] Already disconnected");
+        return;
       }
-      if (unsubscribeDiagnostic) {
-        unsubscribeDiagnostic();
-        unsubscribeDiagnostic = null;
-      }
-      disconnect();
+      performCleanup();
     },
   };
+
+  return instance;
+}
+
+/**
+ * Perform complete cleanup of all resources
+ */
+function performCleanup(): void {
+  if (isDisconnected) {
+    return;
+  }
+
+  isDisconnected = true;
+
+  if (overlayInstance) {
+    overlayInstance.destroy();
+    overlayInstance = null;
+  }
+
+  if (unsubscribeDiagnostic) {
+    unsubscribeDiagnostic();
+    unsubscribeDiagnostic = null;
+  }
+
+  disconnect();
+  instance = null;
 }
 
 // Re-export overlay and WebSocket APIs for external use
