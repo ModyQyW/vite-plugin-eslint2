@@ -20,11 +20,16 @@ let ws: WebSocket | null = null
 const messageHandlers: MessageHandler[] = []
 
 export function createWebSocket(serverUrl: string): WebSocket {
-  // 先关闭现有连接
+  // 先关闭现有连接并清理回调，防止资源泄漏
   if (ws) {
     if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
-      ws.close()
+      ws.close(1000, 'Reconnecting to new server')
     }
+    // 清理旧连接的所有回调，防止竞态条件
+    ws.onopen = null
+    ws.onmessage = null
+    ws.onclose = null
+    ws.onerror = null
   }
 
   ws = new WebSocket(serverUrl)
@@ -32,9 +37,7 @@ export function createWebSocket(serverUrl: string): WebSocket {
   ws.onopen = () => {
     console.log('[ESLint Runtime] WebSocket connected')
     // 通知运行时加载完成
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify({ type: 'runtime-loaded' }))
-    }
+    ws.send(JSON.stringify({ type: 'runtime-loaded' }))
   }
 
   ws.onmessage = (event) => {
