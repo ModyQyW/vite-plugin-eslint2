@@ -1,13 +1,6 @@
-export interface DiagnosticData {
-  file: string
-  errors: Array<{
-    line: number
-    column: number
-    message: string
-    severity: 'error' | 'warning'
-    ruleId?: string
-  }>
-}
+import type { DiagnosticData } from './overlay'
+
+export type { DiagnosticData }
 
 export type MessageHandler = (data: DiagnosticData) => void
 
