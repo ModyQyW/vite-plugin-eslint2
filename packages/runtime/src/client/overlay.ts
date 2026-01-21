@@ -24,12 +24,58 @@ interface OverlayInstance {
   destroy: () => void
 }
 
+// Static style constants
+const BASE_STYLES = `
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+`
+
+const HEADER_STYLES = `
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+`
+
+const BADGE_STYLES = `
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+`
+
+const FILE_PATH_STYLES = `
+  padding: 8px 12px;
+  background: #f9fafb;
+  font-weight: 500;
+  color: #374151;
+  font-size: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  word-break: break-all;
+`
+
+const ERROR_ITEM_STYLES = `
+  padding: 8px 12px;
+  border-left: 2px solid;
+  border-bottom: 1px solid #f3f4f6;
+`
+
 const positionStyles: Record<string, string> = {
   'top-right': 'top: 20px; right: 20px;',
   'top-left': 'top: 20px; left: 20px;',
   'bottom-right': 'bottom: 20px; right: 20px;',
   'bottom-left': 'bottom: 20px; left: 20px;'
-}
+} as const
+
+const validPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'] as const
+type ValidPosition = typeof validPositions[number]
 
 // Shared state for overlay instance
 interface OverlayState {
@@ -46,12 +92,17 @@ const OverlayComponent = {
       required: true
     },
     position: {
-      type: String as () => 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left',
+      type: String as () => ValidPosition,
       default: 'bottom-right'
     }
   },
   setup(props: { state: OverlayState; position: string }) {
     const { isOpen, diagnostics, maxIssues } = props.state
+
+    // Runtime validation for position prop
+    const normalizedPosition = validPositions.includes(props.position as ValidPosition)
+      ? (props.position as ValidPosition)
+      : 'bottom-right'
 
     const errorCount = computed(() => {
       return diagnostics.value.reduce((sum, data) => {
@@ -91,36 +142,25 @@ const OverlayComponent = {
 
     return () => {
       const isError = hasErrors.value
-      const positionStyle = positionStyles[props.position as keyof typeof positionStyles] || positionStyles['bottom-right']
+      const positionStyle = positionStyles[normalizedPosition]
 
       return h('div', {
         style: `
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-          font-size: 13px;
-          line-height: 1.5;
+          ${BASE_STYLES}
           position: fixed;
           ${positionStyle};
           z-index: 999999;
           display: flex;
           flex-direction: column;
-          align-items: ${props.position.includes('right') ? 'flex-end' : 'flex-start'};
+          align-items: ${normalizedPosition.includes('right') ? 'flex-end' : 'flex-start'};
         `
       }, [
         // Header with badge
         h('div', {
           style: `
+            ${HEADER_STYLES}
             background: ${isOpen.value ? '#ffffff' : isError ? '#ef4444' : '#f59e0b'};
             color: ${isOpen.value ? '#1f2937' : '#ffffff'};
-            padding: 8px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            transition: background 0.2s, color 0.2s;
             border: 1px solid ${isOpen.value ? '#e5e7eb' : 'transparent'};
           `,
           onClick: toggle
@@ -135,22 +175,16 @@ const OverlayComponent = {
           h('span', {}, `ESLint ${totalIssues.value}`),
           errorCount.value > 0 && h('span', {
             style: `
+              ${BADGE_STYLES}
               background: #ef4444;
               color: #ffffff;
-              padding: 2px 8px;
-              border-radius: 10px;
-              font-size: 11px;
-              font-weight: 600;
             `
           }, `${errorCount.value}E`),
           warningCount.value > 0 && h('span', {
             style: `
+              ${BADGE_STYLES}
               background: #f59e0b;
               color: #ffffff;
-              padding: 2px 8px;
-              border-radius: 10px;
-              font-size: 11px;
-              font-weight: 600;
             `
           }, `${warningCount.value}W`)
         ]),
@@ -179,24 +213,15 @@ const OverlayComponent = {
             }, [
               // File path
               h('div', {
-                style: `
-                  padding: 8px 12px;
-                  background: #f9fafb;
-                  font-weight: 500;
-                  color: #374151;
-                  font-size: 12px;
-                  border-bottom: 1px solid #e5e7eb;
-                  word-break: break-all;
-                `
+                style: FILE_PATH_STYLES
               }, data.file),
               // Errors
               ...data.errors.map(error => {
                 const isError = error.severity === 'error'
                 return h('div', {
                   style: `
-                    padding: 8px 12px;
-                    border-left: 2px solid ${isError ? '#ef4444' : '#f59e0b'};
-                    border-bottom: 1px solid #f3f4f6;
+                    ${ERROR_ITEM_STYLES}
+                    border-left-color: ${isError ? '#ef4444' : '#f59e0b'};
                   `
                 }, [
                   h('div', {
@@ -269,20 +294,40 @@ export function createOverlay(
   container.appendChild(rootElement)
   app.mount(rootElement)
 
+  let isDestroyed = false
+
   return {
     updateDiagnostics(data: DiagnosticData[]) {
+      if (isDestroyed) return
+
+      // Null check for safety
+      if (!data || !Array.isArray(data)) {
+        state.diagnostics.value = []
+        return
+      }
+
       state.diagnostics.value = data
       // Auto-open if there are errors
-      const hasErrors = data.some(d => d.errors.some(e => e.severity === 'error'))
+      const hasErrors = data.some(d =>
+        d && d.errors && Array.isArray(d.errors) &&
+        d.errors.some(e => e && e.severity === 'error')
+      )
       if (hasErrors) {
         state.isOpen.value = true
       }
     },
     destroy() {
+      if (isDestroyed) return
+      isDestroyed = true
+
       app.unmount()
       if (rootElement.parentNode) {
         rootElement.parentNode.removeChild(rootElement)
       }
+
+      // Clear state refs to release references
+      state.isOpen.value = false
+      state.diagnostics.value = []
     }
   }
 }
