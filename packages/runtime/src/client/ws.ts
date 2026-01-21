@@ -11,21 +11,33 @@ export interface DiagnosticData {
 
 export type MessageHandler = (data: DiagnosticData) => void
 
+interface WebSocketMessage {
+  type: 'diagnostic' | string
+  payload?: DiagnosticData
+}
+
 let ws: WebSocket | null = null
 const messageHandlers: MessageHandler[] = []
 
 export function createWebSocket(serverUrl: string): WebSocket {
+  // 先关闭现有连接
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.close()
+  }
+
   ws = new WebSocket(serverUrl)
 
   ws.onopen = () => {
     console.log('[ESLint Runtime] WebSocket connected')
     // 通知运行时加载完成
-    ws?.send(JSON.stringify({ type: 'runtime-loaded' }))
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'runtime-loaded' }))
+    }
   }
 
   ws.onmessage = (event) => {
     try {
-      const message = JSON.parse(event.data)
+      const message = JSON.parse(event.data) as WebSocketMessage
       if (message.type === 'diagnostic' && message.payload) {
         messageHandlers.forEach(handler => handler(message.payload))
       }
@@ -38,15 +50,22 @@ export function createWebSocket(serverUrl: string): WebSocket {
     console.log('[ESLint Runtime] WebSocket disconnected')
   }
 
-  ws.onerror = (error) => {
-    console.error('[ESLint Runtime] WebSocket error:', error)
+  ws.onerror = () => {
+    console.error('[ESLint Runtime] WebSocket error occurred')
   }
 
   return ws
 }
 
-export function onDiagnostic(handler: MessageHandler) {
+export function onDiagnostic(handler: MessageHandler): () => void {
   messageHandlers.push(handler)
+  // 返回取消订阅函数
+  return () => {
+    const index = messageHandlers.indexOf(handler)
+    if (index > -1) {
+      messageHandlers.splice(index, 1)
+    }
+  }
 }
 
 export function disconnect() {
