@@ -23,6 +23,8 @@ export function createWebSocket(serverUrl: string): WebSocket {
   // 先关闭现有连接并清理回调，防止资源泄漏
   if (ws) {
     if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+      // 在关闭前记录日志
+      console.log('[ESLint Runtime] Closing old connection to reconnect')
       ws.close(1000, 'Reconnecting to new server')
     }
     // 清理旧连接的所有回调，防止竞态条件
@@ -37,7 +39,9 @@ export function createWebSocket(serverUrl: string): WebSocket {
   ws.onopen = () => {
     console.log('[ESLint Runtime] WebSocket connected')
     // 通知运行时加载完成
-    ws.send(JSON.stringify({ type: 'runtime-loaded' }))
+    if (ws) {
+      ws.send(JSON.stringify({ type: 'runtime-loaded' }))
+    }
   }
 
   ws.onmessage = (event) => {
