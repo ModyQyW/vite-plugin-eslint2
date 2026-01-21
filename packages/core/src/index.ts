@@ -1,12 +1,14 @@
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
+import { readFileSync } from "node:fs";
 import debugWrap from "debug";
 import type * as Vite from "vite";
 import { PLUGIN_NAME } from "./constants";
 import type {
   ESLintFormatter,
   ESLintInstance,
+  ESLintLintResults,
   ESLintOutputFixes,
   ESLintPluginUserOptions,
 } from "./types";
@@ -18,6 +20,18 @@ import {
   lintFiles,
   shouldIgnoreModule,
 } from "./utils";
+import { supportsRuntimeInjection } from "./env";
+import {
+  createWebSocketServer,
+  type ESLintWebSocketServer,
+} from "./server/ws";
+import { formatDiagnostic, type DiagnosticData } from "./format";
+
+declare module "vite" {
+  interface ViteDevServer {
+    eslintWebSocket?: ESLintWebSocketServer;
+  }
+}
 
 const debug = debugWrap(PLUGIN_NAME);
 const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +44,8 @@ export default function ESLintPlugin(
   const options = getOptions(userOptions);
 
   let worker: Worker;
+  let supportsRuntime: boolean | null = null;
+  let wsServer: ESLintWebSocketServer | undefined;
 
   const filter = getFilter(options);
   let eslintInstance: ESLintInstance;
@@ -46,6 +62,19 @@ export default function ESLintPlugin(
         (command === "build" && options.build);
       debug(`should apply this plugin: ${shouldApply}`);
       return shouldApply;
+    },
+    async configResolved(config) {
+      debug("==== configResolved hook ====");
+      supportsRuntime = await supportsRuntimeInjection(config);
+      debug(`runtime injection supported: ${supportsRuntime}`);
+    },
+    configureServer(server) {
+      debug("==== configureServer hook ====");
+      if (supportsRuntime) {
+        debug("creating WebSocket server");
+        wsServer = createWebSocketServer(server);
+        server.eslintWebSocket = wsServer;
+      }
     },
     async buildStart() {
       debug("==== buildStart hook ====");
@@ -81,15 +110,57 @@ export default function ESLintPlugin(
     },
     async transform(_, id) {
       debug("==== transform hook ====");
-      // worker
+      // worker mode
       if (worker) return worker.postMessage(id);
-      // no worker
+
+      // non-worker mode
       debug(`id: ${id}`);
       const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
       debug(`should ignore: ${shouldIgnore}`);
       if (shouldIgnore) return;
       const filePath = getFilePath(id);
       debug(`filePath: ${filePath}`);
+
+      // runtime mode: send diagnostic to WebSocket, no terminal output
+      if (supportsRuntime && wsServer) {
+        debug("runtime mode: sending diagnostic to WebSocket");
+        const lintResults: ESLintLintResults = await eslintInstance.lintFiles(
+          options.lintDirtyOnly ? filePath : options.include,
+        );
+
+        // apply fixes if needed
+        if (options.fix) {
+          outputFixes(lintResults);
+        }
+
+        // format and send diagnostic
+        const diagnostics = formatDiagnostic(lintResults);
+        for (const data of diagnostics) {
+          wsServer.sendDiagnostic(data);
+        }
+
+        // terminal output if enabled
+        if (options.terminal) {
+          const results = lintResults.filter(
+            (result) => result.errorCount > 0 || result.warningCount > 0,
+          );
+          if (results.length > 0) {
+            const formattedText = await formatter.format(results);
+            const textType = results.some((result) => result.errorCount > 0)
+              ? options.emitErrorAsWarning
+                ? "warning"
+                : "error"
+              : options.emitWarningAsError
+                ? "error"
+                : "warning";
+            const { log } = await import("./utils");
+            log(formattedText, textType, this);
+          }
+        }
+        return;
+      }
+
+      // traditional mode: terminal output
       return await lintFiles(
         {
           files: options.lintDirtyOnly ? filePath : options.include,
@@ -98,12 +169,38 @@ export default function ESLintPlugin(
           outputFixes,
           options,
         },
-        this, // use transform hook context
+        this,
       );
+    },
+    transformIndexHtml() {
+      debug("==== transformIndexHtml hook ====");
+      if (!supportsRuntime || !wsServer) return;
+
+      debug("injecting runtime script");
+      try {
+        const runtimeCode = readFileSync(
+          resolve(__dirname, "../dist/@runtime/main.js"),
+          "utf-8",
+        );
+        return [
+          {
+            tag: "script",
+            children: runtimeCode,
+            attrs: { type: "module" },
+          },
+        ];
+      } catch (error) {
+        debug("failed to read runtime code: %o", error);
+        debug("runtime injection skipped");
+      }
     },
     async buildEnd() {
       debug("==== buildEnd hook ====");
       if (worker) await worker.terminate();
+      if (wsServer) {
+        debug("closing WebSocket server");
+        wsServer.close();
+      }
     },
   };
 }
