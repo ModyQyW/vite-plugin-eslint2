@@ -44,7 +44,7 @@ export default function ESLintPlugin(
   const options = getOptions(userOptions);
 
   let worker: Worker;
-  let supportsRuntime: boolean | null = null;
+  let supportsRuntime: boolean = false;
   let wsServer: ESLintWebSocketServer | undefined;
 
   const filter = getFilter(options);
@@ -70,7 +70,7 @@ export default function ESLintPlugin(
     },
     configureServer(server) {
       debug("==== configureServer hook ====");
-      if (supportsRuntime) {
+      if (supportsRuntime === true) {
         debug("creating WebSocket server");
         wsServer = createWebSocketServer(server);
         server.eslintWebSocket = wsServer;
@@ -82,6 +82,17 @@ export default function ESLintPlugin(
       if (options.lintInWorker) {
         if (worker) return;
         debug("Initialize worker");
+
+        // warn about runtime unavailability in worker mode
+        if (supportsRuntime === true && (options.overlay || options.terminal)) {
+          const { log } = await import("./utils");
+          const message =
+            "Runtime features (overlay and terminal) are not supported in worker mode. " +
+            "The lint results will be output to terminal only. " +
+            "Disable lintInWorker to enable runtime features.";
+          log(message, "warning");
+        }
+
         worker = new Worker(resolve(__dirname, `worker${ext}`), {
           workerData: { options },
         });
@@ -122,7 +133,7 @@ export default function ESLintPlugin(
       debug(`filePath: ${filePath}`);
 
       // runtime mode: send diagnostic to WebSocket, no terminal output
-      if (supportsRuntime && wsServer) {
+      if (supportsRuntime === true && wsServer) {
         debug("runtime mode: sending diagnostic to WebSocket");
         const lintResults: ESLintLintResults = await eslintInstance.lintFiles(
           options.lintDirtyOnly ? filePath : options.include,

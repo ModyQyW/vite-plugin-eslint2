@@ -34,6 +34,8 @@ export const getOptions = ({
   emitErrorAsWarning,
   emitWarning,
   emitWarningAsError,
+  overlay,
+  terminal,
   ...eslintConstructorOptions
 }: ESLintPluginUserOptions): ESLintPluginOptions => ({
   test: test ?? false,
@@ -51,6 +53,8 @@ export const getOptions = ({
   emitErrorAsWarning: emitErrorAsWarning ?? false,
   emitWarning: emitWarning ?? true,
   emitWarningAsError: emitWarningAsError ?? false,
+  overlay: overlay ?? true,
+  terminal: terminal ?? false,
   ...eslintConstructorOptions,
 });
 

@@ -4,19 +4,9 @@ import { WebSocketServer } from 'ws'
 import type { ViteDevServer } from 'vite'
 import debugWrap from 'debug'
 import { PLUGIN_NAME } from '../constants'
+import type { DiagnosticData } from '../format'
 
 const debug = debugWrap(PLUGIN_NAME)
-
-export interface DiagnosticData {
-  file: string
-  errors: Array<{
-    line: number
-    column: number
-    message: string
-    severity: 'error' | 'warning'
-    ruleId?: string
-  }>
-}
 
 export interface ESLintWebSocketServer {
   sendDiagnostic(data: DiagnosticData): void
