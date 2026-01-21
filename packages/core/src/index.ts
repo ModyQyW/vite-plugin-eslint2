@@ -112,3 +112,5 @@ export type {
   ESLintPluginOptions,
   ESLintPluginUserOptions,
 } from "./types";
+export type { DiagnosticData } from "./format";
+export { formatDiagnostic } from "./format";
