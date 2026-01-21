@@ -24,6 +24,13 @@ ESLint plugin for Vite. Supports Vite v2 ~ v6 and ESLint v7 ~ v9. Requires `node
 
 > You may also want [Stylelint plugin for Vite](https://github.com/ModyQyW/vite-plugin-stylelint).
 
+## Features
+
+- **Runtime Overlay** - Display ESLint errors and warnings in browser during development
+- **Auto-detection** - Automatically detect environment (mini-programs, Web, etc.)
+- **Worker Support** - Run linting in worker threads for better performance
+- **Flexible Configuration** - Comprehensive options for different use cases
+
 ## Install
 
 ```sh
