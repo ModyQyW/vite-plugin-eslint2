@@ -1,3 +1,3 @@
-export { createWebSocketServer } from './ws'
-export type { ESLintWebSocketServer } from './ws'
-export type { DiagnosticData } from '../format'
+export type { DiagnosticData } from "../format";
+export type { ESLintWebSocketServer } from "./ws";
+export { createWebSocketServer } from "./ws";

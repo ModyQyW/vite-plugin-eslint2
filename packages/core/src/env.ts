@@ -1,4 +1,4 @@
-import type { ResolvedConfig } from 'vite'
+import type { ResolvedConfig } from "vite";
 
 /**
  * Detects whether the current environment supports runtime injection
@@ -27,23 +27,23 @@ import type { ResolvedConfig } from 'vite'
  * ```
  */
 export async function supportsRuntimeInjection(
-  config: ResolvedConfig
+  config: ResolvedConfig,
 ): Promise<boolean> {
   // 不支持构建模式
   // Build mode is not supported
-  if (config.command === 'build') return false
+  if (config.command === "build") return false;
 
   try {
     // 尝试导入 @uni-helper/uni-env 检测是否为小程序或 App
     // Try importing @uni-helper/uni-env to detect mini-program or App environment
-    const { isMp, isApp } = await import('@uni-helper/uni-env')
+    const { isMp, isApp } = await import("@uni-helper/uni-env");
 
     // 小程序和 App 不支持运行时注入
     // Mini-programs and Apps do not support runtime injection
-    return !(isMp || isApp)
+    return !(isMp || isApp);
   } catch {
     // 导入失败时，默认支持（Web、H5 等环境）
     // Default to supported when import fails (Web, H5, etc.)
-    return true
+    return true;
   }
 }

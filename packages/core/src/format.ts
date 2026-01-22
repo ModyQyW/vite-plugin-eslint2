@@ -1,23 +1,25 @@
-import type { ESLintLintResults } from './types'
-import { ESLINT_SEVERITY } from './constants'
+import { ESLINT_SEVERITY } from "./constants";
+import type { ESLintLintResults } from "./types";
 
 export interface DiagnosticData {
-  file: string
+  file: string;
   errors: Array<{
-    line: number
-    column: number
-    message: string
-    severity: 'error' | 'warning'
-    ruleId?: string
-  }>
+    line: number;
+    column: number;
+    message: string;
+    severity: "error" | "warning";
+    ruleId?: string;
+  }>;
 }
 
-const severityMap: Record<number, 'error' | 'warning'> = {
-  [ESLINT_SEVERITY.ERROR]: 'error',
-  [ESLINT_SEVERITY.WARNING]: 'warning',
-}
+const severityMap: Record<number, "error" | "warning"> = {
+  [ESLINT_SEVERITY.ERROR]: "error",
+  [ESLINT_SEVERITY.WARNING]: "warning",
+};
 
-export const formatDiagnostic = (results: ESLintLintResults): DiagnosticData[] => {
+export const formatDiagnostic = (
+  results: ESLintLintResults,
+): DiagnosticData[] => {
   return results
     .filter((result) => result.errorCount > 0 || result.warningCount > 0)
     .map((result) => ({
@@ -29,5 +31,5 @@ export const formatDiagnostic = (results: ESLintLintResults): DiagnosticData[] =
         severity: severityMap[message.severity],
         ruleId: message.ruleId ?? undefined,
       })),
-    }))
-}
+    }));
+};

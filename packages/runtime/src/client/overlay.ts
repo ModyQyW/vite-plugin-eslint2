@@ -1,4 +1,4 @@
-import { computed, createApp, defineComponent, h, ref, type Ref } from "vue";
+import { computed, createApp, defineComponent, h, type Ref, ref } from "vue";
 
 export interface DiagnosticError {
   line: number;
@@ -105,11 +105,11 @@ const OverlayComponent = defineComponent({
     const { isOpen, diagnostics, maxIssues } = props.state;
 
     // Runtime validation for position prop
-    const normalizedPosition = validPositions.includes(
-      props.position as ValidPosition,
-    )
-      ? (props.position as ValidPosition)
-      : "bottom-right";
+    const normalizedPosition = (
+      validPositions.includes(props.position as ValidPosition)
+        ? props.position
+        : "bottom-right"
+    ) as ValidPosition;
 
     const errorCount = computed(() => {
       return diagnostics.value.reduce((sum, data) => {
@@ -137,14 +137,6 @@ const OverlayComponent = defineComponent({
 
     const toggle = () => {
       isOpen.value = !isOpen.value;
-    };
-
-    const open = () => {
-      isOpen.value = true;
-    };
-
-    const close = () => {
-      isOpen.value = false;
     };
 
     return () => {
@@ -369,20 +361,10 @@ export function createOverlay(
     updateDiagnostics(data: DiagnosticData[]) {
       if (isDestroyed) return;
 
-      // Null check for safety
-      if (!data || !Array.isArray(data)) {
-        state.diagnostics.value = [];
-        return;
-      }
-
-      state.diagnostics.value = data;
+      state.diagnostics.value = Array.isArray(data) ? data : [];
       // Auto-open if there are errors
-      const hasErrors = data.some(
-        (d) =>
-          d &&
-          d.errors &&
-          Array.isArray(d.errors) &&
-          d.errors.some((e) => e && e.severity === "error"),
+      const hasErrors = data?.some((d) =>
+        d.errors?.some((e) => e.severity === "error"),
       );
       if (hasErrors) {
         state.isOpen.value = true;

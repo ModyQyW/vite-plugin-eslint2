@@ -1,10 +1,13 @@
+import { readFileSync } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
-import { readFileSync } from "node:fs";
 import debugWrap from "debug";
 import type * as Vite from "vite";
 import { PLUGIN_NAME } from "./constants";
+import { supportsRuntimeInjection } from "./env";
+import { formatDiagnostic } from "./format";
+import { createWebSocketServer, type ESLintWebSocketServer } from "./server/ws";
 import type {
   ESLintFormatter,
   ESLintInstance,
@@ -16,16 +19,11 @@ import {
   getFilePath,
   getFilter,
   getOptions,
+  getTextType,
   initializeESLint,
   lintFiles,
   shouldIgnoreModule,
 } from "./utils";
-import { supportsRuntimeInjection } from "./env";
-import {
-  createWebSocketServer,
-  type ESLintWebSocketServer,
-} from "./server/ws";
-import { formatDiagnostic, type DiagnosticData } from "./format";
 
 declare module "vite" {
   interface ViteDevServer {
@@ -157,13 +155,7 @@ export default function ESLintPlugin(
           );
           if (results.length > 0) {
             const formattedText = await formatter.format(results);
-            const textType = results.some((result) => result.errorCount > 0)
-              ? options.emitErrorAsWarning
-                ? "warning"
-                : "error"
-              : options.emitWarningAsError
-                ? "error"
-                : "warning";
+            const textType = getTextType(results, options);
             const { log } = await import("./utils");
             log(formattedText, textType, this);
           }
@@ -216,9 +208,9 @@ export default function ESLintPlugin(
   };
 }
 
+export type { DiagnosticData } from "./format";
+export { formatDiagnostic } from "./format";
 export type {
   ESLintPluginOptions,
   ESLintPluginUserOptions,
 } from "./types";
-export type { DiagnosticData } from "./format";
-export { formatDiagnostic } from "./format";

@@ -5,9 +5,9 @@
  * and WebSocket connection in the browser.
  */
 
+import type { DiagnosticData } from "./client/overlay";
 import { createDefaultOverlay } from "./client/overlay";
 import { createWebSocket, disconnect, onDiagnostic } from "./client/ws";
-import type { DiagnosticData } from "./client/overlay";
 
 interface RuntimeInstance {
   disconnect: () => void;
@@ -46,7 +46,9 @@ function getWebSocketServerUrl(): string {
 export function inject(): RuntimeInstance {
   // Singleton protection - return existing instance if already injected
   if (instance) {
-    console.warn("[ESLint Runtime] Already injected, returning existing instance");
+    console.warn(
+      "[ESLint Runtime] Already injected, returning existing instance",
+    );
     return instance;
   }
 
@@ -68,14 +70,18 @@ export function inject(): RuntimeInstance {
     if (ws.readyState === WebSocket.OPEN && overlayInstance) {
       overlayInstance.updateDiagnostics([data]);
     } else if (ws.readyState === WebSocket.CLOSED) {
-      console.error("[ESLint Runtime] WebSocket disconnected. Disabling overlay.");
+      console.error(
+        "[ESLint Runtime] WebSocket disconnected. Disabling overlay.",
+      );
       performCleanup();
     }
   });
 
   // Listen for WebSocket close event to trigger cleanup
   ws.addEventListener("close", () => {
-    console.error("[ESLint Runtime] WebSocket connection closed. Cleaning up resources.");
+    console.error(
+      "[ESLint Runtime] WebSocket connection closed. Cleaning up resources.",
+    );
     performCleanup();
   });
 

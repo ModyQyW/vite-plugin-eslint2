@@ -13,7 +13,7 @@ export interface OverlayConfig {
    *
    * @default 'bottom-right'
    */
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+  position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
 
   /**
    * Whether to expand initially
@@ -22,7 +22,7 @@ export interface OverlayConfig {
    *
    * @default true（有错误时 / when there are errors）
    */
-  initialIsOpen?: boolean
+  initialIsOpen?: boolean;
 
   /**
    * Maximum number of issues to display per file
@@ -31,14 +31,14 @@ export interface OverlayConfig {
    *
    * @default 50
    */
-  maxIssues?: number
+  maxIssues?: number;
 
   /**
    * Custom styles
    *
    * 自定义样式
    */
-  style?: Record<string, string>
+  style?: Record<string, string>;
 }
 
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
@@ -218,7 +218,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    *
    * @default true（在支持的环境下 / in supported environments）
    */
-  overlay?: boolean | OverlayConfig
+  overlay?: boolean | OverlayConfig;
   /**
    * Whether to output in terminal
    *
@@ -226,7 +226,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    *
    * @default true
    */
-  terminal?: boolean
+  terminal?: boolean;
 }
 export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
 

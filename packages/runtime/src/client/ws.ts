@@ -24,10 +24,14 @@ export function createWebSocket(serverUrl: string): WebSocket {
       ws.close(1000, "Reconnecting to new server");
     }
     // 清理旧连接的所有回调，防止竞态条件
-    ws.onopen = null;
-    ws.onmessage = null;
-    ws.onclose = null;
-    ws.onerror = null;
+    for (const event of [
+      "onopen",
+      "onmessage",
+      "onclose",
+      "onerror",
+    ] as const) {
+      ws[event] = null;
+    }
   }
 
   ws = new WebSocket(serverUrl);
@@ -43,8 +47,11 @@ export function createWebSocket(serverUrl: string): WebSocket {
   ws.onmessage = (event) => {
     try {
       const message = JSON.parse(event.data) as WebSocketMessage;
-      if (message.type === "diagnostic" && message.payload) {
-        messageHandlers.forEach((handler) => handler(message.payload!));
+      if (message.type === "diagnostic") {
+        const payload = message.payload;
+        if (payload) {
+          messageHandlers.forEach((handler) => handler(payload));
+        }
       }
     } catch (error) {
       console.error("[ESLint Runtime] Failed to parse message:", error);

@@ -145,43 +145,51 @@ export const shouldIgnoreModule = async (
   return false;
 };
 
+function removeESLintResultsBySeverity(
+  results: ESLintLintResults,
+  severity: number,
+  countFields: { count: string; fixableCount: string },
+): ESLintLintResults {
+  return results.map((result) => ({
+    ...result,
+    messages: result.messages.filter(
+      (message) => message.severity !== severity,
+    ),
+    suppressedMessages: result.suppressedMessages.filter(
+      (message) => message.severity !== severity,
+    ),
+    [countFields.count]: 0,
+    ...(severity === ESLINT_SEVERITY.ERROR
+      ? { fatalErrorCount: 0 }
+      : { fixableWarningCount: 0 }),
+  }));
+}
+
 export const removeESLintErrorResults = (results: ESLintLintResults) =>
-  results.map((result) => {
-    const filteredMessages = result.messages.filter(
-      (message) => message.severity !== ESLINT_SEVERITY.ERROR,
-    );
-    const filteredSuppressedMessages = result.suppressedMessages.filter(
-      (message) => message.severity !== ESLINT_SEVERITY.ERROR,
-    );
-    return {
-      ...result,
-      messages: filteredMessages,
-      suppressedMessages: filteredSuppressedMessages,
-      errorCount: 0,
-      fatalErrorCount: 0,
-      fixableErrorCount: 0,
-    };
+  removeESLintResultsBySeverity(results, ESLINT_SEVERITY.ERROR, {
+    count: "errorCount",
+    fixableCount: "fixableErrorCount",
   });
 
 export const removeESLintWarningResults = (results: ESLintLintResults) =>
-  results.map((result) => {
-    const filteredMessages = result.messages.filter(
-      (message) => message.severity !== ESLINT_SEVERITY.WARNING,
-    );
-    const filteredSuppressedMessages = result.suppressedMessages.filter(
-      (message) => message.severity !== ESLINT_SEVERITY.WARNING,
-    );
-    return {
-      ...result,
-      messages: filteredMessages,
-      suppressedMessages: filteredSuppressedMessages,
-      warningCount: 0,
-      fixableWarningCount: 0,
-    };
+  removeESLintResultsBySeverity(results, ESLINT_SEVERITY.WARNING, {
+    count: "warningCount",
+    fixableCount: "fixableWarningCount",
   });
 
 export const filterESLintLintResults = (results: ESLintLintResults) =>
   results.filter((result) => result.errorCount > 0 || result.warningCount > 0);
+
+export function getTextType(
+  results: ESLintLintResults,
+  options: ESLintPluginOptions,
+): TextType {
+  const hasError = results.some((result) => result.errorCount > 0);
+  if (hasError) {
+    return options.emitErrorAsWarning ? "warning" : "error";
+  }
+  return options.emitWarningAsError ? "error" : "warning";
+}
 
 export const colorize = (text: string, textType: TextType) =>
   pico[COLOR_MAPPING[textType]](text);
@@ -219,11 +227,6 @@ export const lintFiles: LintFiles = async (
       if (results.length === 0) return;
 
       const formattedText = await formatter.format(results);
-      let formattedTextType: TextType;
-      if (results.some((result) => result.errorCount > 0)) {
-        formattedTextType = options.emitErrorAsWarning ? "warning" : "error";
-      } else {
-        formattedTextType = options.emitWarningAsError ? "error" : "warning";
-      }
-      return log(formattedText, formattedTextType, context);
+      const textType = getTextType(results, options);
+      return log(formattedText, textType, context);
     });
