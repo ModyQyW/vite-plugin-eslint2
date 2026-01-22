@@ -159,6 +159,7 @@ function removeESLintResultsBySeverity(
       (message) => message.severity !== severity,
     ),
     [countFields.count]: 0,
+    [countFields.fixableCount]: 0,
     ...(severity === ESLINT_SEVERITY.ERROR
       ? { fatalErrorCount: 0 }
       : { fixableWarningCount: 0 }),
