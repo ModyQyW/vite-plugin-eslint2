@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.5](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.0.4...v5.0.5) (2026-02-09)
+
+### Features
+
+* support eslint v10, bump example ([4f53f72](https://github.com/ModyQyW/vite-plugin-eslint2/commit/4f53f722b542f36283d8d4558adcd368adc7138b)) - by @ModyQyW
+
 ## [5.0.4](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.0.3...v5.0.4) (2025-07-04)
 
 ### Bug Fixes
