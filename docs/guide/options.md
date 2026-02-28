@@ -92,6 +92,8 @@ If you want to use the flat config system in ESLint v8, set the value to `'eslin
 
 You can learn more from [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
 
+Since ESLint v10.0.0, the flat config system is enforced and the `'eslint/use-at-your-own-risk'` option is no longer provided. You can learn more form [ESLint v10.0.0 released](https://eslint.org/blog/2026/02/eslint-v10.0.0-released/).
+
 ### `formatter`
 
 - Type: `string`

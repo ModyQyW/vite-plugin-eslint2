@@ -85,11 +85,15 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    *
    * You can learn more from [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
    *
+   * Since ESLint v10.0.0, the flat config system is enforced and the `'eslint/use-at-your-own-risk'` option is no longer provided.
+   *
    * ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https://javascript.info/modules-dynamic-imports)。请先查看 [server.fs](https://cn.vitejs.dev/guide/#command-line-interface)。
    *
    * 如果你想在 ESLint v8 中使用平面配置，将值设置为 `'eslint/use-at-your-own-risk'`。在你的项目根放置一个平面配置文件，或者设置 `ESLINT_USE_FLAT_CONFIG` 环境变量。如果你在使用其它位置的配置文件，请传递选项 `overrideConfigFile` 给插件。
    *
    * 查看 [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) 和 [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new) 了解更多。
+   *
+   * 自 ESLint v10.0.0 起，你只能使用平面配置，ESLint 不再提供 `'eslint/use-at-your-own-risk'` 及相关选项。
    *
    * @default "eslint"
    */

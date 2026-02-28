@@ -90,6 +90,8 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 
 查看 [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) 和 [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new) 了解更多。
 
+自 ESLint v10.0.0 起，你只能使用平面配置，ESLint 不再提供 `'eslint/use-at-your-own-risk'` 及相关选项。
+
 ### `formatter`
 
 - 类型：`string`
