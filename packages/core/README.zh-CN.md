@@ -16,7 +16,7 @@
 
 ## 介绍
 
-Vite ESLint 插件。支持 Vite v2 ~ v6 和 ESLint v7 ~ v10。要求 `node>=18`。
+Vite ESLint 插件。支持 Vite v2 ~ v8 和 ESLint v7 ~ v10。要求 `node>=18`。
 
 👇 请查看文档了解具体用法和示例。
 
