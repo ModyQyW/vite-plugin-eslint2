@@ -2,7 +2,7 @@
 import type { EnhanceAppContext, Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { h } from "vue";
-import VAd from "./VAd.vue";
+import VAd from "./v-ad.vue";
 import "./custom.css";
 
 export default {
