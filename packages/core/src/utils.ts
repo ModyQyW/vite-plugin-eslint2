@@ -1,19 +1,21 @@
 import { createFilter, normalizePath } from "@rollup/pluginutils";
 import pico from "picocolors";
-import type * as Rollup from "rollup";
+import type * as Vite from "vite";
 import { COLOR_MAPPING, ESLINT_SEVERITY, PLUGIN_NAME } from "./constants";
 import type {
   ESLintConstructorOptions,
+  ESLintFormatter,
   ESLintInstance,
   ESLintLintResults,
   ESLintOutputFixes,
   ESLintPluginOptions,
   ESLintPluginUserOptions,
   Filter,
-  LintFiles,
+  FilterPattern,
   TextType,
 } from "./types";
 
+// biome-ignore lint/suspicious/noExplicitAny: Work as expected.
 export function interopDefault(m: any) {
   return m.default || m;
 }
@@ -124,9 +126,13 @@ export const shouldIgnoreModule = async (
   eslintInstance?: ESLintInstance,
 ) => {
   // virtual module
-  if (isVirtualModule(id)) return true;
+  if (isVirtualModule(id)) {
+    return true;
+  }
   // not included
-  if (!filter(id)) return true;
+  if (!filter(id)) {
+    return true;
+  }
   // xxx.vue?type=style or yyy.svelte?type=style style modules
   const filePath = getFilePath(id);
   if (
@@ -137,7 +143,9 @@ export const shouldIgnoreModule = async (
     return true;
   }
   // eslint ignore
-  if (eslintInstance) return await eslintInstance.isPathIgnored(filePath);
+  if (eslintInstance) {
+    return await eslintInstance.isPathIgnored(filePath);
+  }
   return false;
 };
 
@@ -185,18 +193,30 @@ export const colorize = (text: string, textType: TextType) =>
 export const log = (
   text: string,
   textType: TextType,
-  context?: Rollup.PluginContext,
+  context?: Vite.Rolldown.PluginContext,
 ) => {
   console.log("");
   if (context) {
-    if (textType === "error") context.error(text);
-    else if (textType === "warning") context.warn(text);
+    if (textType === "error") {
+      context.error(text);
+    } else if (textType === "warning") {
+      context.warn(text);
+    }
   } else {
     console.log(`${text}  Plugin: ${colorize(PLUGIN_NAME, "plugin")}\r\n`);
   }
 };
 
-export const lintFiles: LintFiles = async (
+export const lintFiles: (
+  config: {
+    files: FilterPattern;
+    eslintInstance: ESLintInstance;
+    formatter: ESLintFormatter;
+    outputFixes: ESLintOutputFixes;
+    options: ESLintPluginOptions;
+  },
+  context?: Vite.Rolldown.PluginContext,
+) => Promise<void> = async (
   { files, eslintInstance, formatter, outputFixes, options },
   context,
 ) =>
@@ -204,15 +224,25 @@ export const lintFiles: LintFiles = async (
     .lintFiles(files)
     .then(async (lintResults: ESLintLintResults) => {
       // do nothing if there are no results
-      if (!lintResults || lintResults.length === 0) return;
+      if (!lintResults || lintResults.length === 0) {
+        return;
+      }
       // output fixes
-      if (options.fix) outputFixes(lintResults);
+      if (options.fix) {
+        outputFixes(lintResults);
+      }
       // filter results
       let results = [...lintResults];
-      if (!options.emitError) results = removeESLintErrorResults(results);
-      if (!options.emitWarning) results = removeESLintWarningResults(results);
+      if (!options.emitError) {
+        results = removeESLintErrorResults(results);
+      }
+      if (!options.emitWarning) {
+        results = removeESLintWarningResults(results);
+      }
       results = filterESLintLintResults(results);
-      if (results.length === 0) return;
+      if (results.length === 0) {
+        return;
+      }
 
       const formattedText = await formatter.format(results);
       let formattedTextType: TextType;

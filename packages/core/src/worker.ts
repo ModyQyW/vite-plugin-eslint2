@@ -51,12 +51,16 @@ const initPromise = initializeESLint(options).then((result) => {
 
 parentPort?.on("message", async (id) => {
   // make sure eslintInstance is initialized
-  if (!eslintInstance) await initPromise;
+  if (!eslintInstance) {
+    await initPromise;
+  }
   debug("==== worker message event ====");
   debug(`id: ${id}`);
   const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
   debug(`should ignore: ${shouldIgnore}`);
-  if (shouldIgnore) return;
+  if (shouldIgnore) {
+    return;
+  }
   const filePath = getFilePath(id);
   debug(`filePath: ${filePath}`);
   lintFiles({

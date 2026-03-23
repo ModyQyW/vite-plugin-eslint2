@@ -2,7 +2,8 @@ import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
 import debugWrap from "debug";
-import type * as Vite from "vite";
+// biome-ignore lint/performance/noNamespaceImport: Work as expected.
+import * as Vite from "vite";
 import { PLUGIN_NAME } from "./constants";
 import type {
   ESLintFormatter,
@@ -36,11 +37,13 @@ export default function ESLintPlugin(
   let formatter: ESLintFormatter;
   let outputFixes: ESLintOutputFixes;
 
-  return {
+  const plugin: Vite.Plugin = {
     name: PLUGIN_NAME,
     apply(config, { command }) {
       debug("==== apply hook ====");
-      if (config.mode === "test" || process.env.VITEST) return options.test;
+      if (config.mode === "test" || process.env.VITEST) {
+        return options.test;
+      }
       const shouldApply =
         (command === "serve" && options.dev) ||
         (command === "build" && options.build);
@@ -51,7 +54,9 @@ export default function ESLintPlugin(
       debug("==== buildStart hook ====");
       // initialize worker
       if (options.lintInWorker) {
-        if (worker) return;
+        if (worker) {
+          return;
+        }
         debug("Initialize worker");
         worker = new Worker(resolve(__dirname, `worker${ext}`), {
           workerData: { options },
@@ -82,12 +87,16 @@ export default function ESLintPlugin(
     async transform(_, id) {
       debug("==== transform hook ====");
       // worker
-      if (worker) return worker.postMessage(id);
+      if (worker) {
+        return worker.postMessage(id);
+      }
       // no worker
       debug(`id: ${id}`);
       const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
       debug(`should ignore: ${shouldIgnore}`);
-      if (shouldIgnore) return;
+      if (shouldIgnore) {
+        return;
+      }
       const filePath = getFilePath(id);
       debug(`filePath: ${filePath}`);
       return await lintFiles(
@@ -103,9 +112,25 @@ export default function ESLintPlugin(
     },
     async buildEnd() {
       debug("==== buildEnd hook ====");
-      if (worker) await worker.terminate();
+      if (worker) {
+        await worker.terminate();
+      }
     },
   };
+
+  // For compatibility
+  if (Vite.withFilter) {
+    return Vite.withFilter(plugin, {
+      transform: {
+        id: {
+          include: options.include,
+          exclude: options.exclude,
+        },
+      },
+    });
+  }
+
+  return plugin;
 }
 
 export type {
