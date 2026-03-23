@@ -34,8 +34,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Check
-        run: pnpm check
+      - name: Fix
+        run: pnpm fix
 
       - name: Autofix
         uses: autofix-ci/action@v1

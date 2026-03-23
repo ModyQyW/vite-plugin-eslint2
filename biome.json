@@ -1,44 +1,12 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.4/schema.json",
-  "root": true,
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/biome/core", "ultracite/biome/react"],
   "files": {
-    "includes": [
-      "**",
-      "!**/node_modules",
-      "!**/.git",
-      "!**/.DS_Store",
-      "!**/dist",
-      "!**/cache",
-      "!**/coverage",
-      "!**/examples",
-      "!**/manifest.json",
-      "!**/pages.json",
-      "!**/package.json",
-      "!lerna.json"
-    ],
-    "ignoreUnknown": true
+    "includes": ["!**/examples"]
   },
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "all"
     }
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "suspicious": {
-        "noExplicitAny": "off"
-      },
-      "complexity": {
-        "noBannedTypes": "off"
-      }
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space"
   }
 }

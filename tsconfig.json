@@ -19,7 +19,6 @@
     "**/dist/**",
     "**/node_modules/**",
     "**/client/**",
-    "**/playground/**",
     "**/examples/**",
     "**/fixtures/**",
     "**/interactive/**",
