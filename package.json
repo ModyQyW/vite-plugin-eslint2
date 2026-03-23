@@ -50,7 +50,7 @@
     "tsdown": "^0.12.9",
     "typescript": "^5.9.3",
     "ultracite": "^7.3.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.0"
   },
   "packageManager": "pnpm@10.32.1",
   "engines": {
