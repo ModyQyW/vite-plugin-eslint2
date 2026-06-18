@@ -57,15 +57,15 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@rollup/pluginutils": "^5.4.0",
-    "debug": "^4.4.3"
+    "@rollup/pluginutils": "catalog:",
+    "debug": "catalog:"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.13",
-    "eslint": "^10.5.0",
-    "picocolors": "^1.1.1",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "@types/debug": "catalog:",
+    "eslint": "catalog:",
+    "picocolors": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   },
   "peerDependencies": {
     "@types/eslint": "^7.0.0 || ^8.0.0 || ^9.0.0",
