@@ -78,6 +78,10 @@ export default defineConfig({
                 link: "/guide/options",
               },
               {
+                text: "Migrate from vite-plugin-eslint",
+                link: "/guide/migrate-from-vite-plugin-eslint",
+              },
+              {
                 text: "FAQ",
                 link: "/guide/faq",
               },
@@ -120,6 +124,10 @@ export default defineConfig({
               {
                 text: "选项配置",
                 link: "/zh-Hans/guide/options",
+              },
+              {
+                text: "从 vite-plugin-eslint 迁移",
+                link: "/zh-Hans/guide/migrate-from-vite-plugin-eslint",
               },
               {
                 text: "常见问题",

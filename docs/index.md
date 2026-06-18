@@ -16,6 +16,9 @@ hero:
     - theme: alt
       text: View on GitHub
       link: https://github.com/ModyQyW/vite-plugin-eslint2
+    - theme: alt
+      text: "Ask AI \U0001F916"
+      link: https://deepwiki.com/ModyQyW/vite-plugin-eslint2
   image:
     src: /vite-plugin-eslint2.svg
     alt: vite-plugin-eslint2
