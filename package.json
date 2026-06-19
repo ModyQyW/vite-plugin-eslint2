@@ -47,6 +47,7 @@
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "ultracite": "catalog:",
+    "unrun": "catalog:",
     "vitest": "catalog:"
   },
   "packageManager": "pnpm@10.34.3",

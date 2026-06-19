@@ -93,6 +93,9 @@ catalogs:
     ultracite:
       specifier: ^7.8.3
       version: 7.8.3
+    unrun:
+      specifier: ^0.3.1
+      version: 0.3.1
     vite:
       specifier: ^8.0.16
       version: 8.0.16
@@ -147,13 +150,16 @@ importers:
         version: 6.1.3
       tsdown:
         specifier: 'catalog:'
-        version: 0.22.3(tsx@4.19.2)(typescript@6.0.3)
+        version: 0.22.3(tsx@4.19.2)(typescript@6.0.3)(unrun@0.3.1)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
       ultracite:
         specifier: 'catalog:'
         version: 7.8.3
+      unrun:
+        specifier: 'catalog:'
+        version: 0.3.1
       vitest:
         specifier: 'catalog:'
         version: 4.1.9(@types/node@24.13.2)(@vitest/coverage-v8@4.1.9)(vite@8.0.16(@types/node@24.13.2)(esbuild@0.27.3)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.9.0))
@@ -3480,6 +3486,16 @@ packages:
 
   universal-user-agent@7.0.2:
     resolution: {integrity: sha512-0JCqzSKnStlRRQfCdowvqy3cy0Dvtlb8xecj/H8JFZuCze4rwjPZQOgvFvn0Ws/usCHQFGpyr+pB9adaGwXn4Q==}
+
+  unrun@0.3.1:
+    resolution: {integrity: sha512-onIck/oNnCaytwths1ZVp1LK2Gq2hPoyFhiHebObuUXqR3S0uHuLLaBK8K6mRRgV7Ptip8AnNvaUsgzwWwBZuA==}
+    engines: {node: ^22.13.0 || >=24.0.0}
+    hasBin: true
+    peerDependencies:
+      synckit: ^0.11.11
+    peerDependenciesMeta:
+      synckit:
+        optional: true
 
   update-browserslist-db@1.2.3:
     resolution: {integrity: sha512-Js0m9cx+qOgDxo0eMiFGEueWztz+d4+M3rGlmKPT+T4IS/jP4ylw3Nwpu6cpTTP8R1MAC1kF4VbdLt3ARf209w==}
@@ -6814,7 +6830,7 @@ snapshots:
 
   ts-pattern@5.9.0: {}
 
-  tsdown@0.22.3(tsx@4.19.2)(typescript@6.0.3):
+  tsdown@0.22.3(tsx@4.19.2)(typescript@6.0.3)(unrun@0.3.1):
     dependencies:
       ansis: 4.3.1
       cac: 7.0.0
@@ -6834,6 +6850,7 @@ snapshots:
     optionalDependencies:
       tsx: 4.19.2
       typescript: 6.0.3
+      unrun: 0.3.1
     transitivePeerDependencies:
       - '@ts-macro/tsc'
       - '@typescript/native-preview'
@@ -6915,6 +6932,10 @@ snapshots:
       unist-util-visit-parents: 6.0.1
 
   universal-user-agent@7.0.2: {}
+
+  unrun@0.3.1:
+    dependencies:
+      rolldown: 1.1.1
 
   update-browserslist-db@1.2.3(browserslist@4.28.1):
     dependencies:
