@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.0](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.1.0...v5.2.0) (2026-06-22)
+
+**Note:** Version bump only for package monorepo
+
 ## [5.1.0](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.0.5...v5.1.0) (2026-03-23)
 
 ### Features
