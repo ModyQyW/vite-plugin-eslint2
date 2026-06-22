@@ -21,9 +21,6 @@ export default function ESLintPlugin(
 
   let worker: Worker;
   let linter: Linter;
-  // Plugin context changes per hook (buildStart vs transform); the linter reads
-  // it via this provider so errors/warnings route through Vite's channels.
-  let currentContext: Vite.Rolldown.PluginContext | undefined;
 
   const plugin: Vite.Plugin = {
     name: PLUGIN_NAME,
@@ -53,12 +50,11 @@ export default function ESLintPlugin(
       }
       // initialize linter
       debug("Initial ESLint");
-      currentContext = this;
-      linter = createLinter(options, () => currentContext);
+      linter = createLinter(options);
       // lint on start if needed
       if (options.lintOnStart) {
         debug("Lint on start");
-        await linter.lintAll();
+        await linter.lintAll(this);
       }
     },
     async transform(_, id) {
@@ -67,8 +63,7 @@ export default function ESLintPlugin(
       if (worker) {
         return worker.postMessage(id);
       }
-      currentContext = this;
-      return await linter.lint(id);
+      return await linter.lint(id, this);
     },
     async buildEnd() {
       debug("==== buildEnd hook ====");

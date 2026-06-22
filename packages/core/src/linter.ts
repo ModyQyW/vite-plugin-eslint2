@@ -1,7 +1,12 @@
 import { createFilter, normalizePath } from "@rollup/pluginutils";
 import pico from "picocolors";
 import type * as Vite from "vite";
-import { COLOR_MAPPING, ESLINT_SEVERITY, PLUGIN_NAME } from "./constants";
+import {
+  COLOR_MAPPING,
+  ESLINT_SEVERITY,
+  PLUGIN_NAME,
+  PLUGIN_OPTION_KEYS,
+} from "./constants";
 import type {
   ESLintConstructorOptions,
   ESLintFormatter,
@@ -15,8 +20,8 @@ import type {
 } from "./types";
 
 export interface Linter {
-  lint(id: string): Promise<void>;
-  lintAll(): Promise<void>;
+  lint(id: string, context?: Vite.Rolldown.PluginContext): Promise<void>;
+  lintAll(context?: Vite.Rolldown.PluginContext): Promise<void>;
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: Work as expected.
@@ -25,34 +30,17 @@ const interopDefault = (m: any) => m.default || m;
 const getFilter = (options: ESLintPluginOptions): Filter =>
   createFilter(options.include, options.exclude);
 
-// ESLintPluginOptions extends ESLint.ESLint.Options, so plugin option keys and
-// ESLint option keys share one namespace. This list separates them: any key NOT
-// listed here is forwarded to the ESLint constructor.
-// When adding a new plugin option, append its name here too — otherwise it gets
-// silently forwarded to ESLint and may collide (e.g. `cache` works only because
-// ESLint recognises the same name with compatible semantics).
+// Any key NOT in PLUGIN_OPTION_KEYS is forwarded to the ESLint constructor.
+// `cache` works only because ESLint recognises the same name with compatible semantics.
 const getESLintConstructorOptions = (
   options: ESLintPluginOptions,
 ): ESLintConstructorOptions => ({
   ...Object.fromEntries(
     Object.entries(options).filter(
       ([key]) =>
-        ![
-          "test",
-          "dev",
-          "build",
-          "include",
-          "exclude",
-          "eslintPath",
-          "formatter",
-          "lintInWorker",
-          "lintOnStart",
-          "lintDirtyOnly",
-          "emitError",
-          "emitErrorAsWarning",
-          "emitWarning",
-          "emitWarningAsError",
-        ].includes(key),
+        !PLUGIN_OPTION_KEYS.includes(
+          key as (typeof PLUGIN_OPTION_KEYS)[number],
+        ),
     ),
   ),
   errorOnUnmatchedPattern: false,
@@ -213,10 +201,7 @@ const report = async (
   return log(formattedText, textType, context);
 };
 
-export function createLinter(
-  options: ESLintPluginOptions,
-  contextProvider: () => Vite.Rolldown.PluginContext | undefined,
-): Linter {
+export function createLinter(options: ESLintPluginOptions): Linter {
   const filter = getFilter(options);
   let eslintInstance: ESLintInstance;
   let formatter: ESLintFormatter;
@@ -229,7 +214,10 @@ export function createLinter(
     outputFixes = result.outputFixes;
   });
 
-  const lintFilesInternal = async (files: FilterPattern) => {
+  const lintFiles = async (
+    files: FilterPattern,
+    context?: Vite.Rolldown.PluginContext,
+  ) => {
     await ready;
     const lintResults = await eslintInstance.lintFiles(files);
     // do nothing if there are no results
@@ -244,20 +232,21 @@ export function createLinter(
     if (results.length === 0) {
       return;
     }
-    return report(results, formatter, textType, contextProvider());
+    return report(results, formatter, textType, context);
   };
 
   return {
-    lint: async (id: string) => {
+    lint: async (id, context) => {
       await ready;
       if (await shouldIgnoreModule(id, filter, eslintInstance)) {
         return;
       }
       const filePath = getFilePath(id);
-      return lintFilesInternal(
+      return lintFiles(
         options.lintDirtyOnly ? filePath : options.include,
+        context,
       );
     },
-    lintAll: async () => lintFilesInternal(options.include),
+    lintAll: async (context) => lintFiles(options.include, context),
   };
 }
