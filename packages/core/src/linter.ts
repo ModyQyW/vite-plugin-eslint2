@@ -173,6 +173,40 @@ export const shouldIgnoreModule = async (
   return false;
 };
 
+// Pure result-filtering pipeline. Applies emitError/emitWarning filters and
+// derives the textType (severity channel) for emission. Exported for testing.
+export const filterResults = (
+  results: ESLintLintResults,
+  options: ESLintPluginOptions,
+): { results: ESLintLintResults; textType: TextType } => {
+  let filtered = [...results];
+  if (!options.emitError) {
+    filtered = removeESLintErrorResults(filtered);
+  }
+  if (!options.emitWarning) {
+    filtered = removeESLintWarningResults(filtered);
+  }
+  filtered = filterESLintLintResults(filtered);
+  let textType: TextType;
+  if (filtered.some((result) => result.errorCount > 0)) {
+    textType = options.emitErrorAsWarning ? "warning" : "error";
+  } else {
+    textType = options.emitWarningAsError ? "error" : "warning";
+  }
+  return { results: filtered, textType };
+};
+
+// Format filtered results and emit them to the Vite context (or stdout).
+const report = async (
+  results: ESLintLintResults,
+  formatter: ESLintFormatter,
+  textType: TextType,
+  context?: Vite.Rolldown.PluginContext,
+) => {
+  const formattedText = await formatter.format(results);
+  return log(formattedText, textType, context);
+};
+
 export function createLinter(
   options: ESLintPluginOptions,
   contextProvider: () => Vite.Rolldown.PluginContext | undefined,
@@ -189,44 +223,22 @@ export function createLinter(
     outputFixes = result.outputFixes;
   });
 
-  // Process + emit lint results. Kept separate from lintFilesInternal so each
-  // step stays a small, readable unit; full pipeline decomposition is deferred.
-  const processResults = async (lintResults: ESLintLintResults) => {
+  const lintFilesInternal = async (files: FilterPattern) => {
+    await ready;
+    const lintResults = await eslintInstance.lintFiles(files);
     // do nothing if there are no results
     if (!lintResults || lintResults.length === 0) {
       return;
     }
-    // output fixes
+    // output fixes operate on the raw, unfiltered results
     if (options.fix) {
       outputFixes(lintResults);
     }
-    // filter results
-    let results = [...lintResults];
-    if (!options.emitError) {
-      results = removeESLintErrorResults(results);
-    }
-    if (!options.emitWarning) {
-      results = removeESLintWarningResults(results);
-    }
-    results = filterESLintLintResults(results);
+    const { results, textType } = filterResults(lintResults, options);
     if (results.length === 0) {
       return;
     }
-
-    const formattedText = await formatter.format(results);
-    let formattedTextType: TextType;
-    if (results.some((result) => result.errorCount > 0)) {
-      formattedTextType = options.emitErrorAsWarning ? "warning" : "error";
-    } else {
-      formattedTextType = options.emitWarningAsError ? "error" : "warning";
-    }
-    return log(formattedText, formattedTextType, contextProvider());
-  };
-
-  const lintFilesInternal = async (files: FilterPattern) => {
-    await ready;
-    const lintResults = await eslintInstance.lintFiles(files);
-    return processResults(lintResults);
+    return report(results, formatter, textType, contextProvider());
   };
 
   return {
