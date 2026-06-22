@@ -5,20 +5,9 @@ import debugWrap from "debug";
 // biome-ignore lint/performance/noNamespaceImport: Work as expected.
 import * as Vite from "vite";
 import { PLUGIN_NAME } from "./constants";
-import type {
-  ESLintFormatter,
-  ESLintInstance,
-  ESLintOutputFixes,
-  ESLintPluginUserOptions,
-} from "./types";
-import {
-  getFilePath,
-  getFilter,
-  getOptions,
-  initializeESLint,
-  lintFiles,
-  shouldIgnoreModule,
-} from "./utils";
+import { createLinter, type Linter } from "./linter";
+import type { ESLintPluginUserOptions } from "./types";
+import { getOptions } from "./utils";
 
 const debug = debugWrap(PLUGIN_NAME);
 const __filename = fileURLToPath(import.meta.url);
@@ -31,11 +20,10 @@ export default function ESLintPlugin(
   const options = getOptions(userOptions);
 
   let worker: Worker;
-
-  const filter = getFilter(options);
-  let eslintInstance: ESLintInstance;
-  let formatter: ESLintFormatter;
-  let outputFixes: ESLintOutputFixes;
+  let linter: Linter;
+  // Plugin context changes per hook (buildStart vs transform); the linter reads
+  // it via this provider so errors/warnings route through Vite's channels.
+  let currentContext: Vite.Rolldown.PluginContext | undefined;
 
   const plugin: Vite.Plugin = {
     name: PLUGIN_NAME,
@@ -63,25 +51,14 @@ export default function ESLintPlugin(
         });
         return;
       }
-      // initialize ESLint
+      // initialize linter
       debug("Initial ESLint");
-      const result = await initializeESLint(options);
-      eslintInstance = result.eslintInstance;
-      formatter = result.formatter;
-      outputFixes = result.outputFixes;
+      currentContext = this;
+      linter = createLinter(options, () => currentContext);
       // lint on start if needed
       if (options.lintOnStart) {
         debug("Lint on start");
-        await lintFiles(
-          {
-            files: options.include,
-            eslintInstance,
-            formatter,
-            outputFixes,
-            options,
-          },
-          this, // use buildStart hook context
-        );
+        await linter.lintAll();
       }
     },
     async transform(_, id) {
@@ -90,25 +67,8 @@ export default function ESLintPlugin(
       if (worker) {
         return worker.postMessage(id);
       }
-      // no worker
-      debug(`id: ${id}`);
-      const shouldIgnore = await shouldIgnoreModule(id, filter, eslintInstance);
-      debug(`should ignore: ${shouldIgnore}`);
-      if (shouldIgnore) {
-        return;
-      }
-      const filePath = getFilePath(id);
-      debug(`filePath: ${filePath}`);
-      return await lintFiles(
-        {
-          files: options.lintDirtyOnly ? filePath : options.include,
-          eslintInstance,
-          formatter,
-          outputFixes,
-          options,
-        },
-        this, // use transform hook context
-      );
+      currentContext = this;
+      return await linter.lint(id);
     },
     async buildEnd() {
       debug("==== buildEnd hook ====");
