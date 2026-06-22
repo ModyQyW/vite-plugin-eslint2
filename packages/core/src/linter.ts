@@ -25,6 +25,12 @@ const interopDefault = (m: any) => m.default || m;
 const getFilter = (options: ESLintPluginOptions): Filter =>
   createFilter(options.include, options.exclude);
 
+// ESLintPluginOptions extends ESLint.ESLint.Options, so plugin option keys and
+// ESLint option keys share one namespace. This list separates them: any key NOT
+// listed here is forwarded to the ESLint constructor.
+// When adding a new plugin option, append its name here too — otherwise it gets
+// silently forwarded to ESLint and may collide (e.g. `cache` works only because
+// ESLint recognises the same name with compatible semantics).
 const getESLintConstructorOptions = (
   options: ESLintPluginOptions,
 ): ESLintConstructorOptions => ({
