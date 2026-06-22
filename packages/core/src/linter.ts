@@ -19,6 +19,10 @@ import type {
   TextType,
 } from "./types";
 
+// `context` is a per-call parameter rather than a captured closure because Vite
+// runs transform hooks concurrently: a shared context would be overwritten between
+// concurrent lints, misrouting emit to the wrong module's PluginContext. Adapters
+// pass `this` at call time; the worker omits it (defaults to stdout-only emit).
 export interface Linter {
   lint(id: string, context?: Vite.Rolldown.PluginContext): Promise<void>;
   lintAll(context?: Vite.Rolldown.PluginContext): Promise<void>;
