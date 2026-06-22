@@ -4,5 +4,24 @@ import eslint from "vite-plugin-eslint2";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint()],
+  plugins: [
+    react(),
+    // Only for tests
+    eslint(),
+    // Only for tests
+    // eslint({
+    //   fix: true,
+    // }),
+    // Only for test
+    // eslint({
+    //   lintInWorker: true,
+    //   lintOnStart: true,
+    // }),
+    // Recommended
+    // eslint({
+    //   fix: true,
+    //   lintInWorker: true,
+    //   lintOnStart: true,
+    // }),
+  ],
 });
