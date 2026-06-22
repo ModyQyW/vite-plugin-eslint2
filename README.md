@@ -20,6 +20,10 @@ English | [简体中文](./README.zh-CN.md)
 | [docs](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/docs)             | Documentation                                             |
 | [examples](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/examples)     | Examples integrated with specific frameworks or libraries |
 
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the architecture overview and local development guide.
+
 ## Acknowledgements
 
 Initially forked from [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint).

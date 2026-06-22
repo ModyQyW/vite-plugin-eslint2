@@ -18,6 +18,10 @@
 | [docs](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/docs)             | 文档                           |
 | [examples](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/examples)     | 与特定框架或库集成的示例       |
 
+## 贡献指南
+
+查看 [CONTRIBUTING.zh-CN.md](./CONTRIBUTING.zh-CN.md) 了解架构概览和本地开发指引。
+
 ## 致谢
 
 最初从 [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint) 分叉出来。
