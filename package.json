@@ -50,7 +50,7 @@
     "unrun": "catalog:",
     "vitest": "catalog:"
   },
-  "packageManager": "pnpm@10.34.3",
+  "packageManager": "pnpm@10.34.4",
   "engines": {
     "node": ">=20.11.0 || >=21.2.0"
   }
