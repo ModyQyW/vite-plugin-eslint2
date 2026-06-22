@@ -64,8 +64,6 @@ If you're using the plugin defaults, the plugin will only call [eslint.lintFiles
 
 If you enable the `lintOnStart` option, the plugin will also call [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) in the `buildStart` hook. The option value will not be used to create a filter, but will be used directly as the call parameter, which means that the option value also needs to fulfill the [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) requirement.
 
-If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter every time it calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns), which means that the option value also needs to fulfill the requirements of [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
-
 If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter when it calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) outside of the `buildStart` lifecycle. This means that this option value also needs to fulfill the requirements of [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
 
 ### `exclude`
