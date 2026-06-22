@@ -14,6 +14,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ext = extname(__filename);
 
+// Derive the worker env so its color support matches the main thread.
+// picocolors/chalk check `process.stdout.isTTY` and `FORCE_COLOR` at module
+// load; inside a worker stdout is a pipe (not a TTY), so without this the
+// worker's formatted output loses color. Respect explicit user overrides
+// (NO_COLOR / FORCE_COLOR) and only force color on when the parent is a TTY;
+// otherwise leave the env untouched so worker behavior tracks the parent.
+const getWorkerEnv = () => {
+  if (process.env.NO_COLOR || process.env.FORCE_COLOR !== undefined) {
+    return { ...process.env };
+  }
+  if (process.stdout.isTTY) {
+    return { ...process.env, FORCE_COLOR: "1" };
+  }
+  return { ...process.env };
+};
+
 export default function ESLintPlugin(
   userOptions: ESLintPluginUserOptions = {},
 ): Vite.Plugin {
@@ -45,6 +61,12 @@ export default function ESLintPlugin(
         debug("Initialize worker");
         worker = new Worker(resolve(__dirname, `worker${ext}`), {
           workerData: { options },
+          // Worker stdout is a pipe, not a TTY, so picocolors/chalk disable color
+          // at module load. Forward the main thread's color support so worker
+          // output matches the main-thread path. Only force color when the main
+          // thread itself supports it — never override an explicit user override
+          // (NO_COLOR / FORCE_COLOR) or a non-TTY/CI parent.
+          env: getWorkerEnv(),
         });
         return;
       }
