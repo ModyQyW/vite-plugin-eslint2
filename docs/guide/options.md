@@ -110,6 +110,75 @@ When lint in worker, Vite build process will be faster. You will not see Vite er
 
 It is similar with [@nabla/vite-plugin-eslint](https://github.com/nabla) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker), but @nabla/vite-plugin-eslint only supports linting in worker, vite-plugin-checker can show you errors and warnings in browsers.
 
+### `customOverlay`
+
+- Type: `false | true | CustomOverlayOptions`
+- Default: `false`
+
+Use the plugin's custom overlay instead of Vite's native error overlay. The native overlay renders ESLint's ANSI-colored `stylish` output verbatim, which loses color (or shows escape codes) in the browser. The custom overlay renders structured results natively and — unlike the native overlay — also works when `lintInWorker` is enabled.
+
+- `false`: keep Vite's native overlay (current behavior; no overlay in worker mode).
+- `true`: use the custom overlay with default styling.
+- `{...}`: use the custom overlay with the given styling.
+
+Only takes effect under `serve`. In `build` mode the native `context.error` blocking behavior is always preserved.
+
+In environments without a DOM entry (mini-programs, SSR, headless tests), the runtime is not injected; the plugin warns once and falls back to terminal-only output.
+
+```js
+eslint({
+  customOverlay: true,
+});
+// or with styling
+eslint({
+  customOverlay: {
+    position: "tl",
+    initialIsOpen: true,
+    zIndex: 99999,
+    theme: {
+      "--vite-plugin-eslint2-bg": "#1a1a2e",
+      "--vite-plugin-eslint2-panel-bg": "#16213e",
+      "--vite-plugin-eslint2-error": "#ff6b6b",
+    },
+  },
+});
+```
+
+#### `customOverlay.position`
+
+- Type: `"tl" | "tr" | "bl" | "br"`
+- Default: `"br"`
+
+Position of the overlay badge/panel on the viewport.
+
+#### `customOverlay.initialIsOpen`
+
+- Type: `boolean | "error"`
+- Default: `"error"`
+
+Whether the panel starts open. `"error"` opens only when there is at least one error.
+
+#### `customOverlay.zIndex`
+
+- Type: `number`
+- Default: `99998`
+
+z-index of the overlay. Exposed because Design Systems may occupy high z-index layers.
+
+#### `customOverlay.theme`
+
+- Type: `Partial<Record<ThemeKey, string>>`
+
+Override the overlay's CSS variables. Keys are the predefined variable names:
+
+- `--vite-plugin-eslint2-bg`
+- `--vite-plugin-eslint2-panel-bg`
+- `--vite-plugin-eslint2-error`
+- `--vite-plugin-eslint2-warning`
+- `--vite-plugin-eslint2-text`
+- `--vite-plugin-eslint2-font-mono`
+- `--vite-plugin-eslint2-radius`
+
 ### `lintOnStart`
 
 - Type: `boolean`

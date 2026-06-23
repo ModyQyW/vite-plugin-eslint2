@@ -1,15 +1,26 @@
 import { parentPort, workerData } from "node:worker_threads";
 import debugWrap from "debug";
 import { PLUGIN_NAME } from "./constants";
-import { createLinter } from "./linter";
+import { createLinter, type OverlayPayloadSink } from "./linter";
 import type { ESLintPluginOptions } from "./types";
 
 const debug = debugWrap(`${PLUGIN_NAME}:worker`);
 
 const options = workerData.options as ESLintPluginOptions;
 
+// When the custom overlay is enabled, forward the structured payload to the
+// main thread via parentPort; the main thread then pushes it over WebSocket to
+// the browser. The terminal channel keeps using the legacy stdout path (no
+// `emit` adapter → falls back to `log()`/`console.log`).
+const onOverlayPayload: OverlayPayloadSink | undefined = options.customOverlay
+  ? (payload) => parentPort?.postMessage({ type: "overlay-payload", payload })
+  : undefined;
+
 // Worker emits to stdout only — no Vite PluginContext available here.
-const linter = createLinter(options);
+const linter = createLinter(
+  options,
+  onOverlayPayload ? { onOverlayPayload } : undefined,
+);
 
 // this file needs to be compiled into cjs, which doesn't support top-level await.
 // lint/lintAll internally await their own ready promise, so we fire and forget here.

@@ -22,6 +22,34 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    */
   cache: boolean;
   /**
+   * Use the plugin's custom overlay instead of Vite's native error overlay.
+   *
+   * The native overlay renders ESLint's ANSI-colored `stylish` output verbatim, which loses color (or shows escape codes) in the browser. The custom overlay renders structured results natively, and — unlike the native overlay — also works when `lintInWorker` is enabled.
+   *
+   * In environments without a DOM entry (mini-programs, SSR, headless tests), the runtime is not injected; the plugin warns once and falls back to terminal-only output.
+   *
+   * - `false`: keep Vite's native overlay (current behavior; no overlay in worker mode).
+   * - `true`: use the custom overlay with default styling.
+   * - `{...}`: use the custom overlay with the given styling.
+   *
+   * Only takes effect under `serve`. In `build` mode the native `context.error` blocking behavior is always preserved.
+   *
+   * 使用插件的自定义遮罩层，替代 Vite 原生错误遮罩层。
+   *
+   * 原生遮罩层会把 ESLint 带 ANSI 颜色的 `stylish` 输出原样渲染，在浏览器中颜色丢失（或显示转义字符）。自定义遮罩层原生渲染结构化结果，并且与原生遮罩层不同——在启用 `lintInWorker` 时也能工作。
+   *
+   * 在没有 DOM 入口的环境（小程序、SSR、无头测试）中，运行时不会被注入；插件会警告一次并降级为仅终端输出。
+   *
+   * - `false`：保留 Vite 原生遮罩层（当前行为；worker 模式下无遮罩层）。
+   * - `true`：使用自定义遮罩层，默认样式。
+   * - `{...}`：使用自定义遮罩层，并按给定配置定制样式。
+   *
+   * 仅在 `serve` 下生效。`build` 模式下始终保留原生 `context.error` 的阻塞行为。
+   *
+   * @default false
+   */
+  customOverlay: false | true | CustomOverlayOptions;
+  /**
    * Run ESLint under `serve` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
    *
    * 在 `serve` 命令下运行 ESLint。查看 [命令行界面](https://cn.vitejs.dev/guide/#command-line-interface) 了解更多。
@@ -180,6 +208,83 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   test: boolean;
 }
 export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
+
+/**
+ * Custom overlay styling and behavior options.
+ *
+ * 自定义遮罩层的样式与行为配置。
+ */
+export interface CustomOverlayOptions {
+  /**
+   * Whether the panel starts open.
+   * - `true`: always open.
+   * - `false`: always collapsed.
+   * - `"error"`: open only when there is at least one error.
+   *
+   * 面板是否默认展开。
+   * - `true`：始终展开。
+   * - `false`：始终折叠。
+   * - `"error"`：仅当存在错误时展开。
+   *
+   * @default "error"
+   */
+  initialIsOpen?: boolean | "error";
+  /**
+   * Position of the overlay badge/panel on the viewport.
+   *
+   * 遮罩层徽标/面板在视口中的位置。
+   *
+   * @default "br"
+   */
+  position?: "tl" | "tr" | "bl" | "br";
+  /**
+   * Override the overlay's CSS variables. Keys are the predefined variable names; values are CSS values.
+   *
+   * 覆盖遮罩层的 CSS 变量。键是预定义的变量名；值是 CSS 值。
+   */
+  theme?: Partial<Record<ThemeKey, string>>;
+  /**
+   * z-index of the overlay. Exposed because Design Systems may occupy high z-index layers.
+   *
+   * 遮罩层的 z-index。暴露此选项是因为设计系统可能占用高 z-index 层级。
+   *
+   * @default 99998
+   */
+  zIndex?: number;
+}
+
+/**
+ * Predefined CSS variable keys exposed for `CustomOverlayOptions.theme`.
+ *
+ * 为 `CustomOverlayOptions.theme` 暴露的预定义 CSS 变量键。
+ */
+export type ThemeKey =
+  | "--vite-plugin-eslint2-bg"
+  | "--vite-plugin-eslint2-panel-bg"
+  | "--vite-plugin-eslint2-error"
+  | "--vite-plugin-eslint2-warning"
+  | "--vite-plugin-eslint2-text"
+  | "--vite-plugin-eslint2-font-mono"
+  | "--vite-plugin-eslint2-radius";
+
+/**
+ * Structured payload pushed from server to the custom overlay runtime.
+ * Decoupled from ESLint's `LintResult` to stay stable across ESLint versions.
+ *
+ * 从服务端推送到自定义遮罩层运行时的结构化数据。与 ESLint 的 `LintResult` 解耦，以跨 ESLint 版本保持稳定。
+ */
+export interface OverlayPayload {
+  results: Array<{
+    filePath: string;
+    messages: Array<{
+      line: number;
+      column: number;
+      severity: "error" | "warning";
+      ruleId: string | null;
+      message: string;
+    }>;
+  }>;
+}
 
 export type ESLintInstance = ESLint.ESLint;
 export type ESLintConstructorOptions = ESLint.ESLint.Options;

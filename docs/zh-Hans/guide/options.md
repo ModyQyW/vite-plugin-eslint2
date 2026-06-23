@@ -110,6 +110,75 @@ ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https:/
 
 这与 [@nabla/vite-plugin-eslint](https://github.com/nabla)、[vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 类似。不同的是，@nabla/vite-plugin-eslint 只支持在 worker 中校验，vite-plugin-checker 可以在浏览器中显示错误和警告。
 
+### `customOverlay`
+
+- 类型：`false | true | CustomOverlayOptions`
+- 默认值：`false`
+
+使用插件的自定义遮罩层，替代 Vite 原生错误遮罩层。原生遮罩层会把 ESLint 带 ANSI 颜色的 `stylish` 输出原样渲染，在浏览器中颜色丢失（或显示转义字符）。自定义遮罩层原生渲染结构化结果，并且与原生遮罩层不同——在启用 `lintInWorker` 时也能工作。
+
+- `false`：保留 Vite 原生遮罩层（当前行为；worker 模式下无遮罩层）。
+- `true`：使用自定义遮罩层，默认样式。
+- `{...}`：使用自定义遮罩层，并按给定配置定制样式。
+
+仅在 `serve` 下生效。`build` 模式下始终保留原生 `context.error` 的阻塞行为。
+
+在没有 DOM 入口的环境（小程序、SSR、无头测试）中，运行时不会被注入；插件会警告一次并降级为仅终端输出。
+
+```js
+eslint({
+  customOverlay: true,
+});
+// 或带样式配置
+eslint({
+  customOverlay: {
+    position: "tl",
+    initialIsOpen: true,
+    zIndex: 99999,
+    theme: {
+      "--vite-plugin-eslint2-bg": "#1a1a2e",
+      "--vite-plugin-eslint2-panel-bg": "#16213e",
+      "--vite-plugin-eslint2-error": "#ff6b6b",
+    },
+  },
+});
+```
+
+#### `customOverlay.position`
+
+- 类型：`"tl" | "tr" | "bl" | "br"`
+- 默认值：`"br"`
+
+遮罩层徽标/面板在视口中的位置。
+
+#### `customOverlay.initialIsOpen`
+
+- 类型：`boolean | "error"`
+- 默认值：`"error"`
+
+面板是否默认展开。`"error"` 表示仅当存在错误时展开。
+
+#### `customOverlay.zIndex`
+
+- 类型：`number`
+- 默认值：`99998`
+
+遮罩层的 z-index。暴露此选项是因为设计系统可能占用高 z-index 层级。
+
+#### `customOverlay.theme`
+
+- 类型：`Partial<Record<ThemeKey, string>>`
+
+覆盖遮罩层的 CSS 变量。键是预定义的变量名：
+
+- `--vite-plugin-eslint2-bg`
+- `--vite-plugin-eslint2-panel-bg`
+- `--vite-plugin-eslint2-error`
+- `--vite-plugin-eslint2-warning`
+- `--vite-plugin-eslint2-text`
+- `--vite-plugin-eslint2-font-mono`
+- `--vite-plugin-eslint2-radius`
+
 ### `lintOnStart`
 
 - 类型：`boolean`
