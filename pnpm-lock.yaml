@@ -173,6 +173,24 @@ importers:
         specifier: 'catalog:'
         version: 3.5.38(typescript@6.0.3)
 
+  examples/custom-overlay:
+    devDependencies:
+      '@eslint/js':
+        specifier: 'catalog:'
+        version: 10.0.1(eslint@10.5.0)
+      eslint:
+        specifier: 'catalog:'
+        version: 10.5.0
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vite:
+        specifier: 'catalog:'
+        version: 8.0.16(@types/node@24.13.2)(yaml@2.9.0)
+      vite-plugin-eslint2:
+        specifier: workspace:*
+        version: link:../../packages/core
+
   examples/react-ts:
     dependencies:
       react:
