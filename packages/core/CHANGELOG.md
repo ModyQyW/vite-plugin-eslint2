@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.0](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.2.0...v5.3.0) (2026-06-23)
+
+### Features
+
+* **core:** add customOverlay option for browser-native ESLint overlay ([#52](https://github.com/ModyQyW/vite-plugin-eslint2/issues/52)) ([0f45ff5](https://github.com/ModyQyW/vite-plugin-eslint2/commit/0f45ff5902c4133cafd1c5ba98c8e0e150a7b726)) - by @ModyQyW
+
 ## [5.2.0](https://github.com/ModyQyW/vite-plugin-eslint2/compare/v5.1.0...v5.2.0) (2026-06-22)
 
 **Note:** Version bump only for package vite-plugin-eslint2
