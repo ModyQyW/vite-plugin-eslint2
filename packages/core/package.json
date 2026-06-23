@@ -15,7 +15,7 @@
     "url": "git+https://github.com/ModyQyW/vite-plugin-eslint2.git",
     "directory": "packages/core"
   },
-  "funding": "https://github.com/sponsors/modyqyw",
+  "funding": "https://github.com/modyqyw/sponsors",
   "license": "MIT",
   "author": {
     "name": "ModyQyW",
