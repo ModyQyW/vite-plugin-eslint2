@@ -110,11 +110,7 @@ export default function ESLintPlugin(
       return;
     }
     if (runtimeLoaded) {
-      server.ws.send({
-        type: "custom",
-        event: WS_OVERLAY_EVENT,
-        data: payload,
-      });
+      server.ws.send(WS_OVERLAY_EVENT, payload);
       return;
     }
     // Runtime hasn't pinged yet. Schedule a one-shot degrade check: if no ping
@@ -142,23 +138,19 @@ export default function ESLintPlugin(
     }
   };
 
-  // serve + customOverlay: route terminal output through Vite's logger instead
-  // of `context.error/warn` so the native overlay is not triggered. Build mode
-  // keeps the native blocking behavior (emit is not wired there).
+  // serve + customOverlay: print ESLint's formatted output to the terminal once.
+  // The `stylish` formatter already emits ANSI color codes; printing it directly
+  // (not via Vite's logger, which would re-wrap it in another color layer and
+  // corrupt the output) preserves the original coloring. The structured overlay
+  // is rendered natively in the browser, so the terminal keeps the formatter's
+  // native coloring. `context.error/warn` is deliberately NOT called: it would
+  // trigger Vite's native overlay (which customOverlay replaces) and duplicate
+  // terminal output.
   const makeEmit =
-    (logger: Vite.Logger | undefined): EmitFn =>
-    ({ formattedText, textType, context }) => {
+    (): EmitFn =>
+    ({ formattedText }) => {
       console.log("");
-      if (textType === "error") {
-        logger?.error(formattedText);
-        // Still report to context for HMR invalidation, but as a non-blocking warn
-        // so Vite's native error overlay is not triggered. This preserves module
-        // error surfacing without double-overlay.
-        context?.warn(formattedText);
-      } else {
-        logger?.warn(formattedText);
-        context?.warn(formattedText);
-      }
+      console.log(formattedText);
     };
 
   const plugin: Vite.Plugin = {
@@ -193,11 +185,7 @@ export default function ESLintPlugin(
           degradeTimer = undefined;
         }
         if (pendingPayload !== undefined) {
-          server.ws.send({
-            type: "custom",
-            event: WS_OVERLAY_EVENT,
-            data: pendingPayload,
-          });
+          server.ws.send(WS_OVERLAY_EVENT, pendingPayload);
         }
       });
     },
@@ -223,11 +211,7 @@ export default function ESLintPlugin(
             "message",
             (msg: { type: string; payload?: OverlayPayload }) => {
               if (msg?.type === "overlay-payload") {
-                devServerRef?.ws.send({
-                  type: "custom",
-                  event: WS_OVERLAY_EVENT,
-                  data: msg.payload,
-                });
+                devServerRef?.ws.send(WS_OVERLAY_EVENT, msg.payload);
                 pendingPayload = msg.payload;
               }
             },
@@ -242,7 +226,7 @@ export default function ESLintPlugin(
       const useCustomOverlayInServe =
         customOverlayEnabled && command === "serve";
       linter = createLinter(options, {
-        emit: useCustomOverlayInServe ? makeEmit(logger) : undefined,
+        emit: useCustomOverlayInServe ? makeEmit() : undefined,
         onOverlayPayload: useCustomOverlayInServe
           ? (payload) => {
               if (devServerRef) {
