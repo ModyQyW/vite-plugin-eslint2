@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 // Browser-side custom overlay runtime. Self-contained: no imports from node-side
 // modules, because this file is built to a single ESM bundle and inlined into the
 // served page. Native DOM + Shadow DOM; zero runtime dependencies.
@@ -22,7 +23,7 @@ const OVERLAY_TAG = "vite-plugin-eslint2-overlay";
 
 const DEFAULT_THEME: Record<string, string> = {
   "--vite-plugin-eslint2-bg": "#1e1e1e",
-  "--vite-plugin-eslint2-panel-bg": "#252526",
+  "--vite-plugin-eslint2-panel-bg": "#252525ee",
   "--vite-plugin-eslint2-error": "#f48771",
   "--vite-plugin-eslint2-warning": "#cca700",
   "--vite-plugin-eslint2-text": "#d4d4d4",
@@ -33,12 +34,14 @@ const DEFAULT_THEME: Record<string, string> = {
 
 const POSITION_STYLES: Record<
   NonNullable<CustomOverlayOptions["position"]>,
-  string
+  { host: string; panel: string }
 > = {
-  tl: "top:0;left:0;",
-  tr: "top:0;right:0;",
-  bl: "bottom:0;left:0;",
-  br: "bottom:0;right:0;",
+  // Panel uses position: fixed, so percentages are relative to the viewport,
+  // not :host. Use explicit offsets: badge (~48px tall incl. margin) + gap.
+  tl: { host: "top:0;left:0;", panel: "top:56px;left:16px;" },
+  tr: { host: "top:0;right:0;", panel: "top:56px;right:16px;" },
+  bl: { host: "bottom:0;left:0;", panel: "bottom:56px;left:16px;" },
+  br: { host: "bottom:0;right:0;", panel: "bottom:56px;right:16px;" },
 };
 
 const normalizeConfig = (
@@ -46,7 +49,14 @@ const normalizeConfig = (
 ): Required<Omit<CustomOverlayOptions, "theme">> & {
   theme: CustomOverlayOptions["theme"];
 } => {
-  const cfg = overlayConfig === true ? {} : (overlayConfig ?? {});
+  // `false` / `true` / undefined all normalize to an empty object so downstream
+  // property access is type-safe (only CustomOverlayOptions fields are read).
+  const cfg: CustomOverlayOptions =
+    overlayConfig === true ||
+    overlayConfig === false ||
+    overlayConfig === undefined
+      ? {}
+      : overlayConfig;
   return {
     position: cfg.position ?? "br",
     initialIsOpen: cfg.initialIsOpen ?? "error",
@@ -150,24 +160,25 @@ class VitePluginESLint2Overlay extends HTMLElement {
         :host {
           all: initial;
           ${themeDecls}
+          display: block;
           position: fixed;
-          ${pos}
+          ${pos.host}
           z-index: ${zIndex};
           font-family: var(--vite-plugin-eslint2-font-mono);
           color: var(--vite-plugin-eslint2-text);
         }
         .badge {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 6px;
-          margin: 12px;
-          padding: 6px 10px;
+          gap: 8px;
+          margin: 16px;
+          padding: 8px 14px;
           background: var(--vite-plugin-eslint2-bg);
           color: var(--vite-plugin-eslint2-text);
           border-radius: var(--vite-plugin-eslint2-radius);
           cursor: pointer;
           user-select: none;
-          font-size: 12px;
+          font-size: 13px;
           line-height: 1;
           box-shadow: 0 2px 8px rgba(0,0,0,0.35);
         }
@@ -180,39 +191,53 @@ class VitePluginESLint2Overlay extends HTMLElement {
         .badge .dot.warn { background: var(--vite-plugin-eslint2-warning); }
         .badge .dot.ok { background: #4ec9b0; }
         .panel {
-          display: none;
-          position: absolute;
-          margin: 12px;
-          max-width: 90vw;
-          max-height: 70vh;
+          position: fixed;
+          ${pos.panel}
+          width: calc(100vw - 32px);
+          height: calc(100dvh - 96px);
           overflow: auto;
           background: var(--vite-plugin-eslint2-panel-bg);
           border-radius: var(--vite-plugin-eslint2-radius);
           box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-          padding: 8px 0;
+          padding: 12px 0;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(8px);
+          transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+          pointer-events: none;
         }
-        .panel.open { display: block; }
+        .panel.open {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
         .file {
-          padding: 6px 12px;
-          font-size: 12px;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          padding: 10px 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .file:last-child { border-bottom: none; }
         .file-path {
           color: var(--vite-plugin-eslint2-text);
-          opacity: 0.7;
-          margin-bottom: 4px;
+          opacity: 0.75;
+          margin-bottom: 8px;
+          font-size: 13px;
+          font-weight: 600;
           word-break: break-all;
         }
         .msg {
           display: flex;
-          gap: 8px;
-          padding: 2px 0;
-          font-size: 12px;
+          gap: 10px;
+          padding: 3px 0;
+          font-size: 13px;
+          line-height: 1.5;
         }
         .msg .sev {
           flex: 0 0 auto;
-          font-weight: 600;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 11px;
+          letter-spacing: 0.5px;
         }
         .msg .sev.error { color: var(--vite-plugin-eslint2-error); }
         .msg .sev.warning { color: var(--vite-plugin-eslint2-warning); }
@@ -220,14 +245,17 @@ class VitePluginESLint2Overlay extends HTMLElement {
           flex: 0 0 auto;
           opacity: 0.6;
         }
+        .msg .text {
+          flex: 1 1 auto;
+        }
         .msg .rule {
-          opacity: 0.6;
+          opacity: 0.55;
           font-style: italic;
         }
         .empty {
-          padding: 12px;
+          padding: 16px;
           opacity: 0.6;
-          font-size: 12px;
+          font-size: 13px;
         }
       </style>
       <div class="badge" part="badge">
