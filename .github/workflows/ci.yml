@@ -17,8 +17,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node_version: [20, 22, 24]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        node_version: [ 22, 24, 26 ]
       fail-fast: false
 
     steps:
@@ -30,27 +30,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Setup Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v6
+      - name: Setup pnpm and Node.js ${{ matrix.node_version }}
+        uses: pnpm/setup@v3
         with:
-          node-version: ${{ matrix.node_version }}
-          cache: pnpm
-          registry-url: https://registry.npmjs.org
+          runtime: node@${{ matrix.node_version }}
+          cache: true
 
-      - name: Setup corepack
-        run: npm install -f -g npm@latest corepack@latest && corepack enable
-
-      - name: Install Dependencies
-        run: pnpm install
+      - name: Check
+        run: pnpm check
 
       - name: Build
         run: pnpm build
+
+      - name: Build Examples
+        run: pnpm -r --filter=./examples/* run build
 
       - name: Test
         run: pnpm test
 
       - name: Type Check
-        run: pnpm type-check
+        run: pnpm typecheck
