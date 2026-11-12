@@ -10,6 +10,10 @@ import { getOptions } from "./utils";
 // These tests run the installed ESLint for real, against a throwaway project.
 // They are what catches an ESLint major changing the constructor, `lintFiles`
 // or the shape of `LintMessage`; the unit tests only cover our own logic.
+//
+// Ids go through `normalizePath`, which is the form Vite hands to `transform`.
+// `shouldIgnoreModule` treats an id without a `/` as a virtual module, so a raw
+// Windows path would be skipped and the test would prove nothing.
 
 const createdDirs: string[] = [];
 
@@ -51,11 +55,11 @@ describe("createLinter integration", () => {
       { emit: ({ formattedText }) => emitted.push(formattedText) },
     );
 
-    await linter.lint(path.join(dir, "src/a.js"));
+    await linter.lint(normalizePath(path.join(dir, "src/a.js")));
 
     expect(emitted).toHaveLength(1);
     expect(emitted[0]).toContain("no-unused-vars");
-    expect(emitted[0]).toContain("src/a.js");
+    expect(normalizePath(emitted[0])).toContain("src/a.js");
   });
 
   it("pushes a structured payload built from real ESLint results", async () => {
@@ -71,13 +75,15 @@ describe("createLinter integration", () => {
       },
     );
 
-    await linter.lint(path.join(dir, "src/a.js"));
+    await linter.lint(normalizePath(path.join(dir, "src/a.js")));
 
     const [payload] = payloads;
     expect(payload).toBeDefined();
     expect(payload?.results).toHaveLength(1);
     const [result] = payload?.results ?? [];
-    expect(result?.filePath).toBe(path.join(dir, "src/a.js"));
+    expect(normalizePath(result?.filePath ?? "")).toBe(
+      normalizePath(path.join(dir, "src/a.js")),
+    );
     const [message] = result?.messages ?? [];
     expect(message).toMatchObject({
       line: 1,
@@ -100,7 +106,7 @@ describe("createLinter integration", () => {
       { emit: ({ formattedText }) => emitted.push(formattedText) },
     );
 
-    await linter.lint(path.join(dir, "other/b.js"));
+    await linter.lint(normalizePath(path.join(dir, "other/b.js")));
 
     expect(emitted).toHaveLength(0);
   });
