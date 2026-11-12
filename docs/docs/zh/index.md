@@ -1,29 +1,26 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
-layout: home
+pageType: home
+title: vite-plugin-eslint2
 
 hero:
   name: vite-plugin-eslint2
-  text: Vite ESLint 插件
-  tagline: 只需几分钟即可将 ESLint 集成到 Vite 中！🚀
+  text: Vite 的 ESLint 插件
+  tagline: 几分钟就能把 ESLint 接进 Vite 🚀
   actions:
     - theme: brand
       text: 起步 →
-      link: /zh-Hans/guide/getting-started
+      link: /zh/guide/getting-started
     - theme: alt
       text: 为什么？
-      link: /zh-Hans/guide/why
+      link: /zh/guide/why
     - theme: alt
       text: 在 GitHub 查看
       link: https://github.com/ModyQyW/vite-plugin-eslint2
     - theme: alt
-      text: "Ask AI \U0001F916"
+      text: "Ask AI 🤖"
       link: https://deepwiki.com/ModyQyW/vite-plugin-eslint2
   image:
     src: /vite-plugin-eslint2.svg
     alt: vite-plugin-eslint2
-# features:
-#   - title: "_特性_"
-#     details: _特性细节_
-#     link: /zh-Hans/guide/_feature_
 ---
+

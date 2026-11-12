@@ -1,0 +1,16 @@
+[
+  {
+    "text": "Guide",
+    "link": "/guide/getting-started",
+    "activeMatch": "^/guide/"
+  },
+  {
+    "text": "Resources",
+    "items": [
+      {
+        "text": "Changelog",
+        "link": "https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/CHANGELOG.md"
+      }
+    ]
+  }
+]

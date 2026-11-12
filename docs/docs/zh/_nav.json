@@ -1,0 +1,16 @@
+[
+  {
+    "text": "指南",
+    "link": "/zh/guide/getting-started",
+    "activeMatch": "^/zh/guide/"
+  },
+  {
+    "text": "资源",
+    "items": [
+      {
+        "text": "改动日志",
+        "link": "https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/CHANGELOG.md"
+      }
+    ]
+  }
+]

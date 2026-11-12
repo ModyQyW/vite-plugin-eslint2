@@ -1,0 +1,11 @@
+[
+  { "type": "file", "name": "why", "label": "为什么？" },
+  { "type": "file", "name": "getting-started", "label": "起步" },
+  { "type": "file", "name": "options", "label": "选项配置" },
+  {
+    "type": "file",
+    "name": "migrate-from-vite-plugin-eslint",
+    "label": "从 vite-plugin-eslint 迁移"
+  },
+  { "type": "file", "name": "faq", "label": "常见问题" }
+]

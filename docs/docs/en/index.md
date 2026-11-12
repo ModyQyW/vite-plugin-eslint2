@@ -1,6 +1,6 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
-layout: home
+pageType: home
+title: vite-plugin-eslint2
 
 hero:
   name: vite-plugin-eslint2
@@ -17,13 +17,10 @@ hero:
       text: View on GitHub
       link: https://github.com/ModyQyW/vite-plugin-eslint2
     - theme: alt
-      text: "Ask AI \U0001F916"
+      text: "Ask AI 🤖"
       link: https://deepwiki.com/ModyQyW/vite-plugin-eslint2
   image:
     src: /vite-plugin-eslint2.svg
     alt: vite-plugin-eslint2
-# features:
-#   - title: "_feature_"
-#     details: _feature-details_
-#     link: /guide/_feature_
 ---
+
