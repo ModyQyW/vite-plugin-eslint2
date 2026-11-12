@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
 
     // Only for tests
-    eslint(),
+    // eslint(),
 
     // Only for tests
     // eslint({
@@ -37,11 +37,11 @@ export default defineConfig({
     // }),
 
     // Recommended
-    // eslint({
-    //   fix: true,
-    //   lintInWorker: true,
-    //   lintOnStart: true,
-    //   customOverlay: true,
-    // }),
+    eslint({
+      fix: true,
+      lintInWorker: true,
+      lintOnStart: true,
+      customOverlay: true,
+    }),
   ],
 });
