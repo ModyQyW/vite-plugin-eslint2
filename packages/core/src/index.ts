@@ -3,7 +3,6 @@ import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
 import debugWrap from "debug";
-// biome-ignore lint/performance/noNamespaceImport: Work as expected.
 import * as Vite from "vite";
 import { composePreambleCode } from "./client/preamble";
 import {
@@ -26,17 +25,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ext = extname(__filename);
 
-// Grace window before declaring the environment unsupported. `lintOnStart` lints
-// in buildStart, before the browser requests index.html, so a push can legitimately
-// precede the runtime ping. 2s covers normal browser load + WS round-trip; if no
-// client pings by then, the environment is treated as DOM-less (mini-program/SSR).
+// How long to wait before deciding the environment has no DOM. `lintOnStart` lints
+// in buildStart, before the browser asks for index.html, so a push can arrive
+// before the runtime pings. 2s covers a normal page load plus the WebSocket
+// round-trip; no ping by then means mini-program or SSR.
 const OVERLAY_DEGRADE_GRACE_MS = 2000;
 
-// The runtime is pre-built to a standalone browser ESM bundle and inlined at
-// runtime via fs.readFileSync so the plugin needs no extra served file. This
-// mirrors vite-plugin-checker's approach (without its separate runtime package).
-// The build emits `dist/client-runtime.js` (ESM); the filename is fixed by the
-// tsdown entry key and is the same regardless of how the plugin itself is loaded.
+// The runtime ships as a standalone browser ESM bundle, which this file reads and
+// inlines so the plugin serves nothing extra. tsdown's entry key fixes the output
+// name at `dist/client-runtime.js`, whatever loads the plugin afterwards.
 const RUNTIME_DIST_FILENAME = "client-runtime.js";
 const RUNTIME_DIST_PATH = resolve(__dirname, RUNTIME_DIST_FILENAME);
 let cachedRuntimeCode: string | undefined;
@@ -56,12 +53,10 @@ const getRuntimeCode = (): string => {
 
 const wrapVirtualPrefix = (id: string) => `\0${id}`;
 
-// Derive the worker env so its color support matches the main thread.
-// picocolors/chalk check `process.stdout.isTTY` and `FORCE_COLOR` at module
-// load; inside a worker stdout is a pipe (not a TTY), so without this the
-// worker's formatted output loses color. Respect explicit user overrides
-// (NO_COLOR / FORCE_COLOR) and only force color on when the parent is a TTY;
-// otherwise leave the env untouched so worker behavior tracks the parent.
+// Workers get a piped stdout, so picocolors and chalk see no TTY and turn color
+// off when they load. Forward the parent's color support: honor NO_COLOR and
+// FORCE_COLOR when the user set them, force color on only when the parent is a
+// TTY, and otherwise leave the env alone so the worker tracks the parent.
 const getWorkerEnv = () => {
   if (process.env.NO_COLOR || process.env.FORCE_COLOR !== undefined) {
     return { ...process.env };
@@ -82,12 +77,12 @@ export default function ESLintPlugin(
   let linter: Linter;
   // Vite logger captured in configResolved; reused by the worker path's emit.
   let logger: Vite.Logger | undefined;
-  // Dev server captured in configureServer; used by the worker path to push
-  // overlay payloads (the worker's buildStart can run before configureServer
-  // completes, hence the late-binding reference).
+  // Dev server captured in configureServer, used by the worker path to push
+  // overlay payloads. Late-bound because the worker's buildStart can run before
+  // configureServer finishes.
   let devServerRef: Vite.ViteDevServer | undefined;
   // Captured in configResolved; the custom overlay only applies in serve.
-  let command: "serve" | "build" | undefined;
+  let resolvedCommand: "serve" | "build" | undefined;
 
   // Overlay handshake state, scoped per plugin instance.
   let runtimeLoaded = false;
@@ -113,12 +108,9 @@ export default function ESLintPlugin(
       server.ws.send(WS_OVERLAY_EVENT, payload);
       return;
     }
-    // Runtime hasn't pinged yet. Schedule a one-shot degrade check: if no ping
-    // arrives within the grace window, this environment likely has no DOM
-    // (mini-program, SSR, headless), so warn once and stop pushing. The grace
-    // window avoids false positives when lintOnStart lints before the browser
-    // requests index.html. A browser client loading within the window clears
-    // the timer via the ping handler.
+    // Runtime hasn't pinged yet. Schedule a one-shot degrade check: no ping within
+    // the grace window means a DOM-less environment, so warn once and stop pushing.
+    // A browser client loading inside the window clears the timer in the ping handler.
     if (!degradeTimer) {
       degradeTimer = setTimeout(() => {
         degradeTimer = undefined;
@@ -138,14 +130,12 @@ export default function ESLintPlugin(
     }
   };
 
-  // serve + customOverlay: print ESLint's formatted output to the terminal once.
-  // The `stylish` formatter already emits ANSI color codes; printing it directly
-  // (not via Vite's logger, which would re-wrap it in another color layer and
-  // corrupt the output) preserves the original coloring. The structured overlay
-  // is rendered natively in the browser, so the terminal keeps the formatter's
-  // native coloring. `context.error/warn` is deliberately NOT called: it would
-  // trigger Vite's native overlay (which customOverlay replaces) and duplicate
-  // terminal output.
+  // serve + customOverlay: print ESLint's formatted output to the terminal as it
+  // is. `stylish` already emits ANSI codes, and Vite's logger would wrap them in
+  // another color layer, so console.log keeps the original coloring. The overlay
+  // renders the structured payload in the browser, so the terminal needs nothing
+  // else. context.error/warn stays untouched here: calling it would bring back the
+  // native overlay that customOverlay replaces, and print the text twice.
   const makeEmit =
     (): EmitFn =>
     ({ formattedText }) => {
@@ -169,8 +159,7 @@ export default function ESLintPlugin(
     configResolved(config) {
       // Resolve the logger and command early so hooks can use them. Vite 8's
       // Environment type has no `command` field; capture it from the config.
-      logger = config.logger;
-      command = config.command;
+      ({ logger, command: resolvedCommand } = config);
     },
     configureServer(server) {
       devServerRef = server;
@@ -201,16 +190,14 @@ export default function ESLintPlugin(
           workerData: { options },
           env: getWorkerEnv(),
         });
-        // Receive structured overlay payloads from the worker and forward them
-        // to the browser via WebSocket. `this`/server is accessed through the
-        // closed-over reference set in configureServer — but the worker can be
-        // created in buildStart before configureServer runs in serve. Instead,
-        // we stash the latest payload and flush from configureServer.
+        // Overlay payloads come back from the worker and go to the browser over
+        // WebSocket. The server reference is closed over from configureServer,
+        // which may not have run yet, so the payload is also stashed for replay.
         if (customOverlayEnabled) {
           worker.on(
             "message",
             (msg: { type: string; payload?: OverlayPayload }) => {
-              if (msg?.type === "overlay-payload") {
+              if (msg.type === "overlay-payload") {
                 devServerRef?.ws.send(WS_OVERLAY_EVENT, msg.payload);
                 pendingPayload = msg.payload;
               }
@@ -221,10 +208,10 @@ export default function ESLintPlugin(
       }
       // initialize linter
       debug("Initial ESLint");
-      // serve + customOverlay: use the logger emit adapter so native overlay is
-      // replaced. Build mode keeps native context.error (no emit adapter).
+      // serve + customOverlay: swap in the logger emit adapter so the native
+      // overlay is replaced. Build mode keeps native context.error, no adapter.
       const useCustomOverlayInServe =
-        customOverlayEnabled && command === "serve";
+        customOverlayEnabled && resolvedCommand === "serve";
       linter = createLinter(options, {
         emit: useCustomOverlayInServe ? makeEmit() : undefined,
         onOverlayPayload: useCustomOverlayInServe
@@ -248,7 +235,6 @@ export default function ESLintPlugin(
       ) {
         return wrapVirtualPrefix(id);
       }
-      return;
     },
     load(id) {
       if (id === wrapVirtualPrefix(RUNTIME_CLIENT_RUNTIME_PATH)) {
@@ -262,7 +248,6 @@ export default function ESLintPlugin(
             | CustomOverlayOptions,
         });
       }
-      return;
     },
     transformIndexHtml() {
       // Only inject in serve (dev). Build mode produces static output and the
@@ -270,7 +255,7 @@ export default function ESLintPlugin(
       if (options.customOverlay === false) {
         return;
       }
-      if (command !== "serve") {
+      if (resolvedCommand !== "serve") {
         return;
       }
       return [
@@ -303,6 +288,7 @@ export default function ESLintPlugin(
   };
 
   // For compatibility
+  // biome-ignore lint/suspicious/noUnnecessaryConditions: `withFilter` only exists from Vite 6 on, but the installed types always declare it.
   if (Vite.withFilter) {
     return Vite.withFilter(plugin, {
       transform: {

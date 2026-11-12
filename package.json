@@ -24,13 +24,12 @@
     "docs:preview": "pnpm -C docs run preview",
     "fix": "ultracite fix",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "is-ci || lefthook install",
     "prepublishOnly": "pnpm run build",
     "release": "lerna version",
     "test": "vitest run --passWithNoTests",
     "test:coverage": "vitest run --passWithNoTests --coverage",
-    "type-check": "tsc --noEmit",
-    "preversion": "git-branch-is main && conc \"pnpm:fix\" \"pnpm:type-check\" \"pnpm:test\""
+    "typecheck": "tsc --noEmit && pnpm -C docs run typecheck",
+    "preversion": "git-branch-is main && conc \"pnpm:fix\" \"pnpm:typecheck\" \"pnpm:test\""
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
@@ -41,8 +40,6 @@
     "concurrently": "catalog:",
     "conventional-changelog-conventionalcommits": "catalog:",
     "git-branch-is": "catalog:",
-    "is-ci": "catalog:",
-    "lefthook": "catalog:",
     "rimraf": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
@@ -50,8 +47,8 @@
     "unrun": "catalog:",
     "vitest": "catalog:"
   },
-  "packageManager": "pnpm@10.34.4",
+  "packageManager": "pnpm@12.18.0",
   "engines": {
-    "node": ">=20.11.0 || >=21.2.0"
+    "node": "^22.22.2 || >=24.15.0"
   }
 }

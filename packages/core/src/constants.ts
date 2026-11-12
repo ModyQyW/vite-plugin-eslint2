@@ -8,9 +8,9 @@ export const ESLINT_SEVERITY = {
 
 export const PLUGIN_NAME = "vite:eslint2";
 
-// WebSocket event names for the custom overlay handshake and payload push.
-// Client → server: runtime-loaded ping (sent once on runtime load).
-// Server → client: overlay payload push (after each lint).
+// WebSocket event names for the custom overlay.
+// Client → server: the runtime-loaded ping, sent once when the runtime loads.
+// Server → client: the overlay payload, pushed after each lint.
 export const WS_RUNTIME_LOADED_EVENT = "vite:eslint2:runtime-loaded";
 export const WS_OVERLAY_EVENT = "vite:eslint2:overlay";
 
@@ -18,11 +18,11 @@ export const WS_OVERLAY_EVENT = "vite:eslint2:overlay";
 export const RUNTIME_CLIENT_RUNTIME_PATH = "/@vite-plugin-eslint2-runtime";
 export const RUNTIME_CLIENT_ENTRY_PATH = "/@vite-plugin-eslint2-runtime-entry";
 
-// Plugin-specific option keys. `ESLintPluginOptions extends ESLint.ESLint.Options`,
-// so plugin and ESLint options share one namespace. getOptions destructures these
-// to apply defaults; getESLintConstructorOptions excludes them so they aren't
-// forwarded to the ESLint constructor. `cache` is intentionally absent — it is
-// a real ESLint option the plugin forwards by design.
+// Plugin-only option keys. `ESLintPluginOptions extends ESLint.ESLint.Options`, so
+// plugin and ESLint options share one namespace: getOptions destructures these to
+// apply defaults, and getESLintConstructorOptions filters them out before handing
+// the rest to the ESLint constructor. `cache` is missing on purpose, because it is
+// a real ESLint option the plugin passes through.
 export const PLUGIN_OPTION_KEYS = [
   "test",
   "dev",

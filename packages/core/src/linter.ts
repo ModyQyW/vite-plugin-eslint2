@@ -20,30 +20,29 @@ import type {
   TextType,
 } from "./types";
 
-// `context` is a per-call parameter rather than a captured closure because Vite
-// runs transform hooks concurrently: a shared context would be overwritten between
-// concurrent lints, misrouting emit to the wrong module's PluginContext. Adapters
-// pass `this` at call time; the worker omits it (defaults to stdout-only emit).
+// `context` arrives per call instead of being captured, because Vite runs transform
+// hooks concurrently: a shared context would be overwritten between concurrent
+// lints and emit to the wrong module's PluginContext. Adapters pass `this` at call
+// time; the worker passes nothing and emits to stdout.
 export interface Linter {
-  lint(id: string, context?: Vite.Rolldown.PluginContext): Promise<void>;
-  lintAll(context?: Vite.Rolldown.PluginContext): Promise<void>;
+  lint: (id: string, context?: Vite.Rolldown.PluginContext) => Promise<void>;
+  lintAll: (context?: Vite.Rolldown.PluginContext) => Promise<void>;
 }
 
 /**
- * How filtered results are emitted. The default (`"context"`) preserves the
- * original behavior: route to `context.error/warn` (native overlay + blocking)
- * when a context exists, else `console.log` (worker path).
+ * How filtered results leave the linter. The default (`"context"`) preserves the
+ * original behavior: `context.error/warn` (native overlay, blocking) when a context
+ * exists, `console.log` otherwise (worker path).
  *
- * `"logger"` is used in serve mode with the custom overlay: results go to Vite's
- * logger (terminal, non-blocking, no native overlay) and the structured payload
- * is forwarded to `onOverlayPayload` so index.ts can push it over WebSocket.
+ * `"logger"` is for serve mode with the custom overlay: results go to Vite's logger
+ * (terminal, non-blocking, no native overlay) and the structured payload reaches
+ * `onOverlayPayload` so index.ts can push it over WebSocket.
  */
 export type EmitMode = "context" | "logger";
 
 /**
- * Adapter the linter calls to emit a formatted lint message. Kept as a callback
- * (not imported) so the linter stays free of Vite server dependencies and remains
- * unit-testable.
+ * What the linter calls to write a formatted lint message. A callback, not an
+ * import, keeps the linter free of Vite server dependencies and unit-testable.
  */
 export type EmitFn = (params: {
   formattedText: string;
@@ -53,8 +52,8 @@ export type EmitFn = (params: {
 }) => void;
 
 /**
- * Sink for the structured overlay payload. Called with `undefined` to clear.
- * Only wired when the custom overlay is enabled; otherwise never called.
+ * Sink for the structured overlay payload, called with `undefined` to clear it.
+ * Only wired when the custom overlay is on.
  */
 export type OverlayPayloadSink = (payload: OverlayPayload | undefined) => void;
 
@@ -64,8 +63,8 @@ const interopDefault = (m: any) => m.default || m;
 const getFilter = (options: ESLintPluginOptions): Filter =>
   createFilter(options.include, options.exclude);
 
-// Any key NOT in PLUGIN_OPTION_KEYS is forwarded to the ESLint constructor.
-// `cache` works only because ESLint recognises the same name with compatible semantics.
+// Any key outside PLUGIN_OPTION_KEYS goes to the ESLint constructor. `cache` works
+// only because ESLint uses the same name for the same option.
 const getESLintConstructorOptions = (
   options: ESLintPluginOptions,
 ): ESLintConstructorOptions => ({
@@ -102,7 +101,8 @@ const initializeESLint = async (options: ESLintPluginOptions) => {
     };
   } catch (error) {
     throw new Error(
-      `Failed to initialize ESLint. Have you installed and configured correctly? ${error}`,
+      "Failed to initialize ESLint. Have you installed and configured correctly?",
+      { cause: error },
     );
   }
 };
@@ -201,8 +201,8 @@ export const shouldIgnoreModule = async (
   return false;
 };
 
-// Pure result-filtering pipeline. Applies emitError/emitWarning filters and
-// derives the textType (severity channel) for emission. Exported for testing.
+// Result-filtering pipeline: applies emitError/emitWarning and derives the textType
+// (severity channel) for emission. Exported for testing.
 export const filterResults = (
   results: ESLintLintResults,
   options: ESLintPluginOptions,
@@ -224,7 +224,7 @@ export const filterResults = (
   return { results: filtered, textType };
 };
 
-// Format filtered results and emit them via the adapter (or the legacy path).
+// Format the filtered results and hand them to the adapter, or to the legacy path.
 const report = async (
   results: ESLintLintResults,
   formatter: ESLintFormatter,
@@ -243,9 +243,9 @@ const report = async (
 /**
  * Build a structured overlay payload from filtered results.
  *
- * Severity follows the *post-filter* textType so `emitErrorAsWarning` /
- * `emitWarningAsError` are reflected in the overlay, matching the terminal
- * channel. Each result retains only the fields the runtime needs to render.
+ * Severity follows the post-filter textType, so `emitErrorAsWarning` and
+ * `emitWarningAsError` show up in the overlay the same way they show up in the
+ * terminal. Each result keeps only the fields the runtime renders.
  *
  * Exported for testing.
  */
@@ -266,9 +266,9 @@ export const buildOverlayPayload = (
 });
 
 /**
- * Accumulates per-file overlay payloads so the panel shows all current problems
- * across the project, not just the last-linted file. Files with no remaining
- * messages are dropped; once empty, `snapshot` returns `undefined` so the caller
+ * Collects per-file overlay payloads so the panel shows every current problem in
+ * the project, not only the last-linted file. Files whose messages all went away
+ * are dropped; once nothing is left, `snapshot` returns `undefined` so the caller
  * can clear the overlay.
  */
 export class OverlayManager {
@@ -307,11 +307,9 @@ export function createLinter(
   let formatter: ESLintFormatter;
   let outputFixes: ESLintOutputFixes;
 
-  // Eager initialization: triggered at construction, awaited before each lint.
+  // Eager initialization: starts at construction, awaited before each lint.
   const ready = initializeESLint(options).then((result) => {
-    eslintInstance = result.eslintInstance;
-    formatter = result.formatter;
-    outputFixes = result.outputFixes;
+    ({ eslintInstance, formatter, outputFixes } = result);
   });
 
   const overlayManager = adapters?.onOverlayPayload
@@ -324,17 +322,17 @@ export function createLinter(
   ) => {
     await ready;
     const lintResults = await eslintInstance.lintFiles(files);
-    // do nothing if there are no results
+    // Do nothing if there are no results.
     if (!lintResults || lintResults.length === 0) {
       return;
     }
-    // output fixes operate on the raw, unfiltered results
+    // Fixes run on the raw, unfiltered results.
     if (options.fix) {
       outputFixes(lintResults);
     }
     const { results, textType } = filterResults(lintResults, options);
     if (results.length === 0) {
-      // No problems for these files; drop their overlay entries if tracking.
+      // No problems left for these files; drop their overlay entries if tracking.
       if (overlayManager && adapters?.onOverlayPayload) {
         overlayManager.upsert({
           results: lintResults.map((result) => ({

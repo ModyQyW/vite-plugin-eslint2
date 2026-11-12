@@ -8,24 +8,23 @@ const debug = debugWrap(`${PLUGIN_NAME}:worker`);
 
 const options = workerData.options as ESLintPluginOptions;
 
-// When the custom overlay is enabled, forward the structured payload to the
-// main thread via parentPort; the main thread then pushes it over WebSocket to
-// the browser. The terminal channel keeps using the legacy stdout path (no
-// `emit` adapter → falls back to `log()`/`console.log`).
+// With the custom overlay on, the structured payload goes to the main thread over
+// parentPort, which pushes it to the browser. The terminal keeps using stdout
+// because no `emit` adapter is passed here, so `report` falls back to `log()`.
 const onOverlayPayload: OverlayPayloadSink | undefined = options.customOverlay
   ? (payload) => parentPort?.postMessage({ type: "overlay-payload", payload })
   : undefined;
 
-// Worker emits to stdout only — no Vite PluginContext available here.
+// Worker emits to stdout only: no Vite PluginContext here.
 const linter = createLinter(
   options,
   onOverlayPayload ? { onOverlayPayload } : undefined,
 );
 
-// this file needs to be compiled into cjs, which doesn't support top-level await.
-// lint/lintAll internally await their own ready promise, so we fire and forget here.
-// Each call gets a `.catch` because a rejected `ready` (e.g. ESLint missing)
-// would otherwise become an unhandled rejection and silently kill the worker.
+// This file is compiled to CJS, which has no top-level await. lint/lintAll await
+// their own ready promise, so fire and forget here. Each call needs its `.catch`:
+// a rejected `ready` (ESLint missing, say) would otherwise be an unhandled
+// rejection that silently kills the worker.
 debug("==== worker start ====");
 if (options.lintOnStart) {
   debug("Lint on start");

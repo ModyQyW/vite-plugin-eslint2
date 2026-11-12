@@ -1,23 +1,23 @@
 /// <reference types="vite/client" />
-// Browser-side custom overlay runtime. Self-contained: no imports from node-side
-// modules, because this file is built to a single ESM bundle and inlined into the
-// served page. Native DOM + Shadow DOM; zero runtime dependencies.
+// Browser half of the custom overlay. Self-contained on purpose: no imports from
+// node-side modules, because this file is bundled into one ESM file and inlined
+// into the served page. Plain DOM plus Shadow DOM, no runtime dependencies.
 //
-// The runtime is injected only in environments with an `index.html` entry
-// (transformIndexHtml). In SSR/headless it is still served but `inject()` guards
-// on `typeof document`, so it no-ops. Mini-program builds never trigger
+// The runtime only gets injected where there is an `index.html` entry
+// (transformIndexHtml). SSR and headless still serve it, but `inject()` returns
+// early when `document` is missing. Mini-program builds never hit
 // transformIndexHtml, so the runtime is never injected there.
 
+// Type-only import, erased at build time, so it adds no runtime dependency.
+import type { CustomOverlayOptions, OverlayPayload } from "../types";
+
 // #region
-// NOTE: keep in sync with packages/core/src/constants.ts. Inlined as string
-// literals (not imported) so this file bundles to a standalone browser ESM.
+// Keep in sync with packages/core/src/constants.ts. These are string literals
+// rather than imports so this file bundles to a standalone browser ESM.
 const WS_RUNTIME_LOADED_EVENT = "vite:eslint2:runtime-loaded";
 const WS_OVERLAY_EVENT = "vite:eslint2:overlay";
 
 // #endregion
-
-// Type-only import is erased at build time; does not create a runtime dep.
-import type { CustomOverlayOptions, OverlayPayload } from "../types";
 
 const OVERLAY_TAG = "vite-plugin-eslint2-overlay";
 
@@ -36,8 +36,8 @@ const POSITION_STYLES: Record<
   NonNullable<CustomOverlayOptions["position"]>,
   { host: string; panel: string }
 > = {
-  // Panel uses position: fixed, so percentages are relative to the viewport,
-  // not :host. Use explicit offsets: badge (~48px tall incl. margin) + gap.
+  // The panel is position: fixed, so percentages resolve against the viewport and
+  // not :host. Use explicit offsets: badge (about 48px with its margin) plus a gap.
   tl: { host: "top:0;left:0;", panel: "top:56px;left:16px;" },
   tr: { host: "top:0;right:0;", panel: "top:56px;right:16px;" },
   bl: { host: "bottom:0;left:0;", panel: "bottom:56px;left:16px;" },
@@ -49,14 +49,10 @@ const normalizeConfig = (
 ): Required<Omit<CustomOverlayOptions, "theme">> & {
   theme: CustomOverlayOptions["theme"];
 } => {
-  // `false` / `true` / undefined all normalize to an empty object so downstream
-  // property access is type-safe (only CustomOverlayOptions fields are read).
+  // `false` and `true` both become an empty object, so the property reads below
+  // stay type-safe.
   const cfg: CustomOverlayOptions =
-    overlayConfig === true ||
-    overlayConfig === false ||
-    overlayConfig === undefined
-      ? {}
-      : overlayConfig;
+    overlayConfig === true || overlayConfig === false ? {} : overlayConfig;
   return {
     position: cfg.position ?? "br",
     initialIsOpen: cfg.initialIsOpen ?? "error",
@@ -67,10 +63,10 @@ const normalizeConfig = (
 
 const escapeHtml = (s: string): string =>
   s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/gu, "&amp;")
+    .replace(/</gu, "&lt;")
+    .replace(/>/gu, "&gt;")
+    .replace(/"/gu, "&quot;");
 
 class VitePluginESLint2Overlay extends HTMLElement {
   private readonly shadow: ShadowRoot;
@@ -83,7 +79,7 @@ class VitePluginESLint2Overlay extends HTMLElement {
     this.shadow = this.attachShadow({ mode: "open" });
   }
 
-  // Public API called by inject() before the element is connected.
+  // Public API, called by inject() before the element is connected.
   setConfig(config: ReturnType<typeof normalizeConfig>) {
     this.config = config;
   }
@@ -106,9 +102,9 @@ class VitePluginESLint2Overlay extends HTMLElement {
     for (const result of this.payload?.results ?? []) {
       for (const message of result.messages) {
         if (message.severity === "error") {
-          errors++;
+          errors += 1;
         } else {
-          warnings++;
+          warnings += 1;
         }
       }
     }
@@ -123,14 +119,15 @@ class VitePluginESLint2Overlay extends HTMLElement {
     if (initialIsOpen === false) {
       return false;
     }
-    // "error": open iff there is at least one error
+    // "error": open only when at least one error is present.
     return this.hasError;
   }
 
   setPayload(payload: OverlayPayload | undefined) {
     this.payload = payload;
-    // Respect explicit toggles once the user has interacted; otherwise follow
-    // initialIsOpen policy on each update so fixing the last error collapses.
+    // Respect the user's toggle once they have touched it; until then follow the
+    // initialIsOpen policy on every update, so fixing the last error collapses it.
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: `userToggled` is set in `toggle()`; Biome reads the field initializer as a constant.
     if (!this.userToggled) {
       this.isOpen = this.resolveOpenState();
     }
@@ -296,8 +293,10 @@ class VitePluginESLint2Overlay extends HTMLElement {
       label.textContent = "ESLint";
     }
 
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: `isOpen` is reassigned in `setPayload`, `toggle` and `renderShell`; Biome reads the field initializer as a constant.
     panel.classList.toggle("open", this.isOpen && errors + warnings > 0);
 
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: same `isOpen` field as above.
     if (!this.isOpen || errors + warnings === 0 || !this.payload) {
       panel.innerHTML = `<div class="empty">No problems</div>`;
       return;
@@ -333,11 +332,10 @@ declare global {
 }
 
 /**
- * Mount the overlay custom element and wire the WebSocket events.
+ * Mount the overlay element and wire up the WebSocket events.
  *
- * Guarded for non-DOM environments (SSR, headless tests): if `document` is
- * absent, this is a no-op and the runtime-loaded ping is skipped, which tells
- * the server to fall back to terminal-only output.
+ * A no-op when `document` is missing (SSR, headless tests). Skipping the ping then
+ * tells the server to fall back to terminal-only output.
  */
 export function inject({
   overlayConfig,
@@ -368,9 +366,9 @@ export function inject({
         el.setPayload(payload);
       },
     );
-    // Tell the server this client loaded; the server gates WS pushes on this so
-    // it can warn + degrade to terminal-only in environments where the runtime
-    // never loads (mini-programs, no index.html entry).
+    // Tell the server this client is ready. It gates WebSocket pushes on this ping,
+    // which is how it knows to warn and fall back to terminal output where the
+    // runtime never loads (mini-programs, no index.html entry).
     import.meta.hot.send(WS_RUNTIME_LOADED_EVENT);
   }
 }

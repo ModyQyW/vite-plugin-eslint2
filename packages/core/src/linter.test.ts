@@ -223,7 +223,8 @@ describe("buildOverlayPayload", () => {
       }),
     ];
     const payload = buildOverlayPayload(results, "error");
-    const msg = payload.results[0].messages[0];
+    const [firstResult] = payload.results;
+    const [msg] = firstResult.messages;
     expect(msg).toMatchObject({
       line: 12,
       column: 3,
@@ -231,7 +232,7 @@ describe("buildOverlayPayload", () => {
       ruleId: "no-undef",
       message: "no-undef",
     });
-    expect(payload.results[0].filePath).toBe("/src/a.ts");
+    expect(firstResult.filePath).toBe("/src/a.ts");
   });
 });
 
