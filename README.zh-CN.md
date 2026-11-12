@@ -1,21 +1,21 @@
 # vite-plugin-eslint2
 
+![LOGO](vite-plugin-eslint2.svg)
+
 [English](./README.md) | 简体中文
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ModyQyW/vite-plugin-eslint2)
 
-👇 请查看文档了解具体用法和示例。
-
-[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
+用法和示例见[文档](https://vite-plugin-eslint2.modyqyw.top/)。
 
 ## 介绍
 
-`vite-plugin-eslint2` 是一个为 Vite 提供 ESLint 插件项目，包含几个子包：
+`vite-plugin-eslint2` 是一个 monorepo，包含 Vite 的 ESLint 插件和相关包：
 
 | 名称                                                                              | 描述                           |
 | --------------------------------------------------------------------------------- | ------------------------------ |
-| [core](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/packages/core)    | 核心                           |
-| [docs](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/docs)             | 文档                           |
+| [core](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/packages/core)    | 发布的插件包                   |
+| [docs](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/docs)             | 文档站点（Rspress）            |
 | [examples](https://github.com/ModyQyW/vite-plugin-eslint2/tree/main/examples)     | 与特定框架或库集成的示例       |
 
 ## 贡献指南
@@ -34,7 +34,7 @@
 
 ## 赞助
 
-如果这个包对你有所帮助，请考虑 [赞助](https://github.com/ModyQyW/sponsors) 支持，这将有利于项目持续开发和维护。
+如果这个包对你有所帮助，请考虑 [赞助](https://github.com/ModyQyW/sponsors) 支持，这能让项目持续开发和维护。
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/ModyQyW/sponsors/sponsorkit/sponsors.svg">

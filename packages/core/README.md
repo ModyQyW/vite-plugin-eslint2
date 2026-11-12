@@ -6,23 +6,21 @@ English | [简体中文](./README.zh-CN.md)
   <a href="https://github.com/ModyQyW/vite-plugin-eslint2/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint2?style=for-the-badge" alt="License" />
   </a>
-  <a href="https://www.npmjs.com/package/ModyQyW/vite-plugin-eslint2">
+  <a href="https://www.npmjs.com/package/vite-plugin-eslint2">
     <img src="https://img.shields.io/npm/v/vite-plugin-eslint2?style=for-the-badge" alt="npm" />
   </a>
-  <a href="https://www.npmjs.com/package/ModyQyW/vite-plugin-eslint2">
+  <a href="https://www.npmjs.com/package/vite-plugin-eslint2">
     <img src="https://img.shields.io/npm/dm/vite-plugin-eslint2?style=for-the-badge" alt="npm downloads" />
   </a>
 </div>
 
 ## Introduction
 
-ESLint plugin for Vite. Supports Vite v2 ~ v8 and ESLint v7 ~ v10. Requires `node>=18`.
+ESLint plugin for Vite. Supports Vite v2 to v8 and ESLint v7 to v10. Requires `node>=18`.
 
-👇 See the documentation for specific usage and examples.
+See the [documentation](https://vite-plugin-eslint2.modyqyw.top/) for usage, options and examples.
 
-[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
-
-> You may also want [Stylelint plugin for Vite](https://github.com/ModyQyW/vite-plugin-stylelint).
+> You may also want the [Stylelint plugin for Vite](https://github.com/ModyQyW/vite-plugin-stylelint).
 
 ## Install
 
@@ -30,7 +28,7 @@ ESLint plugin for Vite. Supports Vite v2 ~ v8 and ESLint v7 ~ v10. Requires `nod
 npm install vite-plugin-eslint2 -D
 ```
 
-`vite-plugin-eslint2` does not install and config ESLint for you. You should handle these yourself.
+`vite-plugin-eslint2` does not install or configure ESLint for you. Install the ESLint major you want; each one has its own Node.js requirement, listed in the [getting started guide](https://vite-plugin-eslint2.modyqyw.top/guide/getting-started).
 
 <details>
 
@@ -50,7 +48,7 @@ npm install eslint@^10 -D
 npm install eslint@^9 @types/eslint@^9 -D
 ```
 
-> You don't need to install `@types/eslint` if you are using v9.10.0 or higher.
+> You don't need `@types/eslint` from v9.10.0 on.
 
 </details>
 
@@ -86,10 +84,6 @@ export default defineConfig({
 });
 ```
 
-👇 See the documentation for specific usage and examples.
-
-[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
-
 ## Acknowledge
 
 Initially forked from [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint).
@@ -102,7 +96,7 @@ Thanks to [all contributors](https://github.com/ModyQyW/vite-plugin-eslint2/grap
 
 ## Sponsors
 
-If this package is helpful to you, please consider [sponsoring](https://github.com/ModyQyW/sponsors), which will benefit the ongoing development and maintenance of the project.
+If this package is helpful to you, please consider [sponsoring](https://github.com/ModyQyW/sponsors). It keeps the project developed and maintained.
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/ModyQyW/sponsors/sponsorkit/sponsors.svg">

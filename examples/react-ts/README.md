@@ -1,49 +1,22 @@
-# React + TypeScript + Vite
+# react-ts example
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite + React + TypeScript app that runs `vite-plugin-eslint2` against the local build in `packages/core`.
 
-Currently, two official plugins are available:
+## Run it
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Oxc](https://oxc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+# from the repo root
+pnpm dev                                   # keep rebuilding packages/core/dist
+pnpm -C examples/react-ts dev              # dev server with the plugin active
+pnpm -C examples/react-ts build            # production build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+The plugin only lints in `serve` with the default options. To watch it run during a build, add `build: true` and `lintOnStart: true` to the `eslint(...)` call in `vite.config.ts`.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## What to look at
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- `vite.config.ts` — the plugin is called with defaults; commented blocks show the `fix`, worker and `customOverlay` variants, plus a recommended combination.
+- `eslint.config.js` — flat config with `@eslint/js`, `typescript-eslint`, `@eslint-react/eslint-plugin`, the React hooks plugin and the React Refresh plugin.
+- `src/` — the files the plugin lints.
+
+Add a lint problem (for example an unused variable) and start the dev server to see the plugin report it.

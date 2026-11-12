@@ -6,23 +6,21 @@
   <a href="https://github.com/ModyQyW/vite-plugin-eslint2/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/ModyQyW/vite-plugin-eslint2?style=for-the-badge" alt="License" />
   </a>
-  <a href="https://www.npmjs.com/package/ModyQyW/vite-plugin-eslint2">
+  <a href="https://www.npmjs.com/package/vite-plugin-eslint2">
     <img src="https://img.shields.io/npm/v/vite-plugin-eslint2?style=for-the-badge" alt="npm" />
   </a>
-  <a href="https://www.npmjs.com/package/ModyQyW/vite-plugin-eslint2">
+  <a href="https://www.npmjs.com/package/vite-plugin-eslint2">
     <img src="https://img.shields.io/npm/dm/vite-plugin-eslint2?style=for-the-badge" alt="npm downloads" />
   </a>
 </div>
 
 ## 介绍
 
-Vite ESLint 插件。支持 Vite v2 ~ v8 和 ESLint v7 ~ v10。要求 `node>=18`。
+Vite 的 ESLint 插件。支持 Vite v2 到 v8 和 ESLint v7 到 v10。要求 `node>=18`。
 
-👇 请查看文档了解具体用法和示例。
+用法、选项和示例见[文档](https://vite-plugin-eslint2.modyqyw.top/)。
 
-[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
-
-> 你也可能想要 [Vite Stylelint 插件](https://github.com/ModyQyW/vite-plugin-stylelint)。
+> 你可能还需要 [Vite 的 Stylelint 插件](https://github.com/ModyQyW/vite-plugin-stylelint)。
 
 ## 安装
 
@@ -30,7 +28,7 @@ Vite ESLint 插件。支持 Vite v2 ~ v8 和 ESLint v7 ~ v10。要求 `node>=18`
 npm install vite-plugin-eslint2 -D
 ```
 
-`vite-plugin-eslint2` 不会为你安装和配置 ESLint。你应该自己处理这些。
+`vite-plugin-eslint2` 不会替你安装和配置 ESLint。你需要的大版本自己装，各版本对 Node.js 的要求见[起步](https://vite-plugin-eslint2.modyqyw.top/zh/guide/getting-started)。
 
 <details>
 
@@ -50,7 +48,7 @@ npm install eslint@^10 -D
 npm install eslint@^9 @types/eslint@^9 -D
 ```
 
-> 如果你使用 v9.10.0 或更高版本，你不需要安装 `@types/eslint`。
+> v9.10.0 起不用再装 `@types/eslint`。
 
 </details>
 
@@ -86,10 +84,6 @@ export default defineConfig({
 });
 ```
 
-👇 请查看文档了解具体用法和示例。
-
-[Cloudflare Pages](https://vite-plugin-eslint2.modyqyw.top/)
-
 ## 致谢
 
 最初从 [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint) 分叉出来。
@@ -102,7 +96,7 @@ export default defineConfig({
 
 ## 赞助
 
-如果这个包对你有所帮助，请考虑 [赞助](https://github.com/ModyQyW/sponsors) 支持，这将有利于项目持续开发和维护。
+如果这个包对你有所帮助，请考虑 [赞助](https://github.com/ModyQyW/sponsors) 支持，这能让项目持续开发和维护。
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/ModyQyW/sponsors/sponsorkit/sponsors.svg">
