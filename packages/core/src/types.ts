@@ -6,202 +6,197 @@ export type Filter = ReturnType<CreateFilter>;
 
 export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   /**
-   * Run ESLint under `build` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
+   * Run ESLint under the `build` command. See [Command Line Interface](https://vite.dev/guide/#command-line-interface).
    *
-   * 在 `build` 命令下运行 ESLint。查看 [命令行界面](https://cn.vitejs.dev/guide/#command-line-interface) 了解更多。
+   * 在 `build` 命令下运行 ESLint。见[命令行界面](https://cn.vitejs.dev/guide/#command-line-interface)。
    *
    * @default false
    */
   build: boolean;
   /**
-   * Whether to enable the cache. This is disabled in ESLint by default and enabled in plugin by default to improve speed.
+   * Turn on ESLint's cache. ESLint disables it, the plugin enables it for speed.
    *
-   * 是否启用缓存。ESLint 默认禁用，插件默认启用以提高速度。
+   * 是否启用 ESLint 的缓存。ESLint 默认关闭，插件默认打开，为了快一些。
    *
    * @default true
    */
   cache: boolean;
   /**
-   * Use the plugin's custom overlay instead of Vite's native error overlay.
+   * Use the plugin's own overlay instead of Vite's native error overlay.
    *
-   * The native overlay renders ESLint's ANSI-colored `stylish` output verbatim, which loses color (or shows escape codes) in the browser. The custom overlay renders structured results natively, and — unlike the native overlay — also works when `lintInWorker` is enabled.
+   * The native overlay pastes ESLint's ANSI-colored `stylish` output in verbatim, so the colors are lost (or the escape codes show up). The custom overlay renders structured results instead, and unlike the native one it still works with `lintInWorker`.
    *
-   * In environments without a DOM entry (mini-programs, SSR, headless tests), the runtime is not injected; the plugin warns once and falls back to terminal-only output.
+   * Environments without a DOM entry (mini-programs, SSR, headless tests) never get the runtime injected: the plugin warns once and falls back to terminal output only.
    *
-   * - `false`: keep Vite's native overlay (current behavior; no overlay in worker mode).
-   * - `true`: use the custom overlay with default styling.
-   * - `{...}`: use the custom overlay with the given styling.
+   * - `false`: keep Vite's native overlay. No overlay in worker mode.
+   * - `true`: custom overlay, default styling.
+   * - `{...}`: custom overlay with the styling you pass.
    *
-   * Only takes effect under `serve`. In `build` mode the native `context.error` blocking behavior is always preserved.
+   * Only applies under `serve`. In `build` mode the native `context.error` blocking behaviour stays.
    *
-   * 使用插件的自定义遮罩层，替代 Vite 原生错误遮罩层。
+   * 用插件自己的遮罩层代替 Vite 原生错误遮罩。
    *
-   * 原生遮罩层会把 ESLint 带 ANSI 颜色的 `stylish` 输出原样渲染，在浏览器中颜色丢失（或显示转义字符）。自定义遮罩层原生渲染结构化结果，并且与原生遮罩层不同——在启用 `lintInWorker` 时也能工作。
+   * 原生遮罩会把 ESLint 带 ANSI 颜色的 `stylish` 输出原样贴上去，浏览器里颜色没了，或者直接露出转义字符。自定义遮罩渲染结构化结果，而且和原生遮罩不一样，开着 `lintInWorker` 也能用。
    *
-   * 在没有 DOM 入口的环境（小程序、SSR、无头测试）中，运行时不会被注入；插件会警告一次并降级为仅终端输出。
+   * 没有 DOM 入口的环境（小程序、SSR、无头测试）拿不到注入的运行时，插件警告一次，之后只往终端输出。
    *
-   * - `false`：保留 Vite 原生遮罩层（当前行为；worker 模式下无遮罩层）。
-   * - `true`：使用自定义遮罩层，默认样式。
-   * - `{...}`：使用自定义遮罩层，并按给定配置定制样式。
+   * - `false`：保留 Vite 原生遮罩。worker 模式下没有遮罩。
+   * - `true`：自定义遮罩，默认样式。
+   * - `{...}`：自定义遮罩，样式按你传的来。
    *
-   * 仅在 `serve` 下生效。`build` 模式下始终保留原生 `context.error` 的阻塞行为。
+   * 只在 `serve` 下生效。`build` 模式里仍然是原生 `context.error` 的阻塞行为。
    *
    * @default false
    */
   customOverlay: false | true | CustomOverlayOptions;
   /**
-   * Run ESLint under `serve` command. See [Command Line Interface](https://vitejs.dev/guide/#command-line-interface) for more.
+   * Run ESLint under the `serve` command. See [Command Line Interface](https://vite.dev/guide/#command-line-interface).
    *
-   * 在 `serve` 命令下运行 ESLint。查看 [命令行界面](https://cn.vitejs.dev/guide/#command-line-interface) 了解更多。
+   * 在 `serve` 命令下运行 ESLint。见[命令行界面](https://cn.vitejs.dev/guide/#command-line-interface)。
    *
    * @default true
    */
   dev: boolean;
   /**
-   * Emit found errors. This is enabled by default.
+   * Report errors.
    *
-   * 输出发现的错误。默认启用。
+   * 输出错误。
    *
    * @default true
    */
   emitError: boolean;
   /**
-   * Emit found errors as warnings. This is disabled by default but you may want it enabled when
-   * prototyping.
+   * Report errors as warnings. Handy while prototyping.
    *
-   * 将发现的错误作为警告输出。默认禁用，但你可能会在开发原型时启用这个。
+   * 把错误当警告输出。写原型的时候有用。
    *
    * @default false
    */
   emitErrorAsWarning: boolean;
   /**
-   * Emit found warnings. This is enabled by default.
+   * Report warnings.
    *
-   * 输出发现的警告。默认启用。
+   * 输出警告。
    *
    * @default true
    */
   emitWarning: boolean;
   /**
-   * Emit found warnings as errors when enabled. This is disabled by default.
+   * Report warnings as errors.
    *
-   * 将发现的警告作为错误输出。默认禁用。
+   * 把警告当错误输出。
    *
    * @default false
    */
   emitWarningAsError: boolean;
   /**
-   * Path to ESLint that will be used for linting. Use [dynamic import](https://javascript.info/modules-dynamic-imports) under the hood. Read [server.fs](https://vitejs.dev/guide/#command-line-interface) first.
+   * Which ESLint to lint with. Loaded through [dynamic import](https://javascript.info/modules-dynamic-imports), so read [server.fs](https://vite.dev/config/server-options#server-fs-allow) first.
    *
-   * If you want to use the flat config system in ESLint v8, set the value to `'eslint/use-at-your-own-risk'`. Place a flat config file in the root of your project or set the `ESLINT_USE_FLAT_CONFIG` environment variable to true and pass the option `overrideConfigFile` to the plugin if you are using other config files.
+   * For the flat config system in ESLint v8, set it to `'eslint/use-at-your-own-risk'` and put a flat config file in the project root. If your config lives elsewhere, set the `ESLINT_USE_FLAT_CONFIG` environment variable to true and pass `overrideConfigFile`.
    *
-   * You can learn more from [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
+   * See [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
    *
-   * Since ESLint v10.0.0, the flat config system is enforced and the `'eslint/use-at-your-own-risk'` option is no longer provided.
+   * ESLint v10.0.0 and newer only read flat config and no longer provide `'eslint/use-at-your-own-risk'`.
    *
-   * ESLint 路径，用于校验文件。底层使用使用 [dynamic import](https://javascript.info/modules-dynamic-imports)。请先查看 [server.fs](https://cn.vitejs.dev/guide/#command-line-interface)。
+   * 用哪个 ESLint 校验。底层是[动态导入](https://javascript.info/modules-dynamic-imports)，请先看 [server.fs](https://cn.vitejs.dev/config/server-options#server-fs-allow)。
    *
-   * 如果你想在 ESLint v8 中使用平面配置，将值设置为 `'eslint/use-at-your-own-risk'`。在你的项目根放置一个平面配置文件，或者设置 `ESLINT_USE_FLAT_CONFIG` 环境变量。如果你在使用其它位置的配置文件，请传递选项 `overrideConfigFile` 给插件。
+   * 想在 ESLint v8 里用平面配置，把它设成 `'eslint/use-at-your-own-risk'`，并在项目根目录放一个平面配置文件。配置文件在别处的话，把 `ESLINT_USE_FLAT_CONFIG` 环境变量设成 true，再传 `overrideConfigFile`。
    *
-   * 查看 [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) 和 [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new) 了解更多。
+   * 见 [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) 和 [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new)。
    *
-   * 自 ESLint v10.0.0 起，你只能使用平面配置，ESLint 不再提供 `'eslint/use-at-your-own-risk'` 及相关选项。
+   * ESLint v10.0.0 起只认平面配置，不再提供 `'eslint/use-at-your-own-risk'`。
    *
    * @default "eslint"
    */
   eslintPath: string;
   /**
-   * This option specifies the files you don't want to lint. You don't need to change it in most cases, unless the `include` and `exclude` ranges overlap.
+   * The files you do not want linted. You rarely need to change it, unless `include` and `exclude` overlap.
    *
-   * The plugin forces the virtual module to be ignored and you don't need to do any configuration related to it here.
+   * Virtual modules are always ignored, so you do not need to list them here.
    *
-   * If you're using the plugin defaults, the plugin will only call [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) in the `transform` hook. The option value will be used to [create a filter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to determine if the call should be made and the parameter of the call, which means that the option value needs to fulfill the requirements of [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1).
+   * With the defaults, the `transform` filter built from `include` and `exclude` applies, so the value has to satisfy [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1).
    *
-   * If you enable the `lintOnStart` option or disable the `lintDirtyOnly` option, the option value will not take effect. You need to change `include` value to include this option value.
+   * With `lintOnStart` on or `lintDirtyOnly` off, the value is not passed to ESLint; put the patterns into `include` instead. It still decides which modules get linted.
    *
-   * 这个选项指定你不想要校验的文件模式。在绝大部分情况下，你并不需要调整它，除非 `include` 和 `exclude` 范围有重合。
+   * 不要校验的文件。除非 `include` 和 `exclude` 的范围有重合，一般不用改。
    *
-   * 插件强制忽略虚拟模块，你不需要在这里进行任何相关配置。
+   * 虚拟模块一律忽略，这里不用管。
    *
-   * 如果你正在使用插件默认设置，插件只会在 `transform` 生命周期中调用 [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns)。这个选项值会被用于 [创建一个过滤器](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) 来确定是否该调用以及调用参数。这意味着选项值需要满足 [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1) 的要求。
+   * 用默认配置时，走的是由 `include` 和 `exclude` 生成的 `transform` 过滤器，所以值得满足 [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1) 的要求。
    *
-   * 如果你启用了 `lintOnStart` 选项或禁用了 `lintDirtyOnly` 选项，这个选项值不会生效。你需要调整 `include` 值以包含该选项值。
+   * 打开 `lintOnStart` 或关掉 `lintDirtyOnly` 后，这个值不会传给 ESLint，把模式写进 `include` 里。它照样决定哪些模块会被校验。
    */
   exclude: FilterPattern;
   /**
-   * The name or the path of a formatter. This is used to [load a formatter](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) in order to convert lint results to a human- or machine-readable string.
+   * Name or path of a formatter, [loaded](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath) to turn results into a human- or machine-readable string.
    *
-   * 格式化器的名称或路径。用于 [读取格式化器](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath)，以便将校验结果转换为人类或机器可读的字符串。
+   * 格式化器的名称或路径，用来[加载格式化器](https://eslint.org/docs/developer-guide/nodejs-api#-eslintloadformatternameorpath)，把校验结果转成人类或机器能读的字符串。
    *
    * @default "stylish"
    */
   formatter: string;
   /**
-   * This option specifies the files you want to lint. You don't need to change it in most cases, unless the `include` and `exclude` ranges overlap.
+   * The files you want linted. You rarely need to change it, unless `include` and `exclude` overlap.
    *
-   * If you're using the plugin defaults, the plugin will only call [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) in the `transform` hook. The option value will be used to [create a filter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to determine if the call should be made and the parameter of the call, which means that the option value needs to fulfill the requirements of [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1).
+   * How the value is used depends on which hooks run:
    *
-   * If you enable the `lintOnStart` option, the plugin will also call [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) in the `buildStart` hook. The option value will not be used to create a filter, but will be used directly as the call parameter, which means that the option value also needs to fulfill the [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) requirement.
+   * - With the defaults, the plugin only calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) from the `transform` hook. The value goes through [createFilter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) to decide whether to lint and what to pass, so it has to satisfy [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1).
+   * - With `lintOnStart` on, the plugin also calls it from `buildStart`. No filter there - the value is the argument - so it also has to satisfy [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
+   * - With `lintDirtyOnly` off, the value is the argument for every call outside `buildStart`, so it needs [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) too.
    *
-   * If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter every time it calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns), which means that the option value also needs to fulfill the requirements of [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
+   * 要校验的文件。除非 `include` 和 `exclude` 的范围有重合，一般不用改。
    *
-   * If you disable the `lintDirtyOnly` option, the plugin will use the option value as the call parameter when it calls [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) outside of the `buildStart` lifecycle. This means that this option value also needs to fulfill the requirements of [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2).
+   * 这个值怎么用，取决于哪个钩子在跑：
    *
-   * 这个选项指定你想要校验的文件模式。在绝大部分情况下，你并不需要调整它，除非 `include` 和 `exclude` 范围有重合。
-   *
-   * 如果你正在使用插件默认设置，插件只会在 `transform` 生命周期中调用 [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns)。这个选项值会被用于 [创建一个过滤器](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter) 来确定是否该调用以及调用参数。这意味着选项值需要满足 [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1) 的要求。
-   *
-   * 如果你启用了 `lintOnStart` 选项，插件还会在 `buildStart` 生命周期中调用 [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns)。这个选项值不会用于创建过滤器，而是直接用作调用参数。这意味着这个选项值还需要满足 [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) 的要求。
-   *
-   * 如果你禁用了 `lintDirtyOnly` 选项，插件每次调用 [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns) 时都会将该选项值作为调用参数。这意味着这个选项值也需要满足 [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) 的要求。
+   * - 用默认配置时，插件只在 `transform` 里调用 [eslint.lintFiles](https://eslint.org/docs/latest/integrate/nodejs-api#-eslintlintfilespatterns)。值会先过一遍 [createFilter](https://github.com/rollup/plugins/blob/master/packages/pluginutils/README.md#createfilter)，决定要不要校验、传什么参数，所以它得满足 [picomatch@2.3.1](https://github.com/micromatch/picomatch/tree/2.3.1) 的要求。
+   * - 打开 `lintOnStart` 后，插件还会在 `buildStart` 里调用。这时不过滤，值直接当参数用，所以它还得满足 [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2) 的要求。
+   * - 关掉 `lintDirtyOnly` 后，`buildStart` 之外的每次调用都拿这个值当参数，同样需要满足 [minimatch@3.1.2](https://github.com/isaacs/minimatch/tree/3.1.2)。
    */
   include: FilterPattern;
   /**
-   * Whether or not to checkout only modified files that are not included in the `exclude` option value when running ESLint outside of the `buildStart` lifecycle. Enabled by default.
+   * Outside `buildStart`, lint only the files that changed and are not matched by `exclude`.
    *
-   * When disabled, files are checked against the `include` and `exclude` option values.
+   * When off, ESLint gets the `include` and `exclude` patterns themselves.
    *
-   * 在 `buildStart` 生命周期之外运行 ESLint 时，是否只校验修改过且没有包含在 `exclude` 选项值内的文件。默认启用。
+   * `buildStart` 之外，只校验改过、且没有被 `exclude` 匹配到的文件。
    *
-   * 禁用时，会根据 `include` 和 `exclude` 选项值确定需要校验文件。
+   * 关掉后，直接把 `include` 和 `exclude` 的模式交给 ESLint。
    *
    * @default true
    */
   lintDirtyOnly: boolean;
   /**
-   * Lint in [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-tran). This is disabled by default.
+   * Lint in a [worker thread](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-transferlist).
    *
-   * When lint in worker, Vite build process will be faster. You will not see Vite error overlay, Vite build process will not be stopped, even with errors shown in terminal.
+   * Vite builds faster this way. The trade-off: no error overlay, and the build is not stopped even when the terminal shows errors.
    *
-   * It is similar with [@nabla/vite-plugin-eslint](https://github.com/nabla) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker), but @nabla/vite-plugin-eslint only supports linting in worker, vite-plugin-checker can show you errors and warnings in browsers.
+   * [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) work along the same lines. The former only lints in a worker; the latter shows errors and warnings in the browser.
    *
-   * 在 [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-tran) 中校验。默认禁用。
+   * 在 [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-transferlist) 里校验。
    *
-   * 在 worker 中校验时，Vite 的构建过程会更快。即使终端显示了 ESLint 校验错误，你也不会看到 Vite 错误遮罩层，Vite 构建也不会停止。
+   * 这样 Vite 构建更快，代价是没有错误遮罩，终端里报错时构建也不会停。
    *
-   * 这与 [@nabla/vite-plugin-eslint](https://github.com/nabla)、[vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 类似。不同的是，@nabla/vite-plugin-eslint 只支持在 worker 中校验，vite-plugin-checker 可以在浏览器中显示错误和警告。
+   * [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 是同样的思路。前者只能在 worker 里校验，后者能把错误和警告显示在浏览器里。
    *
    * @default false
    */
   lintInWorker: boolean;
   /**
-   * Lint `include` option specified files once in `buildStart` hook to find potential errors. This is disabled by default.
+   * Lint the files matched by `include` once, in `buildStart`, to catch problems early.
    *
-   * This will significantly slow down Vite first starting if you have no caches and don't enable `lintInWorker`.
+   * Without a warm cache and with `lintInWorker` off, this makes the first Vite startup noticeably slower.
    *
-   * 在 `buildStart` 生命周期中校验 `include` 选项指定的文件一次以发现潜在的错误。默认禁用。
+   * 在 `buildStart` 里按 `include` 校验一遍，早点发现问题。
    *
-   * 如果你没有缓存而且没有启用 `lintInWorker`，这将大大降低 Vite 的初次启动速度。
+   * 没有缓存又没开 `lintInWorker` 时，Vite 第一次启动会明显变慢。
    *
    * @default false
    */
   lintOnStart: boolean;
-
   /**
-   * Run ESLint under `test` mode. See [Command Line
-   * Interface](https://vitejs.dev/guide/#command-line-interface) and [Configuring Vitest](https://vitest.dev/guide/#configuring-vitest) for more.
+   * Run ESLint under `test` mode. See [Command Line Interface](https://vite.dev/guide/#command-line-interface) and [Configuring Vitest](https://vitest.dev/guide/#configuring-vitest).
    *
-   * 在 `test` 模式下运行 ESLint。查看 [命令行界面](https://cn.vitejs.dev/guide/#command-line-interface) 和 [配置 Vitest](https://cn.vitest.dev/guide/) 了解更多。
+   * 在 `test` 模式下运行 ESLint。见[命令行界面](https://cn.vitejs.dev/guide/#command-line-interface)和[配置 Vitest](https://cn.vitest.dev/guide/)。
    *
    * @default false
    */
@@ -210,9 +205,9 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
 export type ESLintPluginUserOptions = Partial<ESLintPluginOptions>;
 
 /**
- * Custom overlay styling and behavior options.
+ * Styling and behaviour options for the custom overlay.
  *
- * 自定义遮罩层的样式与行为配置。
+ * 自定义遮罩层的样式和行为配置。
  */
 export interface CustomOverlayOptions {
   /**
@@ -224,29 +219,29 @@ export interface CustomOverlayOptions {
    * 面板是否默认展开。
    * - `true`：始终展开。
    * - `false`：始终折叠。
-   * - `"error"`：仅当存在错误时展开。
+   * - `"error"`：至少有一个错误时才展开。
    *
    * @default "error"
    */
   initialIsOpen?: boolean | "error";
   /**
-   * Position of the overlay badge/panel on the viewport.
+   * Corner of the viewport that holds the badge and panel.
    *
-   * 遮罩层徽标/面板在视口中的位置。
+   * 徽标和面板放在视口的哪个角。
    *
    * @default "br"
    */
   position?: "tl" | "tr" | "bl" | "br";
   /**
-   * Override the overlay's CSS variables. Keys are the predefined variable names; values are CSS values.
+   * Override the overlay's CSS variables. Keys are the predefined variable names, values are CSS values.
    *
-   * 覆盖遮罩层的 CSS 变量。键是预定义的变量名；值是 CSS 值。
+   * 覆盖遮罩层的 CSS 变量。键是预定义的变量名，值是 CSS 值。
    */
   theme?: Partial<Record<ThemeKey, string>>;
   /**
-   * z-index of the overlay. Exposed because Design Systems may occupy high z-index layers.
+   * The overlay's z-index. Configurable because design systems sometimes sit on high layers.
    *
-   * 遮罩层的 z-index。暴露此选项是因为设计系统可能占用高 z-index 层级。
+   * 遮罩层的 z-index。设计系统有时会占用很高的层级，所以开放这个选项。
    *
    * @default 99998
    */
@@ -254,9 +249,9 @@ export interface CustomOverlayOptions {
 }
 
 /**
- * Predefined CSS variable keys exposed for `CustomOverlayOptions.theme`.
+ * Predefined CSS variable keys available to `CustomOverlayOptions.theme`.
  *
- * 为 `CustomOverlayOptions.theme` 暴露的预定义 CSS 变量键。
+ * `CustomOverlayOptions.theme` 可用的预定义 CSS 变量键。
  */
 export type ThemeKey =
   | "--vite-plugin-eslint2-bg"
@@ -268,10 +263,10 @@ export type ThemeKey =
   | "--vite-plugin-eslint2-radius";
 
 /**
- * Structured payload pushed from server to the custom overlay runtime.
- * Decoupled from ESLint's `LintResult` to stay stable across ESLint versions.
+ * Structured payload pushed from the server to the custom overlay runtime.
+ * Deliberately separate from ESLint's `LintResult` so it stays stable across ESLint versions.
  *
- * 从服务端推送到自定义遮罩层运行时的结构化数据。与 ESLint 的 `LintResult` 解耦，以跨 ESLint 版本保持稳定。
+ * 从服务端推给自定义遮罩层运行时的结构化数据。故意不沿用 ESLint 的 `LintResult`，这样换 ESLint 版本也不用改。
  */
 export interface OverlayPayload {
   results: Array<{
