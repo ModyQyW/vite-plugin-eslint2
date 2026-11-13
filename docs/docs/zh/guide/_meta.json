@@ -1,5 +1,5 @@
 [
-  { "type": "file", "name": "why", "label": "为什么是 vite-plugin-eslint2？" },
+  { "type": "file", "name": "why", "label": "为什么用，为什么不用" },
   { "type": "file", "name": "getting-started", "label": "起步" },
   { "type": "file", "name": "options", "label": "选项配置" },
   {

@@ -13,7 +13,7 @@ hero:
       text: 起步 →
       link: /zh/guide/getting-started
     - theme: alt
-      text: 为什么？
+      text: 为什么用，为什么不用
       link: /zh/guide/why
     - theme: alt
       text: 在 GitHub 查看

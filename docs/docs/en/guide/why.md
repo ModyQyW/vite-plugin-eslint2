@@ -1,14 +1,28 @@
 ---
-description: Why this fork exists. vite-plugin-eslint stopped being maintained, and vite-plugin-eslint2 keeps it working with ESLint 7-10, worker linting and a custom overlay.
+description: Why this fork exists, and when your editor, the ESLint CLI or CI already does the job.
 ---
 
-# Why vite-plugin-eslint2?
+# Why & Why not?
 
-## Reason
+## Why
 
-This project was forked from [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint). The original had issues and pull requests piling up with nobody maintaining it; I emailed the author and got no reply.
+This project was forked from [gxmari007/vite-plugin-eslint](https://github.com/gxmari007/vite-plugin-eslint). The original had issues and pull requests piling up with nobody maintaining it. I emailed the author and got no reply.
 
-My fork added what I needed at the time: ESLint v8 support, the `eslintPath`, `lintInWorker`, `lintOnStart` and `lintDirtyOnly` options, and a forced ignore for virtual modules. Back then it was published as `@modyqyw/vite-plugin-eslint`. I renamed it to `vite-plugin-eslint2` in early 2023 so it is easier to find.
+My fork added what I needed at the time. That was ESLint v8 support, the `eslintPath`, `lintInWorker`, `lintOnStart` and `lintDirtyOnly` options, and a forced ignore for virtual modules. Back then it was published as `@modyqyw/vite-plugin-eslint`. I renamed it to `vite-plugin-eslint2` in early 2023 so it is easier to find.
+
+## Why not
+
+Most projects do not need this plugin.
+
+Your editor already shows the same problems. VS Code needs the [ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint). WebStorm ships the feature.
+
+You can also run ESLint from the CLI or in CI.
+
+Webpack projects use [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin) for the same job.
+
+Turn the plugin on when you want errors and warnings while Vite runs. Set `lintInWorker` so the checks stay off the build thread. Results print to the console.
+
+## Alternatives
 
 [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) cover similar ground. Pick the one that fits your needs.
 

@@ -13,7 +13,7 @@ hero:
       text: Get Started →
       link: /guide/getting-started
     - theme: alt
-      text: Why?
+      text: Why & Why not?
       link: /guide/why
     - theme: alt
       text: View on GitHub

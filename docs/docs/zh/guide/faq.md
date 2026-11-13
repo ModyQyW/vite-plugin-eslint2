@@ -6,23 +6,23 @@ description: 什么时候值得加 vite-plugin-eslint2，校验为什么慢，�
 
 ## 我需要这个插件吗？
 
-大多数情况下不需要。
+大多数情况下不需要。什么时候用、什么时候不用，见 [为什么用，为什么不用](/zh/guide/why)。
 
-Webpack 里常配 [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin)，这个插件在 Vite 里做差不多的事。
-
-编辑器其实已经把信息都给你了。VS Code 装个 [ESLint 扩展](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)，WebStorm 自带这功能。你也可以在命令行或 CI 里跑 ESLint。
-
-路子里有这么多，专门在 Vite 里再跑一遍 ESLint 就没多大必要了。真想边开发边看错误和警告，打开 `lintInWorker`，它不占构建线程，结果打到控制台。也可以试试 [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker)。
-
-如果你还要校验样式，[vite-plugin-stylelint](https://github.com/ModyQyW/vite-plugin-stylelint) 在 Stylelint 上做着同样的事。
+想在 Vite 跑的时候看到错误和警告，就打开这个插件。把 `lintInWorker` 打开，校验不占构建线程。
 
 ## 缓存好像坏了？
 
-删掉缓存文件，手动修好问题，然后重启 Vite。
+1. 删掉缓存文件。
+2. 手动修好问题。
+3. 重启 Vite。
 
 ## 插件跑得很慢？
 
-默认在主线程校验，会卡住构建。打开 `lintInWorker`，Vite 不卡了，结果打到控制台。也可以换 [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 或 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker)，或者在 Vite 外面单独跑 ESLint。
+默认情况下插件在主线程校验，可能拖住构建。
+
+打开 `lintInWorker`，Vite 不会被卡住，结果打到控制台。
+
+也可以在 Vite 外面单独跑 ESLint。[@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 是另外的选择。
 
 ## 推荐的配置？
 
@@ -39,10 +39,12 @@ export default defineConfig({
 });
 ```
 
-`fix` 会在你开发时直接改文件，不适合就关掉。
+`fix` 会在你开发时直接改文件。不适合就关掉。
 
 ## 报错为什么一片红？
 
-Vite 原生的错误遮罩不渲染 `PluginContext.warn` 的内容，ESLint `stylish` 输出的 ANSI 颜色也会被原样贴上去，浏览器里看不出区别。这些问题在上游 [#2076](https://github.com/vitejs/vite/issues/2076)、[#6274](https://github.com/vitejs/vite/pull/6274) 和 [#8327](https://github.com/vitejs/vite/discussions/8327) 里有记录。
+Vite 原生的错误遮罩不渲染 `PluginContext.warn` 的内容。它把 ESLint `stylish` 输出的 ANSI 颜色原样贴上去，浏览器里就看不出颜色区别了。
 
-打开 `customOverlay: true`，插件会自己渲染结果，错误和警告分开显示。
+这些限制在上游 [#2076](https://github.com/vitejs/vite/issues/2076)、[#6274](https://github.com/vitejs/vite/pull/6274) 和 [#8327](https://github.com/vitejs/vite/discussions/8327) 里有记录。
+
+打开 `customOverlay: true`，插件会自己渲染结果。错误和警告分开显示。

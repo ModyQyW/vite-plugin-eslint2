@@ -6,23 +6,23 @@ description: When vite-plugin-eslint2 is worth adding, why linting feels slow, h
 
 ## Should I use this plugin?
 
-Most of the time you don't need it.
+Usually not. Read [Why & Why not?](/guide/why) for the cases where the plugin helps, and for the cases where your editor, the CLI or CI already cover it.
 
-[eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin) is common in Webpack, and this plugin does roughly the same job for Vite.
-
-Your editor already shows the same information. In VS Code you add the [ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint); WebStorm ships the feature. You can also run ESLint from the CLI or in CI.
-
-With all of those options, running ESLint inside Vite is rarely necessary. If you do want errors and warnings while Vite runs, turn on `lintInWorker` so the checks stay off the build thread and print to the console. [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) are other choices.
-
-If you also lint styles, [vite-plugin-stylelint](https://github.com/ModyQyW/vite-plugin-stylelint) does the same job for Stylelint.
+Turn the plugin on when you want errors and warnings while Vite runs. Set `lintInWorker` so the checks stay off the build thread.
 
 ## Cache looks broken?
 
-Delete the cache file, fix the problem by hand, then restart Vite.
+1. Delete the cache file.
+2. Fix the problem by hand.
+3. Restart Vite.
 
 ## The plugin is slow?
 
-By default the plugin lints on the main thread, which can block. Turn on `lintInWorker` to keep Vite responsive and print results to the console. [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) are alternatives, as is running ESLint next to Vite instead of inside it.
+The plugin lints on the main thread by default. That can block the build.
+
+Set `lintInWorker` to keep Vite responsive. Results print to the console.
+
+You can also run ESLint next to Vite instead of inside it. [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) are other choices.
 
 ## Recommended configuration?
 
@@ -39,10 +39,12 @@ export default defineConfig({
 });
 ```
 
-`fix` rewrites files while you work — drop it if that does not suit your setup.
+`fix` rewrites files while you work. Drop it if that does not suit your setup.
 
 ## Why is the error output all red?
 
-Vite's native error overlay does not render `PluginContext.warn` output and shows ESLint's ANSI-colored `stylish` output verbatim, which loses the color distinctions in the browser. These limitations are tracked upstream in [#2076](https://github.com/vitejs/vite/issues/2076), [#6274](https://github.com/vitejs/vite/pull/6274) and [#8327](https://github.com/vitejs/vite/discussions/8327).
+Vite's native error overlay does not render `PluginContext.warn` output. It shows ESLint's ANSI-colored `stylish` output verbatim, so the color distinctions disappear in the browser.
 
-Set `customOverlay: true` to render the results natively instead, with errors and warnings styled separately.
+These limits are tracked upstream in [#2076](https://github.com/vitejs/vite/issues/2076), [#6274](https://github.com/vitejs/vite/pull/6274) and [#8327](https://github.com/vitejs/vite/discussions/8327).
+
+Set `customOverlay: true` to render the results natively. Errors and warnings get separate styling.
