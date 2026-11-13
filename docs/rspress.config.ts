@@ -1,10 +1,38 @@
 import path from "node:path";
-import { defineConfig } from "@rspress/core";
+import { defineConfig, type UserConfig } from "@rspress/core";
 
 const siteOrigin = "https://vite-plugin-eslint2.modyqyw.top";
 
 // `siteOrigin` turns the sitemap `<loc>`, the hreflang links and the llms.txt
 // entries into absolute URLs; Rspress leaves all three relative without it.
+//
+// Rspress 2 writes no canonical link, so it goes here per route. Keep
+// `description`, `og:description`, `og:title` and `og:type` out of this array:
+// the Layout skips its own page-level tags for any name it finds here, and every
+// page would inherit the site description.
+const seoHead: NonNullable<UserConfig["head"]> = [
+  (route) => [
+    "link",
+    { rel: "canonical", href: `${siteOrigin}${route.routePath}` },
+  ],
+  (route) => [
+    "meta",
+    { property: "og:url", content: `${siteOrigin}${route.routePath}` },
+  ],
+  ["meta", { property: "og:site_name", content: "vite-plugin-eslint2" }],
+  ["meta", { property: "og:image", content: `${siteOrigin}/og-image.png` }],
+  ["meta", { property: "og:image:width", content: "1200" }],
+  ["meta", { property: "og:image:height", content: "630" }],
+  [
+    "meta",
+    {
+      property: "og:image:alt",
+      content: "vite-plugin-eslint2 — ESLint inside your Vite dev server",
+    },
+  ],
+  ["meta", { name: "twitter:card", content: "summary_large_image" }],
+  ["meta", { name: "twitter:image", content: `${siteOrigin}/og-image.png` }],
+];
 
 export default defineConfig({
   lang: "en",
@@ -49,6 +77,7 @@ export default defineConfig({
         src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3102250747488251",
       },
     ],
+    ...seoHead,
   ],
   // `head` only accepts tags without children, so the inline gtag bootstrap has
   // to go through Rsbuild's html tag config instead.
