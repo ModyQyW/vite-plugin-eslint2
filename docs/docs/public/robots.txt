@@ -1,0 +1,6 @@
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: *
+Allow: /
+
+Sitemap: https://vite-plugin-eslint2.modyqyw.top/sitemap.xml

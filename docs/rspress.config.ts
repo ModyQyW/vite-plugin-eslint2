@@ -1,10 +1,17 @@
 import path from "node:path";
 import { defineConfig } from "@rspress/core";
 
+const siteOrigin = "https://vite-plugin-eslint2.modyqyw.top";
+
+// `siteOrigin` turns the sitemap `<loc>`, the hreflang links and the llms.txt
+// entries into absolute URLs; Rspress leaves all three relative without it.
+
 export default defineConfig({
   lang: "en",
   title: "vite-plugin-eslint2",
-  description: "ESLint plugin for Vite.",
+  description:
+    "Run ESLint inside Vite with a browser overlay, worker linting and auto-fix. Supports Vite 2-8 and ESLint 7-10.",
+  siteOrigin,
   icon: "/vite-plugin-eslint2.svg",
   logo: "/vite-plugin-eslint2.svg",
   logoText: "vite-plugin-eslint2",
@@ -19,7 +26,8 @@ export default defineConfig({
       lang: "zh",
       label: "简体中文",
       title: "vite-plugin-eslint2",
-      description: "Vite 的 ESLint 插件。",
+      description:
+        "在 Vite 里跑 ESLint，带浏览器浮层、worker 和自动修复。支持 Vite 2-8 和 ESLint 7-10。",
     },
   ],
   globalStyles: path.join(import.meta.dirname, "theme/index.css"),
