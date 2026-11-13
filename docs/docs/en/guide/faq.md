@@ -1,3 +1,7 @@
+---
+description: When vite-plugin-eslint2 is worth adding, why linting feels slow, how to recover a broken cache, and why the error overlay shows raw ANSI colors.
+---
+
 # FAQ
 
 ## Should I use this plugin?

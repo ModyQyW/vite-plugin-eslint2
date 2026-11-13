@@ -1,3 +1,7 @@
+---
+description: Install vite-plugin-eslint2, pick the ESLint version and Node.js floor that fit your project, and add the plugin to vite.config.ts.
+---
+
 # Getting Started
 
 ## Overview

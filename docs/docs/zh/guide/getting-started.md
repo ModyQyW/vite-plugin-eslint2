@@ -1,3 +1,7 @@
+---
+description: 安装 vite-plugin-eslint2，挑好合适的 ESLint 版本和 Node.js 下限，再把插件加到 vite.config.ts 里。
+---
+
 # 起步
 
 ## 总览
