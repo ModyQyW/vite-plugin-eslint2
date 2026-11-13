@@ -111,9 +111,13 @@ flowchart TD
 
 ### 遮罩握手
 
-`serve` 下开着 `customOverlay` 时，`index.ts` 通过 `transformIndexHtml` 注入运行时，然后等 Vite WebSocket 上来的 `WS_RUNTIME_LOADED_EVENT`，收到之后才推 `WS_OVERLAY_EVENT` 的数据。早到的数据先存在 `pendingPayload`，收到 ping 再补发。`OVERLAY_DEGRADE_GRACE_MS`（2000 毫秒）内没有 ping，说明环境里没有 DOM：警告一次，停止推送，继续往终端输出。
+`serve` 下开着 `customOverlay` 时，`index.ts` 通过 `transformIndexHtml` 注入运行时。之后它等 Vite WebSocket 上来的 `WS_RUNTIME_LOADED_EVENT`。收到 ping 之后才推 `WS_OVERLAY_EVENT` 的数据。
 
-运行时被预先打包成 `dist/client-runtime.js`，用 `readFileSync` 内联进来，插件不需要额外提供文件。从源码跑的话，得先执行 `pnpm build`，`customOverlay` 才能用。
+早到的数据先存在 `pendingPayload`。收到 ping 时插件补发这些数据。
+
+`OVERLAY_DEGRADE_GRACE_MS`（2000 毫秒）内没有 ping，说明环境里没有 DOM。插件警告一次，停止推送，继续往终端输出。
+
+构建把运行时写到 `dist/client-runtime.js`。`index.ts` 用 `readFileSync` 把它内联进来，插件不需要额外提供文件。从源码跑之前先执行 `pnpm build`。
 
 ## 提交
 

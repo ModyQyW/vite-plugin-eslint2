@@ -96,10 +96,10 @@ flowchart TD
 
 ### Key design rules
 
-- **`Linter` is the only place that knows how to run one lint pass.** Adapters turn the outside world (Vite hooks, worker messages) into `lint(id, context)` and `lintAll(context)` calls; they never assemble `eslintInstance + formatter + outputFixes` themselves.
+- **`Linter` is the only place that knows how to run one lint pass.** Adapters turn the outside world (Vite hooks, worker messages) into `lint(id, context)` and `lintAll(context)` calls. They never assemble `eslintInstance + formatter + outputFixes` themselves.
 - **`context` is a per-call argument, never a captured closure.** Vite runs `transform` hooks concurrently, so a shared context would be overwritten between lints and emit to the wrong module. The worker passes nothing and gets stdout output.
 - **`adapters` is the seam between the two adapters.** `createLinter(options, adapters)` takes an optional `emit` (how to write formatted text) and an optional `onOverlayPayload` (where structured overlay data goes).
-- **`filterResults` does no I/O.** `(results, options) → { results, textType }`, with no ESLint instance involved, which is why it carries the filter and severity tests. The emit step stays private and is exercised through `createLinter`.
+- **`filterResults` does no I/O.** `(results, options) → { results, textType }`. No ESLint instance is involved. That is why it carries the filter and severity tests. The emit step stays private and is exercised through `createLinter`.
 - **Plugin options and ESLint options share one namespace.** `ESLintPluginOptions extends ESLint.ESLint.Options`. `getESLintConstructorOptions` (`linter.ts`) splits them by exclusion using `PLUGIN_OPTION_KEYS`. A key that is not in that list is forwarded to the ESLint constructor, so it can collide with an ESLint option name. `cache` works today because ESLint uses the same name for the same thing.
 
 ### Adding a plugin option
@@ -111,9 +111,13 @@ flowchart TD
 
 ### Custom overlay handshake
 
-Under `serve` with `customOverlay` on, `index.ts` injects the runtime through `transformIndexHtml` and then waits for a `WS_RUNTIME_LOADED_EVENT` ping over Vite's WebSocket before pushing `WS_OVERLAY_EVENT` payloads. Payloads that arrive earlier sit in `pendingPayload` and are replayed on the ping. No ping within `OVERLAY_DEGRADE_GRACE_MS` (2000 ms) means a DOM-less environment: warn once, stop pushing, keep printing to the terminal.
+Under `serve` with `customOverlay` on, `index.ts` injects the runtime through `transformIndexHtml`. It then waits for a `WS_RUNTIME_LOADED_EVENT` ping over Vite's WebSocket. Only after that ping does it push `WS_OVERLAY_EVENT` payloads.
 
-The runtime is pre-built to `dist/client-runtime.js` and inlined with `readFileSync`, so the plugin serves no extra file. `pnpm build` has to run before `customOverlay` works from source.
+Payloads that arrive earlier sit in `pendingPayload`. The plugin replays them on the ping.
+
+No ping within `OVERLAY_DEGRADE_GRACE_MS` (2000 ms) means a DOM-less environment. The plugin warns once, stops pushing, and keeps printing to the terminal.
+
+The build writes the runtime to `dist/client-runtime.js`. `index.ts` inlines it with `readFileSync`, so the plugin serves no extra file. Run `pnpm build` before using `customOverlay` from source.
 
 ## Committing
 

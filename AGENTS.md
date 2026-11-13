@@ -64,7 +64,13 @@ Vite runs `transform` hooks concurrently. The linter takes the `PluginContext` a
 
 ### Custom overlay handshake
 
-Under `serve` with `customOverlay` on, `index.ts` injects the runtime via `transformIndexHtml`, then waits for a `vite:eslint2:runtime-loaded` ping over Vite's WebSocket before pushing `vite:eslint2:overlay` payloads. Payloads arriving before the ping are buffered in `pendingPayload` and replayed. No ping within `OVERLAY_DEGRADE_GRACE_MS` (2000 ms) means a DOM-less environment (mini-program, SSR, headless): warn once, stop pushing, keep printing to the terminal. In this mode `index.ts` passes an `emit` adapter that writes to `console.log`, so `report` never reaches `context.error`/`context.warn` — doing so would trigger the native overlay the custom one replaces.
+Under `serve` with `customOverlay` on, `index.ts` injects the runtime via `transformIndexHtml`. It then waits for a `vite:eslint2:runtime-loaded` ping over Vite's WebSocket. Only after that ping does it push `vite:eslint2:overlay` payloads.
+
+Payloads that arrive before the ping are buffered in `pendingPayload`. The plugin replays them on the ping.
+
+No ping within `OVERLAY_DEGRADE_GRACE_MS` (2000 ms) means a DOM-less environment (mini-program, SSR, headless). The plugin warns once, stops pushing, and keeps printing to the terminal.
+
+In this mode `index.ts` passes an `emit` adapter that writes to `console.log`. `report` therefore never reaches `context.error`/`context.warn` — doing so would trigger the native overlay the custom one replaces.
 
 The WebSocket event names are inlined as string literals in `client/runtime.ts` (it must bundle without importing node-side modules) **and** exported from `constants.ts`. Change both or the handshake silently stops matching.
 
