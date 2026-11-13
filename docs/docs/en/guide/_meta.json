@@ -1,5 +1,5 @@
 [
-  { "type": "file", "name": "why", "label": "Why?" },
+  { "type": "file", "name": "why", "label": "Why vite-plugin-eslint2?" },
   { "type": "file", "name": "getting-started", "label": "Getting Started" },
   { "type": "file", "name": "options", "label": "Options" },
   {

@@ -1,4 +1,8 @@
-# Why?
+---
+description: Why this fork exists. vite-plugin-eslint stopped being maintained, and vite-plugin-eslint2 keeps it working with ESLint 7-10, worker linting and a custom overlay.
+---
+
+# Why vite-plugin-eslint2?
 
 ## Reason
 

@@ -1,4 +1,8 @@
-# 为什么？
+---
+description: 这个分支为什么存在：vite-plugin-eslint 没人维护了，vite-plugin-eslint2 把它接过来，支持 ESLint 7-10，带 worker 校验和自定义浮层。
+---
+
+# 为什么是 vite-plugin-eslint2？
 
 ## 原因
 
