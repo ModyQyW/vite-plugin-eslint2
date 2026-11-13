@@ -86,7 +86,7 @@
 
 用哪个 ESLint 校验。底层是[动态导入](https://javascript.info/modules-dynamic-imports)，请先看 [server.fs](https://cn.vitejs.dev/config/server-options#server-fs-allow)。
 
-想在 ESLint v8 里用平面配置，把它设成 `'eslint/use-at-your-own-risk'`，并在项目根目录放一个平面配置文件。配置文件在别处的话，把 `ESLINT_USE_FLAT_CONFIG` 环境变量设成 true，再传 `overrideConfigFile`。
+想在 ESLint v8 里用平面配置，把它设成 `'eslint/use-at-your-own-risk'`。在项目根目录放一个平面配置文件。配置文件在别处的话，把 `ESLINT_USE_FLAT_CONFIG` 环境变量设成 true。还要传 `overrideConfigFile`。
 
 见 [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) 和 [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new)。
 
@@ -108,14 +108,18 @@ ESLint v10.0.0 起只认平面配置，不再提供 `'eslint/use-at-your-own-ris
 
 这样 Vite 构建更快，代价是没有错误遮罩，终端里报错时构建也不会停。
 
-[@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 是同样的思路。前者只能在 worker 里校验，后者能把错误和警告显示在浏览器里。
+[@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 是同样的思路。前者只能在 worker 里校验。后者能把错误和警告显示在浏览器里。
 
 ### `customOverlay`
 
 - 类型：`false | true | CustomOverlayOptions`
 - 默认值：`false`
 
-用插件自己的遮罩层代替 Vite 原生错误遮罩。原生遮罩会把 ESLint 带 ANSI 颜色的 `stylish` 输出原样贴上去，浏览器里颜色没了，或者直接露出转义字符。自定义遮罩渲染结构化结果，而且和原生遮罩不一样，开着 `lintInWorker` 也能用。
+用插件自己的遮罩层代替 Vite 原生错误遮罩。
+
+原生遮罩把 ESLint 带 ANSI 颜色的 `stylish` 输出原样贴上去。浏览器里颜色没了，或者直接露出转义字符。
+
+自定义遮罩渲染结构化结果。它还能配合 `lintInWorker` 使用，原生遮罩做不到。
 
 - `false`：保留 Vite 原生遮罩。worker 模式下没有遮罩。
 - `true`：自定义遮罩，默认样式。

@@ -86,7 +86,7 @@ With `lintOnStart` on or `lintDirtyOnly` off, this value is not passed to ESLint
 
 Which ESLint to lint with. Loaded through [dynamic import](https://javascript.info/modules-dynamic-imports), so read [server.fs](https://vite.dev/config/server-options#server-fs-allow) first.
 
-For the flat config system in ESLint v8, set it to `'eslint/use-at-your-own-risk'` and put a flat config file in the project root. If your config lives elsewhere, set the `ESLINT_USE_FLAT_CONFIG` environment variable to true and pass `overrideConfigFile`.
+For the flat config system in ESLint v8, set this to `'eslint/use-at-your-own-risk'`. Put a flat config file in the project root. If your config lives elsewhere, set the `ESLINT_USE_FLAT_CONFIG` environment variable to true. Pass `overrideConfigFile` as well.
 
 See [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
 
@@ -108,14 +108,18 @@ Lint in a [worker thread](https://nodejs.org/api/worker_threads.html#portpostmes
 
 Vite builds faster this way. The trade-off: no error overlay, and the build is not stopped even when the terminal shows errors.
 
-[@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) work along the same lines. The former only lints in a worker; the latter shows errors and warnings in the browser.
+[@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) work along the same lines. The former lints in a worker only. The latter shows errors and warnings in the browser.
 
 ### `customOverlay`
 
 - Type: `false | true | CustomOverlayOptions`
 - Default: `false`
 
-Use the plugin's own overlay instead of Vite's native error overlay. The native one pastes ESLint's ANSI-colored `stylish` output in verbatim, so the colors are lost (or the escape codes show up). The custom overlay renders structured results instead, and unlike the native one it still works with `lintInWorker`.
+Use the plugin's own overlay instead of Vite's native error overlay.
+
+The native overlay pastes ESLint's ANSI-colored `stylish` output in verbatim. The colors are lost, or the escape codes show up.
+
+The custom overlay renders structured results instead. It also works with `lintInWorker`, which the native overlay does not.
 
 - `false`: keep Vite's native overlay. No overlay in worker mode.
 - `true`: custom overlay, default styling.

@@ -6,7 +6,9 @@ description: Install vite-plugin-eslint2, pick the ESLint version and Node.js fl
 
 ## Overview
 
-`vite-plugin-eslint2` runs ESLint inside Vite. It supports Vite v2 to v8 and ESLint v7 to v10. The plugin itself needs Node.js 18 or newer; each ESLint major has its own Node.js requirement, listed below.
+`vite-plugin-eslint2` runs ESLint inside Vite. It supports Vite v2 to v8 and ESLint v7 to v10.
+
+The plugin needs Node.js 18 or newer. Each ESLint major has its own Node.js requirement. The table below lists them.
 
 > For Nuxt projects, use [@nuxt/eslint](https://github.com/nuxt/eslint).
 

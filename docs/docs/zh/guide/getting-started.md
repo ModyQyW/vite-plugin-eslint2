@@ -6,7 +6,9 @@ description: 安装 vite-plugin-eslint2，挑好合适的 ESLint 版本和 Node.
 
 ## 总览
 
-`vite-plugin-eslint2` 在 Vite 里跑 ESLint。支持 Vite v2 到 v8 和 ESLint v7 到 v10。插件本身要求 Node.js 18 以上，各个 ESLint 大版本对 Node.js 的要求不同，见下表。
+`vite-plugin-eslint2` 在 Vite 里跑 ESLint。支持 Vite v2 到 v8 和 ESLint v7 到 v10。
+
+插件本身要求 Node.js 18 以上。各个 ESLint 大版本对 Node.js 的要求不一样，见下面的表格。
 
 > Nuxt 项目请用 [@nuxt/eslint](https://github.com/nuxt/eslint)。
 
