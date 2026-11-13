@@ -24,7 +24,9 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   /**
    * Use the plugin's own overlay instead of Vite's native error overlay.
    *
-   * The native overlay pastes ESLint's ANSI-colored `stylish` output in verbatim, so the colors are lost (or the escape codes show up). The custom overlay renders structured results instead, and unlike the native one it still works with `lintInWorker`.
+   * The native overlay pastes ESLint's ANSI-colored `stylish` output in verbatim. The colors are lost, or the escape codes show up.
+   *
+   * The custom overlay renders structured results instead. It also works with `lintInWorker`, which the native overlay does not.
    *
    * Environments without a DOM entry (mini-programs, SSR, headless tests) never get the runtime injected: the plugin warns once and falls back to terminal output only.
    *
@@ -36,7 +38,9 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    *
    * 用插件自己的遮罩层代替 Vite 原生错误遮罩。
    *
-   * 原生遮罩会把 ESLint 带 ANSI 颜色的 `stylish` 输出原样贴上去，浏览器里颜色没了，或者直接露出转义字符。自定义遮罩渲染结构化结果，而且和原生遮罩不一样，开着 `lintInWorker` 也能用。
+   * 原生遮罩把 ESLint 带 ANSI 颜色的 `stylish` 输出原样贴上去。浏览器里颜色没了，或者直接露出转义字符。
+   *
+   * 自定义遮罩渲染结构化结果。它还能配合 `lintInWorker` 使用，原生遮罩做不到。
    *
    * 没有 DOM 入口的环境（小程序、SSR、无头测试）拿不到注入的运行时，插件警告一次，之后只往终端输出。
    *
@@ -92,7 +96,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
   /**
    * Which ESLint to lint with. Loaded through [dynamic import](https://javascript.info/modules-dynamic-imports), so read [server.fs](https://vite.dev/config/server-options#server-fs-allow) first.
    *
-   * For the flat config system in ESLint v8, set it to `'eslint/use-at-your-own-risk'` and put a flat config file in the project root. If your config lives elsewhere, set the `ESLINT_USE_FLAT_CONFIG` environment variable to true and pass `overrideConfigFile`.
+   * For the flat config system in ESLint v8, set this to `'eslint/use-at-your-own-risk'`. Put a flat config file in the project root. If your config lives elsewhere, set the `ESLINT_USE_FLAT_CONFIG` environment variable to true. Pass `overrideConfigFile` as well.
    *
    * See [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) and [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new).
    *
@@ -100,7 +104,7 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    *
    * 用哪个 ESLint 校验。底层是[动态导入](https://javascript.info/modules-dynamic-imports)，请先看 [server.fs](https://cn.vitejs.dev/config/server-options#server-fs-allow)。
    *
-   * 想在 ESLint v8 里用平面配置，把它设成 `'eslint/use-at-your-own-risk'`，并在项目根目录放一个平面配置文件。配置文件在别处的话，把 `ESLINT_USE_FLAT_CONFIG` 环境变量设成 true，再传 `overrideConfigFile`。
+   * 想在 ESLint v8 里用平面配置，把它设成 `'eslint/use-at-your-own-risk'`。在项目根目录放一个平面配置文件。配置文件在别处的话，把 `ESLINT_USE_FLAT_CONFIG` 环境变量设成 true。还要传 `overrideConfigFile`。
    *
    * 见 [Flat config rollout plans](https://eslint.org/blog/2023/10/flat-config-rollout-plans/) 和 [Configuration Files (New)](https://eslint.org/docs/latest/use/configure/configuration-files-new)。
    *
@@ -170,13 +174,13 @@ export interface ESLintPluginOptions extends ESLint.ESLint.Options {
    *
    * Vite builds faster this way. The trade-off: no error overlay, and the build is not stopped even when the terminal shows errors.
    *
-   * [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) work along the same lines. The former only lints in a worker; the latter shows errors and warnings in the browser.
+   * [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) and [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) work along the same lines. The former lints in a worker only. The latter shows errors and warnings in the browser.
    *
    * 在 [worker](https://nodejs.org/api/worker_threads.html#portpostmessagevalue-transferlist) 里校验。
    *
    * 这样 Vite 构建更快，代价是没有错误遮罩，终端里报错时构建也不会停。
    *
-   * [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 是同样的思路。前者只能在 worker 里校验，后者能把错误和警告显示在浏览器里。
+   * [@nabla/vite-plugin-eslint](https://github.com/nabla/vite-plugin-eslint) 和 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) 是同样的思路。前者只能在 worker 里校验。后者能把错误和警告显示在浏览器里。
    *
    * @default false
    */
