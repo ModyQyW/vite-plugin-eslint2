@@ -59,41 +59,7 @@ export default defineConfig({
     },
   ],
   globalStyles: path.join(import.meta.dirname, "theme/index.css"),
-  head: [
-    // Google Analytics
-    [
-      "script",
-      {
-        async: "",
-        src: "https://www.googletagmanager.com/gtag/js?id=G-GBE9KNFWLS",
-      },
-    ],
-    // Google AdSense
-    [
-      "script",
-      {
-        async: "",
-        crossorigin: "anonymous",
-        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3102250747488251",
-      },
-    ],
-    ...seoHead,
-  ],
-  // `head` only accepts tags without children, so the inline gtag bootstrap has
-  // to go through Rsbuild's html tag config instead.
-  builderConfig: {
-    html: {
-      tags: [
-        {
-          tag: "script",
-          children: `window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-GBE9KNFWLS');`,
-        },
-      ],
-    },
-  },
+  head: seoHead,
   themeConfig: {
     socialLinks: [
       {

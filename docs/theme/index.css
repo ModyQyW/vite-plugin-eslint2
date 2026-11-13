@@ -1,8 +1,3 @@
-.google-ads {
-  padding: 12px;
-  border-left: 1px solid var(--rp-c-divider);
-}
-
 /* The theme renders the home hero brand as a <div>, so it puts a real <h1>
    above the hero instead. Hide the div and tighten the hero to keep the brand
    showing once, at the top of the page. */
