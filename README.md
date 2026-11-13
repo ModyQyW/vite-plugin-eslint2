@@ -8,7 +8,7 @@ English | [简体中文](./README.zh-CN.md)
 
 Usage and examples live in the [documentation](https://vite-plugin-eslint2.modyqyw.top/).
 
-## Introductions
+## Introduction
 
 `vite-plugin-eslint2` is a monorepo for the Vite ESLint plugin and the packages around it:
 
