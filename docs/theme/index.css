@@ -2,3 +2,52 @@
   padding: 12px;
   border-left: 1px solid var(--rp-c-divider);
 }
+
+/* The theme renders the home hero brand as a <div>, so it puts a real <h1>
+   above the hero instead. Hide the div and tighten the hero to keep the brand
+   showing once, at the top of the page. */
+.rp-home-h1 {
+  max-width: 72rem;
+  padding: 0 40px;
+  margin: 5rem auto 0;
+  font-size: 4rem;
+  font-weight: 600;
+  line-height: 1.2em;
+}
+
+.rp-home-h1__brand {
+  color: var(--rp-home-hero-title-color);
+}
+
+/* The gradient text needs `background-clip: text`; the solid colour above is the
+   fallback for engines that lack it. */
+@supports (background-clip: text) {
+  .rp-home-h1__brand {
+    -webkit-text-fill-color: #0000;
+    background: var(--rp-home-hero-title-bg);
+    background-clip: text;
+  }
+}
+
+.rp-home-hero__title {
+  display: none;
+}
+
+.rp-home-h1 + .rp-home-hero {
+  margin-top: 0;
+}
+
+@media (width <= 1000px) {
+  .rp-home-h1 {
+    padding: 0 20px;
+    margin: 2rem auto 0;
+    text-align: center;
+  }
+}
+
+@media (width <= 600px) {
+  .rp-home-h1 {
+    padding: 10px;
+    font-size: 2rem;
+  }
+}
